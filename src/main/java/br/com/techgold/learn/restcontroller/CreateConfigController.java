@@ -26,7 +26,6 @@ public class CreateConfigController {
 	
 	@PostMapping("/create")
 	public String register(@RequestBody DtoCadastroFuncionario dados ) {
-
 		
 		if(paisesService.existeConfig() == 0) {
 			paisesService.salvar(new ConfiguracaoPaises("BR",true));
@@ -48,7 +47,6 @@ public class CreateConfigController {
 		} else {
 			return "Erro!";
 		}
-	}
-	
+	}	
 
 }

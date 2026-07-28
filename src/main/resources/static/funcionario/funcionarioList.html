@@ -325,15 +325,12 @@
 							<input type="text" id="idmodal" class="form-control" style="width: 95px;" readonly>
 						</div>
 					</div>
-
 					<div class="row">
 						<div class="col-md-12">
 							<label class="form-label mt-2" for="emailmodal"><b>E-mail *</b></label>
 							<input type="text" id="emailmodal" class="form-control">
 						</div>
 					</div>
-
-
 					<div class="row">
 						<div class="col-md-6">
 							<label class="form-label mt-2" for="usuariomodal"><b>Usuario *</b></label>
@@ -361,7 +358,6 @@
                   				<input type="checkbox" name="trocaSenha" id="trocaSenha"  value="true">
                 			</label>
 						</div>
-
 					</div>
 					<div class="row">
 						<div class="col-md-6 ms-auto">
@@ -382,7 +378,6 @@
 				            <i class="bi bi-gear"></i> Configurações avançadas
 				        </button>
 				    </div>
-
 				    <div>
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
 				            Fechar
@@ -392,7 +387,6 @@
 				        </button>
 				    </div>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -475,12 +469,10 @@
 	<script>
 		function abrirConfiguracoesAvancadas() {
 			const idFuncionario = $('#idmodal').val();
-
 			   if (!idFuncionario) {
 			       alert("Funcionário não identificado.");
 			       return;
 			   }
-
 			   window.open(
 			       `/learn/funcionario/avancado?id=${idFuncionario}`,
 			       '_blank'
@@ -579,7 +571,6 @@
 					</td>`
 					+ '</tr>'
 				$('#tabela-usuarios').append(itens);
-
 					if(i.refeicao != null){
 						if(i.refeicao == true){
 							$('#btnRefeicao'+i.id).append('<i class="bi bi-cup-hot" style="color: red; font-size: 20px;"><input type="hidden" id="refeicaoValor'+i.id+'" name="refeicaoValor'+i.id+'" value="'+i.refeicao+'"></i>');
@@ -634,7 +625,6 @@
 					success: function (data) { alert("Status alterado para ( Em Refeição )");	},
 					error: function (e) { alert(e); }
 				});
-
 				$('#btnRefeicao'+id).append('<i class="bi bi-cup-hot" style="color: red; font-size: 20px;"><input type="hidden" id="refeicaoValor'+id+'" name="refeicaoValor'+id+'" value="true"></i>');
 
 			}else{
@@ -653,7 +643,6 @@
 					success: function (data) { alert("Status alterado para ( Online! )");	},
 					error: function (e) { alert(e); }
 				});
-
 				$('#btnRefeicao'+id).append('<i class="bi bi-cup-hot" style="color: green; font-size: 20px;"><input type="hidden" id="refeicaoValor'+id+'" name="refeicaoValor'+id+'" value="false"></i>');
 			}
 		}
@@ -704,7 +693,6 @@
 				contentType: "application/json",
 				url: "/learn/funcionarios/" + id,
 				success: function (data) {
-
 					$('#idmodal').val("");
 					$('#nomemodal').val("");
 					$('#usuariomodal').val("");
@@ -870,13 +858,6 @@
 						        onclick="preencheModalPassword(${data.id})">
 						        <img src="../assets/img/key-change.png" style="height: 16px">
 						    </button>
-						    <a class="btn-action btn btn-outline-secondary"
-						        id="btnRefeicao${data.id}"
-						        href="#"
-						        onclick="refeicao(${data.id})"
-						        title="Refeição"
-						        role="button">
-						    </a>
 						    <button
 						        class="btn-action btn btn-primary"
 						        data-bs-toggle="modal"

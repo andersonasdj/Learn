@@ -94,7 +94,6 @@ public class FuncionarioRestController {
 				));
 	}
 	
-
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/nav")
 	public ResponseEntity<DtoFuncionarioNavbar> funcionarioNavbar() {
@@ -107,7 +106,6 @@ public class FuncionarioRestController {
 	public ResponseEntity<DtoListarFuncionarios> atualizar(@RequestBody DtoFuncionarioEdit dados) {
 		return ResponseEntity.ok().body(service.atualizarFuncionario(dados));
 	}
-	
 	
 	@PreAuthorize("hasRole('ROLE_SADMIN')")
 	@PutMapping("/senha") //ATUALIZA A SENHA PARA QUALQUER USUARIO

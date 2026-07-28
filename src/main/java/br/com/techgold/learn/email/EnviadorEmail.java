@@ -23,8 +23,7 @@ public class EnviadorEmail {
 		@Value("${learn.email.copia}")
 		private String copiaEmail;
 	
-		@Autowired
-	    private JavaMailSender emailSender;
+		@Autowired private JavaMailSender emailSender;
 		
 		@Value("${upload.dir}")
 		private String UPLOAD_DIR;
