@@ -1,0 +1,560 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="assets/img/favicon.ico">
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="assets/css/password-generator.css?v=1" media="print" onload="this.media='all'">
+	<link rel="stylesheet" href="assets/css/defaultStyle.css?v=1">
+	<link rel="stylesheet" href="assets/css/dark.css?v=1">
+	<link rel="stylesheet" href="assets/css/navbar.css?v=4">
+	<link rel="stylesheet" href="assets/css/home.css?v=8.1">
+	<title>Learn - TechGold</title>
+</head>
+
+<body>
+	<script>(function(){if(localStorage.getItem('darkMode')==='enabled')document.body.classList.add('dark-mode');document.body.dataset.layout=localStorage.getItem('navLayout')||'top';if(localStorage.getItem('sidebarCollapsed')==='true')document.body.classList.add('sidebar-collapsed');})();</script>
+
+	<!-- SIDEBAR -->
+	<aside id="sidebarNav" class="sistech-sidebar">
+		<div class="sidebar-brand">
+			<div class="sidebar-brand-icon">
+				<img src="./assets/img/key.png" style="height:13px;filter:brightness(0) invert(1);">
+			</div>
+			<span class="sidebar-brand-text">Dashboard</span>
+		</div>
+		<div class="sidebar-scroll">
+			<a href="/learn/home" class="sidebar-item active">
+				<i class="bi bi-house-fill"></i>
+				<span class="sidebar-item-label">Início</span>
+			</a>
+		
+			<div class="sidebar-group" id="sgClientes">
+				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgClientes')">
+					<i class="bi bi-building"></i>
+					<span class="sidebar-group-label">Clientes</span>
+					<i class="bi bi-chevron-down sidebar-chevron"></i>
+				</button>
+				<div class="sidebar-group-items">
+					<a href="/learn/cliente/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
+					<a href="/learn/cliente/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+					<a href="/learn/cliente/colaborador" class="sidebar-subitem"><i class="bi bi-people text-secondary"></i>Colaboradores</a>
+				</div>
+			</div>
+			<div class="sidebar-group" id="sgFuncionarios">
+				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgFuncionarios')">
+					<i class="bi bi-person-badge"></i>
+					<span class="sidebar-group-label">Funcionários</span>
+					<i class="bi bi-chevron-down sidebar-chevron"></i>
+				</button>
+				<div class="sidebar-group-items">
+					<a href="/learn/funcionario/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
+					<a href="/learn/funcionario/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+				</div>
+			</div>
+			
+		</div>
+		<div class="sidebar-footer">
+			<button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" title="Recolher barra lateral">
+				<i class="bi bi-arrow-bar-left" id="sidebarCollapseIcon"></i>
+			</button>
+		</div>
+	</aside>
+
+	<!-- FLYOUT: submenu ao clicar no ícone com sidebar recolhida -->
+	<div id="sidebarFlyout" class="sidebar-flyout">
+		<div class="sidebar-flyout-title" id="sidebarFlyoutTitle"></div>
+		<div id="sidebarFlyoutItems"></div>
+	</div>
+
+	<!-- OVERLAY MOBILE -->
+	<div id="sidebarOverlay" onclick="closeSidebarMobile()"></div>
+
+	<!-- SLIM TOPBAR (modo sidebar) -->
+	<div id="slimTopbar" class="sistech-slim-topbar">
+		<button class="icon-btn d-lg-none" onclick="openSidebarMobile()" title="Menu" style="font-size:1.1rem;">
+			<i class="bi bi-list"></i>
+		</button>
+		<span style="font-size:.8rem;font-weight:600;color:#374151;" class="d-none d-sm-inline" id="slimTopbarTitle">SisTech</span>
+		<div class="ms-auto d-flex align-items-center gap-2">
+			<button class="layout-toggle-btn" onclick="toggleLayout()" title="Voltar ao navbar no topo">
+				<i class="bi bi-layout-three-columns"></i>
+			</button>
+			<button class="icon-btn" onclick="toggleDarkMode()" title="Alternar modo escuro">
+				<i class="bi bi-moon"></i>
+			</button>
+			
+			<div class="dropdown">
+				<button class="user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<div class="user-avatar" id="userInitialsSlim">?</div>
+					<span class="user-name d-none d-md-inline" id="navNomeSlim">Usuário</span>
+					<i class="bi bi-chevron-down nav-chevron"></i>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-end">
+					<li><a class="dropdown-item" href="/learn/funcionario/perfil"><i class="bi bi-person me-2"></i>Perfil</a></li>
+					<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalFoto"><i class="bi bi-camera me-2"></i>Trocar foto</a></li>
+					<li><hr class="dropdown-divider"></li>		
+					<li><a class="dropdown-item" href="/learn/configuracoes"><i class="bi bi-sliders me-2"></i>Configurações</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="/learn/sobre"><i class="bi bi-info-circle me-2"></i>Sobre</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item text-danger" href="/learn/logout"><i class="bi bi-box-arrow-right me-2"></i>Sair</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-expand-lg navbar-modern sticky-top mb-2">
+			<div class="container-fluid px-3">
+
+				<!-- Brand -->
+				<a class="navbar-brand-modern" href="/learn/home">
+					<div class="brand-icon">
+						<img src="./assets/img/key.png" style="height:15px; filter:brightness(0) invert(1);">
+					</div>
+					<span class="brand-text">Learn</span>
+				</a>
+
+				<!-- Mobile toggle -->
+				<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarMain" aria-controls="navbarMain"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<!-- Collapse -->
+				<div class="collapse navbar-collapse" id="navbarMain">
+
+					<!-- Nav items -->
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 align-items-lg-center">
+
+						<li class="nav-item">
+							<a class="nav-link-modern" href="/learn/home">
+								<i class="bi bi-house-fill"></i> Início
+							</a>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-building"></i> Clientes
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="/learn/cliente/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
+								<li><a class="dropdown-item" href="/learn/cliente/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/learn/cliente/colaborador"><i class="bi bi-people me-2 text-secondary"></i>Colaboradores</a></li>
+							</ul>
+						</li>
+
+						<li class="nav-item dropdown">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-person-badge"></i> Funcionários
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="/learn/funcionario/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
+								<li><a class="dropdown-item" href="/learn/funcionario/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+							</ul>
+						</li>
+						
+					</ul>
+
+					<!-- Direita: ícones + usuário -->
+					<div class="d-flex align-items-center gap-2">
+
+						<!-- Layout toggle -->
+						<button class="layout-toggle-btn" onclick="toggleLayout()" title="Alternar para barra lateral">
+							<i class="bi bi-layout-sidebar"></i>
+						</button>
+
+						<!-- Dark mode -->
+						<button class="icon-btn" onclick="toggleDarkMode()" id="toggleDarkBtn" title="Alternar modo escuro" aria-label="Alternar modo escuro">
+							<i class="bi bi-moon"></i>
+						</button>
+
+
+						<!-- Usuário dropdown -->
+						<div class="dropdown">
+							<button class="user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<div class="user-avatar" id="userInitials">?</div>
+								<span class="user-name" id="navNome">Usuário</span>
+								<i class="bi bi-chevron-down nav-chevron"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end">
+								<li><a class="dropdown-item" href="/learn/funcionario/perfil"><i class="bi bi-person me-2"></i>Perfil</a></li>
+								<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalFoto"><i class="bi bi-camera me-2"></i>Trocar foto</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/learn/configuracoes"><i class="bi bi-sliders me-2"></i>Configurações</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/learn/sobre"><i class="bi bi-info-circle me-2"></i>Sobre</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item text-danger" href="/learn/logout"><i class="bi bi-box-arrow-right me-2"></i>Sair</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</nav>
+		<!-- / NAVBAR -->
+		
+		   <div id="homePageShell" class="home-page-shell mb-2">
+		   <div id="homeLoadingOverlay" class="home-loading-overlay">
+				<div class="container-fluid mb-3">
+					<div class="row g-3">
+						<div class="col-12 col-lg-8">
+							<div class="home-skeleton-card" style="height:200px;border-radius:14px;"></div>
+						</div>
+						<div class="col-12 col-lg-4">
+							<div class="home-skeleton-card" style="height:200px;border-radius:14px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div class="row g-3">
+						<div class="col-12 col-lg-6"><div class="home-skeleton-chart"></div></div>
+						<div class="col-12 col-lg-6"><div class="home-skeleton-chart"></div></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container-fluid mb-3">
+				<div class="row g-3 align-items-stretch">
+				<!-- Card de Boas-Vindas + KPIs -->
+				<div class="col-12 col-lg-12 anim-in">
+					<div class="card shadow-sm border-0 h-100">
+						<div class="card-body">
+							<div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+								<!-- Dados do Funcionário -->
+								<div>
+									<h5 class="mb-1">
+										<span id="saudacao"></span>
+										<strong style="color: #164294;"><span id="nomeFuncionario"></span></strong>
+									</h5>
+									<p class="mb-2 text-muted small"><span id="dataUltimoLogin"></span></p>
+									
+									
+								</div>
+								<!-- Relógio compacto -->
+								<a href="#" class="compact-clock">
+									<span class="compact-clock-label" id="clockLabel">Hoje: — • — —</span>
+									<span class="compact-clock-hora"  id="clockHora">--:--</span>
+								</a>
+							</div>
+								
+						</div>
+					</div>
+				</div>
+			
+			</div><!-- /container-fluid -->
+
+		</div><!-- /homePageShell -->
+
+	<br /><br />
+	<footer class="container-fluid fixed-bottom text-center text-white">
+		<div class="text-center" style="background-color: rgba(0, 0, 0, 0.2);">
+			© 2026 Copyright:
+			<a class="text-white" href="#">TechGold</a>
+		</div>
+	</footer>
+
+	<!-- Toast container -->
+	<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999" id="toastContainer"></div>
+
+
+	<!-- ################################################# MODAL FOTO ################################################# -->
+	<div class="modal fade" id="modalFoto" tabindex="-1" aria-labelledby="modalFoto" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="modalLabelColaboradorFoto">Atualização de foto de perfil</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+				</div>
+				<br />
+				<div class="container">
+					<div class="Neon Neon-theme-dragdropbox">
+						<form id="uploadForm" enctype="multipart/form-data">
+
+							<div class="Neon-input-dragDrop">
+								<div class="Neon-input-inner">
+									<div class="Neon-input-icon"><i class="fa fa-file-image-o"></i></div>
+									<span id="inputId"></span>
+									<input type="file" id="file" name="file" class="Neon-input-choose-btn blue"></input>
+								</div>
+								<br />
+								<button type="submit" class="btn btn-secondary btn-sm">Enviar</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- ################################################### MODAL FOTO ################################################# -->
+	<!-- ############################################### MODAL TROCA DE SENHS ########################################### -->
+	<div class="modal fade" id="modalTrocaDeSenha" tabindex="-1" aria-labelledby="modalTrocaDeSenha" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="modalLabelTrocaDeSenha">Aviso</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="container">
+					<br />
+					<p><span style="font-size: 25px; color: red;">Realize a alteração de sua senha!</span>
+						<a href="/learn/funcionario/perfil" class="btn btn-warning">Alterar</a>
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- ############################################### MODAL TROCA DE SENHS ########################################### -->
+
+	<script defer src="assets/js/bootstrap.bundle.min.js"></script>
+	<script defer src="assets/js/dark.js"></script>
+	<script defer src="assets/js/navbar.js"></script>
+	<script defer src="assets/js/sidebar.js"></script>
+
+	<script defer>
+		document.addEventListener("DOMContentLoaded", () => {
+		    iniciarSistema();
+		    iniciarRelogio();
+		    iniciarEventos();
+		});
+
+		function showHomeLoading() {
+		    const overlay = document.getElementById("homeLoadingOverlay");
+		    if (!overlay) return;
+		    overlay.style.display = "block";
+			requestAnimationFrame(() => {
+				overlay.style.opacity = "1";
+				overlay.style.pointerEvents = "auto";
+			});
+		}
+
+		function hideHomeLoading() {
+		    const overlay = document.getElementById("homeLoadingOverlay");
+		    if (!overlay) return;
+			overlay.style.opacity = "0";
+			overlay.style.pointerEvents = "none";
+			window.setTimeout(() => {
+				overlay.style.display = "none";
+			}, 240);
+		}
+
+		// ======================================================
+		// INICIALIZAÇÃO
+		// ======================================================
+		async function iniciarSistema() {
+		    showHomeLoading();
+		    try {
+		        await Promise.all([
+		            carregarHome(),
+		        ]);
+		    } catch (e) {
+		        console.error("Erro ao iniciar sistema", e);
+		    } finally {
+		        hideHomeLoading();
+		    }
+		}
+
+		function iniciarEventos() {
+		    // Upload foto
+		    const uploadForm = document.getElementById("uploadForm");
+	
+		    if(uploadForm){
+		        uploadForm.addEventListener("submit", async (e) => {
+		            e.preventDefault();
+		            const formData = new FormData(uploadForm);
+	
+		            try {
+		                const response = await fetch("/learn/api/file/perfil/upload", {
+		                    method: "POST",
+		                    body: formData
+		                });
+	
+						if (response.ok) {
+						    bootstrap.Modal.getInstance(document.getElementById('modalFoto'))?.hide();
+						    await carregarFoto(_homeData?.id);
+						} else {
+						    alert('Aviso: ' + (await response.text()));
+						}
+	
+		            } catch (e) {
+		                alert("Erro ao enviar arquivo");
+		            }
+		        });
+		    }
+		}
+
+		// ======================================================
+		// HOME
+		// ======================================================
+		async function carregarHome() {
+	
+		    try {
+		        const response = await fetch("/learn/funcionarios/home");
+	
+		        if(response.status === 401){
+		            alert("Realize login novamente!");
+		            window.location.href = "/learn/login";
+		            return;
+		        }
+		        const data = await response.json();
+	
+		        preencherHome(data);
+		        carregarFoto(data.id);
+	
+		    } catch (e) {
+		        console.error("Erro ao carregar home", e);
+		    }
+		}
+
+		// ======================================================
+		// PREENCHIMENTO HOME
+		// ======================================================
+		function formatarNumero2(valor) {
+		    return String(valor).padStart(2, '0');
+		}
+
+		function gerarSaudacao() {
+		    const hora = new Date().getHours();
+		    if (hora < 12) return 'Bom dia, ';
+		    if (hora < 18) return 'Boa tarde, ';
+		    return 'Boa noite, ';
+		}	
+
+		function preencherHome(data){
+		    _homeData = data;
+		    document.getElementById("saudacao").textContent = gerarSaudacao();
+		    document.getElementById("nomeFuncionario").textContent = data.nomeFuncionario; 
+		    document.getElementById("dataUltimoLogin").textContent = "Último login: " + data.dataUltimoLogin;
+
+		    if (window.navbarInit) window.navbarInit(data.nomeFuncionario);
+		    inserirInputId(data.id);
+	
+		    if(data.trocaSenha){
+		        const modal = new bootstrap.Modal(
+		            document.getElementById("modalTrocaDeSenha")
+		        );
+		        modal.show();
+		    }
+		}
+
+		function inserirInputId(id){
+		    const inputId = document.getElementById("inputId");
+		    inputId.innerHTML = `
+		        <input type="hidden" id="id" name="id" value="${id}">
+		    `;
+		}
+
+		// ======================================================
+		// TOAST
+		// ======================================================
+		function mostrarToast(mensagem, tipo) {
+		    const cfg = {
+		        warning: { bg:'#fff7ed', border:'#fed7aa', color:'#ea580c', icon:'bi-exclamation-triangle-fill' },
+		        success: { bg:'#f0fdf4', border:'#bbf7d0', color:'#16a34a', icon:'bi-check-circle-fill'        },
+		        danger:  { bg:'#fef2f2', border:'#fecaca', color:'#dc2626', icon:'bi-x-circle-fill'            }
+		    };
+		    const c = cfg[tipo] || cfg.warning;
+		    const id = 'toast_' + Date.now();
+		    const el = document.createElement('div');
+		    el.id = id;
+		    el.className = 'toast show mb-2';
+		    el.setAttribute('role','alert');
+		    el.style.cssText = `background:${c.bg};border:1.5px solid ${c.border};border-radius:12px;min-width:280px;max-width:340px;box-shadow:0 4px 16px rgba(0,0,0,.1);`;
+		    el.innerHTML = `
+		        <div class="d-flex align-items-start gap-2 p-3" style="color:${c.color}">
+		            <i class="bi ${c.icon} fs-5 flex-shrink-0 mt-1"></i>
+		            <span class="me-auto" style="font-size:.87rem;line-height:1.45;">${mensagem}</span>
+		            <button class="btn-close ms-1 mt-1" style="font-size:.65rem;opacity:.5;" onclick="this.closest('.toast').remove()"></button>
+		        </div>
+		    `;
+		    document.getElementById('toastContainer').appendChild(el);
+		    setTimeout(() => { if(el.parentNode) el.remove(); }, 5000);
+		}
+
+		// ======================================================
+		// FOTO PERFIL
+		// ======================================================
+		async function carregarFoto(id){
+		    if(!id) return;
+
+		    try {
+		        const response = await fetch("/learn/api/file/perfil/" + id + "/thumb", { cache: 'no-store' });
+		        if(!response.ok) return;
+		        const blob = await response.blob();
+		        if(blob.type.startsWith("image/")){
+		            const blobUrl = URL.createObjectURL(blob);
+		            const avatarImg = `<img src="${blobUrl}" alt="">`;
+		            ['userInitials', 'userInitialsSlim'].forEach(elId => {
+		                const el = document.getElementById(elId);
+		                if (el) el.innerHTML = avatarImg;
+		            });
+		            setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+		        }
+		    } catch(e){ /* erro de rede */ }
+		}
+		// ======================================================
+
+		function tempoRelativo(dataStr) {
+		    if (!dataStr) return '—';
+		    const p = dataStr.match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})/);
+		    if (!p) return dataStr;
+		    const d = new Date(p[3], p[2]-1, p[1], p[4], p[5]);
+		    if (isNaN(d.getTime())) return dataStr;
+		    const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+		    if (diff < 60)     return 'agora';
+		    if (diff < 3600)   return 'há ' + Math.floor(diff / 60) + ' min';
+		    if (diff < 86400)  return 'há ' + Math.floor(diff / 3600) + 'h';
+		    if (diff < 172800) return 'há 1 dia';
+		    return 'há ' + Math.floor(diff / 86400) + ' dias';
+		}
+	
+		// ======================================================
+		// RELÓGIO OTIMIZADO
+		// ======================================================
+		const _MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+		const _DIAS  = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+		let _elLabel = null, _elHora = null;
+
+		function iniciarRelogio(){
+		    _elLabel = document.getElementById("clockLabel");
+		    _elHora  = document.getElementById("clockHora");
+		    atualizarRelogio();
+		    setInterval(atualizarRelogio, 1000);
+		}
+
+		function atualizarRelogio(){
+		    const now = new Date();
+		    const dia = _DIAS[now.getDay()];
+		    const dd  = String(now.getDate()).padStart(2, "0");
+		    const mes = _MESES[now.getMonth()];
+		    const hh  = String(now.getHours()).padStart(2, "0");
+		    const mm  = String(now.getMinutes()).padStart(2, "0");
+		    if (_elLabel) _elLabel.textContent = `Hoje: ${dia} • ${dd} ${mes}`;
+		    if (_elHora)  _elHora.textContent  = `${hh}:${mm}`;
+		}
+
+		// iniciarLayout() e demais funções de sidebar estão em assets/js/sidebar.js
+		function escapeHtml(str) {
+			return String(str)
+				.replace(/&/g, "&amp;")
+				.replace(/</g, "&lt;")
+				.replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;")
+				.replace(/'/g, "&#039;");
+		}
+	</script>
+</body>
+</html>
