@@ -98,7 +98,18 @@
 					<a href="/learn/funcionario/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
 				</div>
 			</div>
-			
+			<div class="sidebar-group" id="sgCursos">
+				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgCursos')">
+					<i class="bi bi-mortarboard"></i>
+					<span class="sidebar-group-label">Cursos</span>
+					<i class="bi bi-chevron-down sidebar-chevron"></i>
+				</button>
+				<div class="sidebar-group-items">
+					<a href="/learn/curso/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
+					<a href="/learn/curso/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+				</div>
+			</div>
+
 		</div>
 		<div class="sidebar-footer">
 			<button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" title="Recolher barra lateral">
@@ -195,6 +206,15 @@
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="/learn/funcionario/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
 								<li><a class="dropdown-item" href="/learn/funcionario/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-mortarboard"></i> Cursos
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="/learn/curso/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
+								<li><a class="dropdown-item" href="/learn/curso/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
 							</ul>
 						</li>
 					</ul>

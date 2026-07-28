@@ -63,4 +63,7 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 	    """)
 	    List<ColaboradorProjecao> buscarPorPalavraChave(@Param("dados") String dados);
 
+	@Query("SELECT c.cliente.id FROM Colaborador c WHERE c.id = :id")
+	Long buscaClienteIdPorId(Long id);
+
 }

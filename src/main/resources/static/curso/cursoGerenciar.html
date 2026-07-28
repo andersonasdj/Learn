@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/css/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="../assets/css/StyleClientesFuncionarios.css">
+	<link rel="stylesheet" href="../assets/css/defaultStyle.css?v=1.1">
+	<link rel="stylesheet" href="../assets/css/dark.css?v=1.1">
+	<link rel="stylesheet" href="../assets/css/navbar.css?v=1.1">
+	<title>Learn - Gerenciar Curso</title>
+	<style>
+		.card { border: 1px solid rgba(0,0,0,.1) !important; box-shadow: 0 3px 12px rgba(0,0,0,.09) !important; border-radius: 14px !important; }
+		body.dark-mode .card { border-color: rgba(255,255,255,.12) !important; box-shadow: 0 3px 14px rgba(0,0,0,.5) !important; }
+		.questao-block { background: rgba(13,110,253,.04); }
+		body.dark-mode .questao-block { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.15) !important; }
+		.aula-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+
+		.editor-rico { border: 1px solid rgba(0,0,0,.15); border-radius: 8px; overflow: hidden; }
+		body.dark-mode .editor-rico { border-color: rgba(255,255,255,.15); }
+		.editor-rico-toolbar {
+			display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+			padding: 6px; background: rgba(0,0,0,.03); border-bottom: 1px solid rgba(0,0,0,.1);
+		}
+		body.dark-mode .editor-rico-toolbar { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); }
+		.editor-rico-toolbar .btn.ativo { background: #0d6efd; color: #fff; border-color: #0d6efd; }
+		.editor-rico-separador { width: 1px; align-self: stretch; background: rgba(0,0,0,.15); margin: 0 2px; }
+		body.dark-mode .editor-rico-separador { background: rgba(255,255,255,.15); }
+		.editor-rico-area {
+			min-height: 220px; max-height: 420px; overflow-y: auto;
+			padding: 12px 14px; outline: none;
+		}
+		.editor-rico-area img { max-width: 100%; border-radius: 6px; }
+		.editor-rico-area blockquote { border-left: 3px solid #0d6efd; margin: 0; padding-left: 12px; color: #6c757d; }
+	</style>
+</head>
+<body>
+	<script>(function(){if(localStorage.getItem('darkMode')==='enabled')document.body.classList.add('dark-mode');document.body.dataset.layout=localStorage.getItem('navLayout')||'top';if(localStorage.getItem('sidebarCollapsed')==='true')document.body.classList.add('sidebar-collapsed');})();</script>
+
+	<!-- SIDEBAR -->
+	<aside id="sidebarNav" class="sistech-sidebar">
+		<div class="sidebar-brand">
+			<div class="sidebar-brand-icon">
+				<img src="../assets/img/key.png" style="height:13px;filter:brightness(0) invert(1);">
+			</div>
+			<span class="sidebar-brand-text">Dashboard</span>
+		</div>
+		<div class="sidebar-scroll">
+			<a href="/learn/home" class="sidebar-item active">
+				<i class="bi bi-house-fill"></i>
+				<span class="sidebar-item-label">Início</span>
+			</a>
+			<div class="sidebar-group" id="sgClientes">
+				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgClientes')">
+					<i class="bi bi-building"></i>
+					<span class="sidebar-group-label">Clientes</span>
+					<i class="bi bi-chevron-down sidebar-chevron"></i>
+				</button>
+				<div class="sidebar-group-items">
+					<a href="/learn/cliente/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
+					<a href="/learn/cliente/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+					<a href="/learn/cliente/colaborador" class="sidebar-subitem"><i class="bi bi-people text-secondary"></i>Colaboradores</a>
+				</div>
+			</div>
+			<div class="sidebar-group" id="sgFuncionarios">
+				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgFuncionarios')">
+					<i class="bi bi-person-badge"></i>
+					<span class="sidebar-group-label">Funcionários</span>
+					<i class="bi bi-chevron-down sidebar-chevron"></i>
+				</button>
+				<div class="sidebar-group-items">
+					<a href="/learn/funcionario/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
+					<a href="/learn/funcionario/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+				</div>
+			</div>
+			<div class="sidebar-group" id="sgCursos">
+				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgCursos')">
+					<i class="bi bi-mortarboard"></i>
+					<span class="sidebar-group-label">Cursos</span>
+					<i class="bi bi-chevron-down sidebar-chevron"></i>
+				</button>
+				<div class="sidebar-group-items">
+					<a href="/learn/curso/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
+					<a href="/learn/curso/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+				</div>
+			</div>
+		</div>
+		<div class="sidebar-footer">
+			<button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" title="Recolher barra lateral">
+				<i class="bi bi-arrow-bar-left" id="sidebarCollapseIcon"></i>
+			</button>
+		</div>
+	</aside>
+
+	<!-- FLYOUT: submenu ao clicar no ícone com sidebar recolhida -->
+	<div id="sidebarFlyout" class="sidebar-flyout">
+		<div class="sidebar-flyout-title" id="sidebarFlyoutTitle"></div>
+		<div id="sidebarFlyoutItems"></div>
+	</div>
+
+	<!-- OVERLAY MOBILE -->
+	<div id="sidebarOverlay" onclick="closeSidebarMobile()"></div>
+
+	<!-- SLIM TOPBAR (modo sidebar) -->
+	<div id="slimTopbar" class="sistech-slim-topbar">
+		<button class="icon-btn d-lg-none" onclick="openSidebarMobile()" title="Menu" style="font-size:1.1rem;">
+			<i class="bi bi-list"></i>
+		</button>
+		<span style="font-size:.8rem;font-weight:600;color:#374151;" class="d-none d-sm-inline" id="slimTopbarTitle">SisTech</span>
+		<div class="ms-auto d-flex align-items-center gap-2">
+			<button class="layout-toggle-btn" onclick="toggleLayout()" title="Voltar ao navbar no topo">
+				<i class="bi bi-layout-three-columns"></i>
+			</button>
+			<button class="icon-btn" onclick="toggleDarkMode()" title="Alternar modo escuro">
+				<i class="bi bi-moon"></i>
+			</button>
+			<div class="dropdown">
+				<button class="user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<div class="user-avatar" id="userInitialsSlim">?</div>
+					<span class="user-name d-none d-md-inline" id="navNomeSlim">Usuário</span>
+					<i class="bi bi-chevron-down nav-chevron"></i>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-end">
+					<li><a class="dropdown-item" href="/learn/funcionario/perfil"><i class="bi bi-person me-2"></i>Perfil</a></li>
+					<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalFoto"><i class="bi bi-camera me-2"></i>Trocar foto</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="/learn/configuracoes"><i class="bi bi-sliders me-2"></i>Configurações</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="/learn/sobre"><i class="bi bi-info-circle me-2"></i>Sobre</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item text-danger" href="/learn/logout"><i class="bi bi-box-arrow-right me-2"></i>Sair</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-expand-lg navbar-modern sticky-top mb-2">
+			<div class="container-fluid px-3">
+				<a class="navbar-brand-modern" href="/learn/home">
+					<div class="brand-icon">
+						<img src="../assets/img/key.png" style="height:15px; filter:brightness(0) invert(1);">
+					</div>
+					<span class="brand-text">Learn</span>
+				</a>
+				<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarMain" aria-controls="navbarMain"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarMain">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 align-items-lg-center">
+						<li class="nav-item">
+							<a class="nav-link-modern" href="/learn/home">
+								<i class="bi bi-house-fill"></i> Início
+							</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-building"></i> Clientes
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="/learn/cliente/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
+								<li><a class="dropdown-item" href="/learn/cliente/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/learn/cliente/colaborador"><i class="bi bi-people me-2 text-secondary"></i>Colaboradores</a></li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-person-badge"></i> Funcionários
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="/learn/funcionario/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
+								<li><a class="dropdown-item" href="/learn/funcionario/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-mortarboard"></i> Cursos
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="/learn/curso/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
+								<li><a class="dropdown-item" href="/learn/curso/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+							</ul>
+						</li>
+					</ul>
+					<div class="d-flex align-items-center gap-2">
+						<button class="layout-toggle-btn" onclick="toggleLayout()" title="Alternar para barra lateral">
+							<i class="bi bi-layout-sidebar"></i>
+						</button>
+						<button class="icon-btn" onclick="toggleDarkMode()" id="toggleDarkBtn" title="Alternar modo escuro" aria-label="Alternar modo escuro">
+							<i class="bi bi-moon"></i>
+						</button>
+						<div class="dropdown">
+							<button class="user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<div class="user-avatar" id="userInitials">?</div>
+								<span class="user-name" id="navNome">Usuário</span>
+								<i class="bi bi-chevron-down nav-chevron"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end">
+								<li><a class="dropdown-item" href="/learn/funcionario/perfil"><i class="bi bi-person me-2"></i>Perfil</a></li>
+								<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalFoto"><i class="bi bi-camera me-2"></i>Trocar foto</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/learn/configuracoes"><i class="bi bi-sliders me-2"></i>Configurações</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/learn/sobre"><i class="bi bi-info-circle me-2"></i>Sobre</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item text-danger" href="/learn/logout"><i class="bi bi-box-arrow-right me-2"></i>Sair</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<!-- / NAVBAR -->
+
+		<div class="container-fluid mt-3 mb-5">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<a href="/learn/curso/list" class="btn btn-sm btn-outline-secondary">
+					<i class="bi bi-arrow-left"></i> Voltar para Cursos
+				</a>
+				<a id="linkVisualizarAluno" href="#" target="_blank" class="btn btn-sm btn-outline-primary">
+					<i class="bi bi-eye"></i> Visualizar como aluno
+				</a>
+			</div>
+
+			<!-- ===================== INFORMAÇÕES DO CURSO ===================== -->
+			<div class="card mb-4">
+				<div class="card-body">
+					<h5 class="mb-3"><i class="bi bi-info-circle text-primary me-2"></i>Informações do Curso</h5>
+					<div class="row g-3">
+						<div class="col-md-8">
+							<label class="form-label fw-semibold">Título</label>
+							<input type="text" id="infoTitulo" class="form-control">
+						</div>
+						<div class="col-md-4">
+							<label class="form-label fw-semibold">Status</label>
+							<select id="infoStatus" class="form-select">
+								<option value="RASCUNHO">Rascunho</option>
+								<option value="PUBLICADO">Publicado</option>
+								<option value="ARQUIVADO">Arquivado</option>
+							</select>
+						</div>
+						<div class="col-md-12">
+							<label class="form-label fw-semibold">Descrição</label>
+							<textarea id="infoDescricao" class="form-control" rows="3"></textarea>
+						</div>
+						<div class="col-md-12">
+							<label class="form-label fw-semibold">URL da capa</label>
+							<input type="text" id="infoCapa" class="form-control">
+						</div>
+					</div>
+					<div class="text-end mt-3">
+						<button class="btn btn-primary" onclick="salvarInfoCurso()">
+							<i class="bi bi-check-circle me-1"></i>Salvar informações
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- ===================== AULAS / VÍDEOS / TESTE ===================== -->
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h5 class="mb-0"><i class="bi bi-collection-play text-primary me-2"></i>Aulas</h5>
+						<button class="btn btn-success btn-sm" onclick="abrirModalAula()">
+							<i class="bi bi-plus-circle me-1"></i>Nova aula
+						</button>
+					</div>
+					<div class="accordion" id="accordionAulas"></div>
+					<div id="semAulas" class="text-center text-muted py-4" style="display:none;">
+						<i class="bi bi-collection display-6 d-block mb-2 opacity-25"></i>
+						Nenhuma aula cadastrada
+					</div>
+				</div>
+			</div>
+
+			<!-- ===================== LIBERAÇÃO DE ACESSO ===================== -->
+			<div class="row g-4">
+				<div class="col-lg-6">
+					<div class="card h-100">
+						<div class="card-body">
+							<h5 class="mb-3"><i class="bi bi-building text-primary me-2"></i>Acesso por Cliente</h5>
+							<div class="input-group mb-3">
+								<select id="selectClienteLiberar" class="form-select">
+									<option value="">Selecione um cliente...</option>
+								</select>
+								<button class="btn btn-success" onclick="liberarCliente()">
+									<i class="bi bi-unlock me-1"></i>Liberar
+								</button>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-sm align-middle mb-0">
+									<thead>
+										<tr><th>Cliente</th><th>Desde</th><th class="text-end">Ação</th></tr>
+									</thead>
+									<tbody id="tbAcessoClientes">
+										<tr><td colspan="3" class="text-center text-muted py-3">Nenhum cliente com acesso</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="card h-100">
+						<div class="card-body">
+							<h5 class="mb-3"><i class="bi bi-people text-primary me-2"></i>Acesso por Colaborador</h5>
+							<div class="input-group mb-2">
+								<input type="text" id="buscaColaboradorLiberar" class="form-control" placeholder="Buscar colaborador por nome, e-mail...">
+								<button class="btn btn-outline-primary" onclick="buscarColaboradorParaLiberar()">
+									<i class="bi bi-search"></i>
+								</button>
+							</div>
+							<div id="resultadoBuscaColaborador" class="mb-3"></div>
+							<div class="table-responsive">
+								<table class="table table-sm align-middle mb-0">
+									<thead>
+										<tr><th>Colaborador</th><th>Desde</th><th class="text-end">Ação</th></tr>
+									</thead>
+									<tbody id="tbAcessoColaboradores">
+										<tr><td colspan="3" class="text-center text-muted py-3">Nenhum colaborador com acesso</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<br /><br />
+	<footer class="container-fluid fixed-bottom text-center text-white">
+		<div class="text-center" style="background-color: rgba(0, 0, 0, 0.2);">
+			© 2026 Copyright:
+			<a class="text-white" href="#">TechGold</a>
+		</div>
+	</footer>
+
+	<!-- ############################## MODAL AULA ############################## -->
+	<div class="modal fade" id="modalAula" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalAulaTitulo">Nova Aula</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="aulaId">
+					<div class="mb-2">
+						<label class="form-label fw-semibold">Título</label>
+						<input type="text" id="aulaTitulo" class="form-control">
+					</div>
+					<div class="mb-2">
+						<label class="form-label fw-semibold">Descrição</label>
+						<textarea id="aulaDescricao" class="form-control" rows="3"></textarea>
+					</div>
+					<div class="mb-2">
+						<label class="form-label fw-semibold">Ordem</label>
+						<input type="number" id="aulaOrdem" class="form-control" min="0" value="0">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" onclick="salvarAula()">Salvar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ############################## MODAL CONTEUDO ############################## -->
+	<div class="modal fade" id="modalConteudo" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalConteudoTitulo">Novo Conteúdo</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="conteudoId">
+					<input type="hidden" id="conteudoAulaId">
+					<div class="row g-3 mb-3">
+						<div class="col-md-9">
+							<label class="form-label fw-semibold">Título (opcional)</label>
+							<input type="text" id="conteudoTitulo" class="form-control">
+						</div>
+						<div class="col-md-3">
+							<label class="form-label fw-semibold">Ordem</label>
+							<input type="number" id="conteudoOrdem" class="form-control" min="0" value="0">
+						</div>
+					</div>
+
+					<label class="form-label fw-semibold">Conteúdo</label>
+					<div class="editor-rico">
+						<div class="editor-rico-toolbar">
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="bold" title="Negrito"><i class="bi bi-type-bold"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="italic" title="Itálico"><i class="bi bi-type-italic"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="underline" title="Sublinhado"><i class="bi bi-type-underline"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="strikeThrough" title="Tachado"><i class="bi bi-type-strikethrough"></i></button>
+							<span class="editor-rico-separador"></span>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="formatBlock" data-valor="H2" title="Título 2">H2</button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="formatBlock" data-valor="H3" title="Título 3">H3</button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="formatBlock" data-valor="P" title="Parágrafo"><i class="bi bi-paragraph"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="formatBlock" data-valor="BLOCKQUOTE" title="Citação"><i class="bi bi-quote"></i></button>
+							<span class="editor-rico-separador"></span>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="insertUnorderedList" title="Lista"><i class="bi bi-list-ul"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="insertOrderedList" title="Lista numerada"><i class="bi bi-list-ol"></i></button>
+							<span class="editor-rico-separador"></span>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="justifyLeft" title="Alinhar à esquerda"><i class="bi bi-text-left"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="justifyCenter" title="Centralizar"><i class="bi bi-text-center"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="justifyRight" title="Alinhar à direita"><i class="bi bi-text-right"></i></button>
+							<span class="editor-rico-separador"></span>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="createLink" title="Inserir link"><i class="bi bi-link-45deg"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" id="btnEditorImagem" title="Inserir imagem"><i class="bi bi-image"></i></button>
+							<input type="color" id="editorCorTexto" class="form-control form-control-color" title="Cor do texto" value="#000000" style="width:34px;height:31px;padding:2px;">
+							<span class="editor-rico-separador"></span>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="removeFormat" title="Limpar formatação"><i class="bi bi-eraser"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="undo" title="Desfazer"><i class="bi bi-arrow-counterclockwise"></i></button>
+							<button type="button" class="btn btn-sm btn-outline-secondary" data-cmd="redo" title="Refazer"><i class="bi bi-arrow-clockwise"></i></button>
+						</div>
+						<div id="editorConteudoArea" class="editor-rico-area" contenteditable="true"></div>
+						<input type="file" id="editorImagemInput" class="d-none" accept="image/png,image/jpeg,image/gif,image/webp">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" onclick="salvarConteudo()">Salvar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ############################## MODAL VIDEO ############################## -->
+	<div class="modal fade" id="modalVideo" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalVideoTitulo">Novo Vídeo</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="videoId">
+					<input type="hidden" id="videoAulaId">
+					<div class="mb-2">
+						<label class="form-label fw-semibold">Título</label>
+						<input type="text" id="videoTitulo" class="form-control">
+					</div>
+					<div id="videoArquivoNovoWrapper" class="mb-2">
+						<label class="form-label fw-semibold">Arquivo de vídeo</label>
+						<input type="file" id="videoArquivo" class="form-control" accept="video/*">
+						<small class="text-muted d-block mt-1">Formatos aceitos: mp4, webm, ogg, mov, mkv, avi.</small>
+					</div>
+					<div id="videoArquivoAtualWrapper" class="mb-2" style="display:none;">
+						<label class="form-label fw-semibold">Arquivo atual</label>
+						<div class="d-flex align-items-center gap-2 border rounded p-2">
+							<i class="bi bi-file-earmark-play fs-4 text-primary"></i>
+							<span id="videoNomeArquivoAtual" class="small text-truncate flex-grow-1"></span>
+							<button type="button" class="btn btn-sm btn-outline-secondary" onclick="$('#videoArquivoSubstituir').trigger('click')">Substituir</button>
+						</div>
+						<input type="file" id="videoArquivoSubstituir" class="d-none" accept="video/*" onchange="substituirArquivoVideo()">
+						<small class="text-muted d-block mt-1" id="videoSubstituindoAviso" style="display:none;">Enviando novo arquivo...</small>
+					</div>
+					<div class="row g-2">
+						<div class="col-6">
+							<label class="form-label fw-semibold">Duração (segundos)</label>
+							<input type="number" id="videoDuracao" class="form-control" min="0">
+						</div>
+						<div class="col-6">
+							<label class="form-label fw-semibold">Ordem</label>
+							<input type="number" id="videoOrdem" class="form-control" min="0" value="0">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" onclick="salvarVideo()">Salvar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ############################## MODAL TESTE ############################## -->
+	<div class="modal fade" id="modalTeste" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalTesteTitulo">Teste da Aula</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="testeId">
+					<input type="hidden" id="testeAulaId">
+					<div class="row g-3 mb-3">
+						<div class="col-md-6">
+							<label class="form-label fw-semibold">Título do teste (opcional)</label>
+							<input type="text" id="testeTitulo" class="form-control">
+						</div>
+						<div class="col-md-3">
+							<label class="form-label fw-semibold">Nota de aprovação (%)</label>
+							<input type="number" id="testeNotaAprovacao" class="form-control" min="0" max="100" value="70">
+						</div>
+						<div class="col-md-3">
+							<label class="form-label fw-semibold">Tentativas máximas</label>
+							<input type="number" id="testeTentativasMaximas" class="form-control" min="1" value="3">
+						</div>
+					</div>
+					<div id="questoesContainer"></div>
+					<button class="btn btn-outline-primary btn-sm" onclick="adicionarQuestao()">
+						<i class="bi bi-plus-circle me-1"></i>Adicionar questão
+					</button>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" onclick="salvarTeste()">Salvar teste</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ############################## MODAL PLAYER DE VIDEO ############################## -->
+	<div class="modal fade" id="modalPlayerVideo" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content bg-dark">
+				<div class="modal-header border-0">
+					<h5 class="modal-title text-white" id="modalPlayerVideoTitulo">Vídeo</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body pt-0">
+					<video id="playerVideoElemento" controls style="width:100%; max-height:70vh;"></video>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../assets/js/jquery-3.6.3.js"></script>
+	<script defer src="../assets/js/bootstrap.bundle.min.js"></script>
+	<script defer src="../assets/js/dark.js"></script>
+	<script defer src="../assets/js/navbar.js"></script>
+	<script defer src="../assets/js/sidebar.js"></script>
+	<script>
+		const cursoId = new URLSearchParams(window.location.search).get('id');
+		let _funcionarioId = null;
+		let _testeExistenteId = null;
+		let _questaoSeq = 0;
+
+		if (!cursoId) {
+			alert('Curso não informado.');
+			window.location.href = "/learn/curso/list";
+		}
+
+		$('#linkVisualizarAluno').attr('href', '/learn/curso/visualizar?id=' + cursoId);
+
+		function escapeHtml(str) {
+			return String(str ?? '')
+				.replace(/&/g, "&amp;")
+				.replace(/</g, "&lt;")
+				.replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;")
+				.replace(/'/g, "&#039;");
+		}
+
+		function erro401() {
+			alert('Realize login novamente!');
+			window.location.href = "/learn/login";
+		}
+
+		function tratarErroAjax(xhr) {
+			if (xhr.status === 401) return; // tratado pelo statusCode 401 (erro401)
+			if (xhr.status === 403) {
+				alert('Você não possui permissão para executar esta ação.');
+			} else {
+				alert(xhr.responseText || 'Erro ao processar a solicitação!');
+			}
+		}
+
+		// ======================================================
+		// INFORMAÇÕES DO CURSO
+		// ======================================================
+		function carregarInfoCurso() {
+			$.ajax({
+				type: "GET",
+				url: "/learn/cursos/edit/" + cursoId,
+				success: function (data) {
+					$('#infoTitulo').val(data.titulo);
+					$('#infoDescricao').val(data.descricao);
+					$('#infoCapa').val(data.caminhoCapa);
+					$('#infoStatus').val(data.status);
+				},
+				statusCode: { 401: erro401, 500: function () { alert('Erro ao carregar o curso!'); } }
+			});
+		}
+
+		function salvarInfoCurso() {
+			const payload = {
+				id: Number(cursoId),
+				titulo: $('#infoTitulo').val().trim(),
+				descricao: $('#infoDescricao').val(),
+				caminhoCapa: $('#infoCapa').val(),
+				status: $('#infoStatus').val()
+			};
+			if (!payload.titulo) { alert('Informe o título do curso.'); return; }
+
+			$.ajax({
+				type: "PUT",
+				contentType: "application/json",
+				url: "/learn/cursos",
+				data: JSON.stringify(payload),
+				success: function () { alert('Informações salvas com sucesso!'); },
+				statusCode: { 401: erro401, 500: function () { alert('Erro ao salvar as informações!'); } }
+			});
+		}
+
+		// ======================================================
+		// AULAS
+		// ======================================================
+		function carregarAulas() {
+			$.ajax({
+				type: "GET",
+				url: "/learn/aulas/curso/" + cursoId,
+				success: function (aulas) {
+					$('#accordionAulas').empty();
+					$('#semAulas').toggle(aulas.length === 0);
+
+					aulas.forEach(aula => {
+						const item = `
+							<div class="accordion-item" id="aulaItem${aula.id}">
+								<h2 class="accordion-header">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#colapsoAula${aula.id}" onclick="aoAbrirAula(${aula.id})">
+										<span class="aula-header">
+											<span><i class="bi bi-play-circle me-2"></i>${escapeHtml(aula.titulo)} <small class="text-muted">(ordem ${aula.ordem})</small></span>
+										</span>
+									</button>
+								</h2>
+								<div id="colapsoAula${aula.id}" class="accordion-collapse collapse" data-bs-parent="#accordionAulas">
+									<div class="accordion-body">
+										<div class="d-flex justify-content-end gap-2 mb-3">
+											<button class="btn btn-sm btn-outline-secondary" onclick="abrirModalAula(${aula.id})"><i class="bi bi-pencil-square"></i> Editar aula</button>
+											<button class="btn btn-sm btn-outline-danger" onclick="excluirAula(${aula.id})"><i class="bi bi-trash"></i> Excluir aula</button>
+										</div>
+
+										<div class="d-flex justify-content-between align-items-center mb-2">
+											<h6 class="mb-0"><i class="bi bi-file-richtext me-1"></i>Conteúdos</h6>
+											<button class="btn btn-sm btn-success" onclick="abrirModalConteudo(${aula.id})"><i class="bi bi-plus-circle me-1"></i>Novo conteúdo</button>
+										</div>
+										<div class="table-responsive mb-4">
+											<table class="table table-sm align-middle">
+												<thead><tr><th>Título</th><th>Ordem</th><th class="text-end">Ações</th></tr></thead>
+												<tbody id="tbConteudos${aula.id}"><tr><td colspan="3" class="text-center text-muted py-2">Carregando...</td></tr></tbody>
+											</table>
+										</div>
+
+										<div class="d-flex justify-content-between align-items-center mb-2">
+											<h6 class="mb-0"><i class="bi bi-camera-video me-1"></i>Vídeos</h6>
+											<button class="btn btn-sm btn-success" onclick="abrirModalVideo(${aula.id})"><i class="bi bi-plus-circle me-1"></i>Novo vídeo</button>
+										</div>
+										<div class="table-responsive mb-4">
+											<table class="table table-sm align-middle">
+												<thead><tr><th>Título</th><th>Duração</th><th>Ordem</th><th class="text-end">Ações</th></tr></thead>
+												<tbody id="tbVideos${aula.id}"><tr><td colspan="4" class="text-center text-muted py-2">Carregando...</td></tr></tbody>
+											</table>
+										</div>
+
+										<h6 class="mb-2"><i class="bi bi-patch-question me-1"></i>Teste</h6>
+										<div id="testeResumo${aula.id}"><p class="text-muted small">Carregando...</p></div>
+									</div>
+								</div>
+							</div>
+						`;
+						$('#accordionAulas').append(item);
+					});
+				},
+				statusCode: { 401: erro401, 500: function () { alert('Erro ao carregar as aulas!'); } }
+			});
+		}
+
+		const _aulasCarregadas = new Set();
+
+		function aoAbrirAula(aulaId) {
+			if (_aulasCarregadas.has(aulaId)) return;
+			_aulasCarregadas.add(aulaId);
+			carregarConteudos(aulaId);
+			carregarVideos(aulaId);
+			carregarTesteResumo(aulaId);
+		}
+
+		function abrirModalAula(id) {
+			$('#aulaId, #aulaTitulo, #aulaDescricao').val('');
+			$('#aulaOrdem').val(0);
+			if (id) {
+				$('#modalAulaTitulo').text('Editar Aula');
+				$.ajax({
+					type: "GET",
+					url: "/learn/aulas/edit/" + id,
+					success: function (data) {
+						$('#aulaId').val(data.id);
+						$('#aulaTitulo').val(data.titulo);
+						$('#aulaDescricao').val(data.descricao);
+						$('#aulaOrdem').val(data.ordem);
+					}
+				});
+			} else {
+				$('#modalAulaTitulo').text('Nova Aula');
+			}
+			new bootstrap.Modal(document.getElementById('modalAula')).show();
+		}
+
+		function salvarAula() {
+			const id = $('#aulaId').val();
+			const titulo = $('#aulaTitulo').val().trim();
+			if (!titulo) { alert('Informe o título da aula.'); return; }
+
+			const payload = {
+				cursoId: Number(cursoId),
+				titulo: titulo,
+				descricao: $('#aulaDescricao').val(),
+				ordem: Number($('#aulaOrdem').val()) || 0
+			};
+
+			if (id) payload.id = Number(id);
+
+			$.ajax({
+				type: id ? "PUT" : "POST",
+				contentType: "application/json",
+				url: "/learn/aulas",
+				data: JSON.stringify(payload),
+				success: function () {
+					bootstrap.Modal.getInstance(document.getElementById('modalAula')).hide();
+					carregarAulas();
+				},
+				statusCode: { 401: erro401, 500: function () { alert('Erro ao salvar a aula!'); } }
+			});
+		}
+
+		function excluirAula(id) {
+			if (!confirm('Excluir esta aula? Todos os vídeos e o teste associados também serão excluídos.')) return;
+			$.ajax({
+				type: "DELETE",
+				url: "/learn/aulas/delete/" + id,
+				success: function () { carregarAulas(); },
+				statusCode: { 401: erro401, 403: function () { alert('Você não possui permissão para excluir aulas.'); } }
+			});
+		}
+
+		// ======================================================
+		// CONTEÚDOS (texto rico)
+		// ======================================================
+		function carregarConteudos(aulaId) {
+			$.ajax({
+				type: "GET",
+				url: "/learn/conteudos/aula/" + aulaId,
+				success: function (conteudos) {
+					const corpo = $('#tbConteudos' + aulaId);
+					corpo.empty();
+					if (conteudos.length === 0) {
+						corpo.append('<tr><td colspan="3" class="text-center text-muted py-2">Nenhum conteúdo cadastrado</td></tr>');
+						return;
+					}
+					conteudos.forEach(c => {
+						corpo.append(`
+							<tr>
+								<td>${escapeHtml(c.titulo || '(sem título)')}</td>
+								<td>${c.ordem}</td>
+								<td class="text-end">
+									<button class="btn btn-sm btn-outline-secondary" onclick="abrirModalConteudo(${aulaId}, ${c.id})"><i class="bi bi-pencil-square"></i></button>
+									<button class="btn btn-sm btn-outline-danger" onclick="excluirConteudo(${c.id}, ${aulaId})"><i class="bi bi-trash"></i></button>
+								</td>
+							</tr>
+						`);
+					});
+				}
+			});
+		}
+
+		function comandoEditor(cmd, valor) {
+			document.execCommand(cmd, false, valor || null);
+			$('#editorConteudoArea').trigger('focus');
+		}
+
+		$(document).on('mousedown', '.editor-rico-toolbar .btn[data-cmd]', function (e) {
+			e.preventDefault();
+		});
+
+		$(document).on('click', '.editor-rico-toolbar .btn[data-cmd]', function () {
+			const cmd = $(this).data('cmd');
+			let valor = $(this).data('valor');
+			if (cmd === 'createLink') {
+				valor = prompt('URL do link:', 'https://');
+				if (!valor) return;
+			}
+			comandoEditor(cmd, valor);
+		});
+
+		$('#editorCorTexto').on('input', function () {
+			comandoEditor('foreColor', $(this).val());
+		});
+
+		$('#btnEditorImagem').on('click', function () {
+			$('#editorImagemInput').trigger('click');
+		});
+
+		$('#editorImagemInput').on('change', function () {
+			const arquivo = this.files[0];
+			this.value = '';
+			if (!arquivo) return;
+
+			const aulaId = $('#conteudoAulaId').val();
+			const formData = new FormData();
+			formData.append('aulaId', aulaId);
+			formData.append('file', arquivo);
+
+			$.ajax({
+				type: "POST",
+				url: "/learn/conteudos/imagens",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					$('#editorConteudoArea').trigger('focus');
+					document.execCommand('insertHTML', false, `<img src="/learn/media/${data.url}">`);
+				},
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		});
+
+		function abrirModalConteudo(aulaId, id) {
+			$('#conteudoId, #conteudoTitulo').val('');
+			$('#conteudoOrdem').val(0);
+			$('#conteudoAulaId').val(aulaId);
+			$('#editorConteudoArea').html('');
+
+			if (id) {
+				$('#modalConteudoTitulo').text('Editar Conteúdo');
+				$.ajax({
+					type: "GET",
+					url: "/learn/conteudos/edit/" + id,
+					success: function (data) {
+						$('#conteudoId').val(data.id);
+						$('#conteudoTitulo').val(data.titulo);
+						$('#conteudoOrdem').val(data.ordem);
+						$('#editorConteudoArea').html(data.corpoHtml);
+					}
+				});
+			} else {
+				$('#modalConteudoTitulo').text('Novo Conteúdo');
+			}
+			new bootstrap.Modal(document.getElementById('modalConteudo')).show();
+		}
+
+		function salvarConteudo() {
+			const id = $('#conteudoId').val();
+			const aulaId = $('#conteudoAulaId').val();
+			const corpoHtml = $('#editorConteudoArea').html().trim();
+
+			if (!corpoHtml) { alert('Escreva algum conteúdo antes de salvar.'); return; }
+
+			const payload = {
+				aulaId: Number(aulaId),
+				titulo: $('#conteudoTitulo').val(),
+				corpoHtml: corpoHtml,
+				ordem: Number($('#conteudoOrdem').val()) || 0
+			};
+			if (id) payload.id = Number(id);
+
+			$.ajax({
+				type: id ? "PUT" : "POST",
+				contentType: "application/json",
+				url: "/learn/conteudos",
+				data: JSON.stringify(payload),
+				success: function () {
+					bootstrap.Modal.getInstance(document.getElementById('modalConteudo')).hide();
+					carregarConteudos(Number(aulaId));
+				},
+				statusCode: { 401: erro401, 500: function () { alert('Erro ao salvar o conteúdo!'); } }
+			});
+		}
+
+		function excluirConteudo(id, aulaId) {
+			if (!confirm('Excluir este conteúdo?')) return;
+			$.ajax({
+				type: "DELETE",
+				url: "/learn/conteudos/delete/" + id,
+				success: function () { carregarConteudos(aulaId); },
+				statusCode: { 401: erro401, 403: function () { alert('Você não possui permissão para excluir conteúdos.'); } }
+			});
+		}
+
+		// ======================================================
+		// VÍDEOS
+		// ======================================================
+		function carregarVideos(aulaId) {
+			$.ajax({
+				type: "GET",
+				url: "/learn/videos/aula/" + aulaId,
+				success: function (videos) {
+					const corpo = $('#tbVideos' + aulaId);
+					corpo.empty();
+					if (videos.length === 0) {
+						corpo.append('<tr><td colspan="4" class="text-center text-muted py-2">Nenhum vídeo cadastrado</td></tr>');
+						return;
+					}
+					videos.forEach(v => {
+						corpo.append(`
+							<tr>
+								<td>
+									${escapeHtml(v.titulo)}
+									<div class="small text-muted text-truncate" style="max-width:220px;">${escapeHtml(v.nomeArquivoOriginal || '')}</div>
+								</td>
+								<td>${v.duracaoSegundos ?? '—'}s</td>
+								<td>${v.ordem}</td>
+								<td class="text-end">
+									<button class="btn btn-sm btn-outline-primary" onclick="assistirVideo('${encodeURI(v.url)}', '${escapeHtml(v.titulo).replace(/'/g, "\\'")}')"><i class="bi bi-play-fill"></i></button>
+									<button class="btn btn-sm btn-outline-secondary" onclick="abrirModalVideo(${aulaId}, ${v.id})"><i class="bi bi-pencil-square"></i></button>
+									<button class="btn btn-sm btn-outline-danger" onclick="excluirVideo(${v.id}, ${aulaId})"><i class="bi bi-trash"></i></button>
+								</td>
+							</tr>
+						`);
+					});
+				}
+			});
+		}
+
+		function assistirVideo(url, titulo) {
+			$('#modalPlayerVideoTitulo').text(titulo);
+			$('#playerVideoElemento').attr('src', '/learn/media/' + url);
+			new bootstrap.Modal(document.getElementById('modalPlayerVideo')).show();
+		}
+
+		document.getElementById('modalPlayerVideo').addEventListener('hidden.bs.modal', function () {
+			const el = document.getElementById('playerVideoElemento');
+			el.pause();
+			el.removeAttribute('src');
+			el.load();
+		});
+
+		function abrirModalVideo(aulaId, id) {
+			$('#videoId, #videoTitulo, #videoDuracao').val('');
+			$('#videoOrdem').val(0);
+			$('#videoAulaId').val(aulaId);
+			$('#videoArquivo').val('');
+			$('#videoArquivoSubstituir').val('');
+			$('#videoSubstituindoAviso').hide();
+
+			if (id) {
+				$('#modalVideoTitulo').text('Editar Vídeo');
+				$('#videoArquivoNovoWrapper').hide();
+				$('#videoArquivoAtualWrapper').show();
+				$.ajax({
+					type: "GET",
+					url: "/learn/videos/edit/" + id,
+					success: function (data) {
+						$('#videoId').val(data.id);
+						$('#videoTitulo').val(data.titulo);
+						$('#videoDuracao').val(data.duracaoSegundos);
+						$('#videoOrdem').val(data.ordem);
+						$('#videoNomeArquivoAtual').text(data.nomeArquivoOriginal || data.url);
+					}
+				});
+			} else {
+				$('#modalVideoTitulo').text('Novo Vídeo');
+				$('#videoArquivoNovoWrapper').show();
+				$('#videoArquivoAtualWrapper').hide();
+			}
+			new bootstrap.Modal(document.getElementById('modalVideo')).show();
+		}
+
+		function salvarVideo() {
+			const id = $('#videoId').val();
+			const aulaId = $('#videoAulaId').val();
+			const titulo = $('#videoTitulo').val().trim();
+			if (!titulo) { alert('Informe o título do vídeo.'); return; }
+
+			const duracaoSegundos = $('#videoDuracao').val() ? Number($('#videoDuracao').val()) : null;
+			const ordem = Number($('#videoOrdem').val()) || 0;
+
+			if (id) {
+				$.ajax({
+					type: "PUT",
+					contentType: "application/json",
+					url: "/learn/videos",
+					data: JSON.stringify({ id: Number(id), titulo, duracaoSegundos, ordem }),
+					success: function () {
+						bootstrap.Modal.getInstance(document.getElementById('modalVideo')).hide();
+						carregarVideos(Number(aulaId));
+					},
+					statusCode: { 401: erro401, 500: function () { alert('Erro ao salvar o vídeo!'); } }
+				});
+				return;
+			}
+
+			const arquivo = $('#videoArquivo')[0].files[0];
+			if (!arquivo) { alert('Selecione um arquivo de vídeo.'); return; }
+
+			const formData = new FormData();
+			formData.append('aulaId', aulaId);
+			formData.append('titulo', titulo);
+			if (duracaoSegundos !== null) formData.append('duracaoSegundos', duracaoSegundos);
+			formData.append('ordem', ordem);
+			formData.append('file', arquivo);
+
+			$.ajax({
+				type: "POST",
+				url: "/learn/videos",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function () {
+					bootstrap.Modal.getInstance(document.getElementById('modalVideo')).hide();
+					carregarVideos(Number(aulaId));
+				},
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		function substituirArquivoVideo() {
+			const id = $('#videoId').val();
+			const aulaId = $('#videoAulaId').val();
+			const arquivo = $('#videoArquivoSubstituir')[0].files[0];
+			if (!id || !arquivo) return;
+
+			const formData = new FormData();
+			formData.append('file', arquivo);
+
+			$('#videoSubstituindoAviso').show();
+			$.ajax({
+				type: "PUT",
+				url: "/learn/videos/" + id + "/arquivo",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					$('#videoSubstituindoAviso').hide();
+					$('#videoNomeArquivoAtual').text(data.nomeArquivoOriginal || data.url);
+					carregarVideos(Number(aulaId));
+				},
+				error: function (xhr) {
+					$('#videoSubstituindoAviso').hide();
+					tratarErroAjax(xhr);
+				},
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		function excluirVideo(id, aulaId) {
+			if (!confirm('Excluir este vídeo?')) return;
+			$.ajax({
+				type: "DELETE",
+				url: "/learn/videos/delete/" + id,
+				success: function () { carregarVideos(aulaId); },
+				statusCode: { 401: erro401, 403: function () { alert('Você não possui permissão para excluir vídeos.'); } }
+			});
+		}
+
+		// ======================================================
+		// TESTE
+		// ======================================================
+		function carregarTesteResumo(aulaId) {
+			$.ajax({
+				type: "GET",
+				url: "/learn/testes/aula/" + aulaId,
+				success: function (teste) {
+					const container = $('#testeResumo' + aulaId);
+					if (!teste) {
+						container.html(`
+							<p class="text-muted small">Nenhum teste cadastrado para esta aula.</p>
+							<button class="btn btn-sm btn-success" onclick="abrirModalTeste(${aulaId})"><i class="bi bi-plus-circle me-1"></i>Criar teste</button>
+						`);
+						return;
+					}
+					container.html(`
+						<p class="small mb-2"><i class="bi bi-list-check me-1"></i>${teste.questoes.length} questão(ões) • nota de aprovação: ${teste.notaAprovacao}%</p>
+						<button class="btn btn-sm btn-outline-secondary" onclick="abrirModalTeste(${aulaId})"><i class="bi bi-pencil-square me-1"></i>Editar teste</button>
+						<button class="btn btn-sm btn-outline-danger" onclick="excluirTeste(${teste.id}, ${aulaId})"><i class="bi bi-trash me-1"></i>Excluir teste</button>
+					`);
+				}
+			});
+		}
+
+		function limparQuestoes() {
+			$('#questoesContainer').empty();
+			_questaoSeq = 0;
+		}
+
+		function adicionarQuestao(enunciado, alternativas) {
+			const qUid = 'q' + (_questaoSeq++);
+			const bloco = $(`
+				<div class="questao-block border rounded p-3 mb-3" data-quid="${qUid}">
+					<div class="d-flex justify-content-between mb-2">
+						<strong>Questão</strong>
+						<button type="button" class="btn btn-sm btn-outline-danger" onclick="$(this).closest('.questao-block').remove()">
+							<i class="bi bi-trash"></i>
+						</button>
+					</div>
+					<textarea class="form-control mb-2 enunciado-input" rows="2" placeholder="Enunciado da questão">${escapeHtml(enunciado || '')}</textarea>
+					<div class="alternativas-container mb-2"></div>
+					<button type="button" class="btn btn-sm btn-outline-primary" onclick="adicionarAlternativa($(this).closest('.questao-block'))">
+						<i class="bi bi-plus"></i> Alternativa
+					</button>
+				</div>
+			`);
+			$('#questoesContainer').append(bloco);
+
+			const alts = alternativas && alternativas.length ? alternativas : [{ texto: '', correta: false }, { texto: '', correta: false }];
+			alts.forEach(a => adicionarAlternativa(bloco, a.texto, a.correta));
+		}
+
+		function adicionarAlternativa(blocoQuestao, texto, correta) {
+			const qUid = blocoQuestao.data('quid');
+			const row = $(`
+				<div class="input-group input-group-sm mb-1 alternativa-row">
+					<span class="input-group-text"><input type="radio" name="correta-${qUid}" class="correta-radio" ${correta ? 'checked' : ''}></span>
+					<input type="text" class="form-control texto-input" placeholder="Texto da alternativa" value="${escapeHtml(texto || '')}">
+					<button type="button" class="btn btn-outline-danger" onclick="$(this).closest('.alternativa-row').remove()"><i class="bi bi-x"></i></button>
+				</div>
+			`);
+			blocoQuestao.find('.alternativas-container').append(row);
+		}
+
+		function abrirModalTeste(aulaId) {
+			$('#testeAulaId').val(aulaId);
+			$('#testeId').val('');
+			_testeExistenteId = null;
+			limparQuestoes();
+
+			$.ajax({
+				type: "GET",
+				url: "/learn/testes/aula/" + aulaId,
+				success: function (teste) {
+					if (teste) {
+						_testeExistenteId = teste.id;
+						$('#testeId').val(teste.id);
+						$('#testeTitulo').val(teste.titulo);
+						$('#testeNotaAprovacao').val(teste.notaAprovacao);
+						$('#testeTentativasMaximas').val(teste.tentativasMaximas);
+						teste.questoes.forEach(q => adicionarQuestao(q.enunciado, q.alternativas));
+					} else {
+						$('#testeTitulo').val('');
+						$('#testeNotaAprovacao').val(70);
+						$('#testeTentativasMaximas').val(3);
+						adicionarQuestao();
+					}
+					new bootstrap.Modal(document.getElementById('modalTeste')).show();
+				}
+			});
+		}
+
+		function salvarTeste() {
+			const aulaId = Number($('#testeAulaId').val());
+			const notaAprovacao = Number($('#testeNotaAprovacao').val()) || 0;
+			const tentativasMaximas = Number($('#testeTentativasMaximas').val()) || 3;
+			const titulo = $('#testeTitulo').val();
+
+			const questoes = [];
+			$('#questoesContainer .questao-block').each(function () {
+				const enunciado = $(this).find('.enunciado-input').val().trim();
+				const alternativas = [];
+				$(this).find('.alternativa-row').each(function () {
+					alternativas.push({
+						texto: $(this).find('.texto-input').val().trim(),
+						correta: $(this).find('.correta-radio').is(':checked')
+					});
+				});
+				questoes.push({ enunciado, alternativas });
+			});
+
+			if (questoes.length === 0) { alert('Adicione ao menos uma questão.'); return; }
+			for (const q of questoes) {
+				if (!q.enunciado) { alert('Preencha o enunciado de todas as questões.'); return; }
+				if (q.alternativas.length < 2) { alert('Cada questão precisa de ao menos duas alternativas.'); return; }
+				if (q.alternativas.some(a => !a.texto)) { alert('Preencha o texto de todas as alternativas.'); return; }
+				if (q.alternativas.filter(a => a.correta).length !== 1) { alert('Marque exatamente uma alternativa correta em cada questão.'); return; }
+			}
+
+			const id = $('#testeId').val();
+			const payload = { aulaId, titulo, notaAprovacao, tentativasMaximas, questoes };
+			if (id) payload.id = Number(id);
+
+			$.ajax({
+				type: id ? "PUT" : "POST",
+				contentType: "application/json",
+				url: "/learn/testes",
+				data: JSON.stringify(payload),
+				success: function () {
+					bootstrap.Modal.getInstance(document.getElementById('modalTeste')).hide();
+					_aulasCarregadas.delete(aulaId);
+					carregarTesteResumo(aulaId);
+					_aulasCarregadas.add(aulaId);
+				},
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		function excluirTeste(id, aulaId) {
+			if (!confirm('Excluir este teste?')) return;
+			$.ajax({
+				type: "DELETE",
+				url: "/learn/testes/delete/" + id,
+				success: function () { carregarTesteResumo(aulaId); },
+				statusCode: { 401: erro401, 403: function () { alert('Você não possui permissão para excluir testes.'); } }
+			});
+		}
+
+		// ======================================================
+		// ACESSO POR CLIENTE
+		// ======================================================
+		function carregarClientesParaSelect() {
+			$.ajax({
+				type: "GET",
+				url: "/learn/clientes?page=0&size=10000",
+				success: function (data) {
+					const select = $('#selectClienteLiberar');
+					select.find('option:not(:first)').remove();
+					data.content.forEach(c => {
+						select.append(`<option value="${c.id}">${escapeHtml(c.nomeCliente)}</option>`);
+					});
+				}
+			});
+		}
+
+		function carregarAcessoClientes() {
+			$.ajax({
+				type: "GET",
+				url: "/learn/cursos/acesso/cliente/curso/" + cursoId,
+				success: function (data) {
+					const corpo = $('#tbAcessoClientes');
+					corpo.empty();
+					if (data.length === 0) {
+						corpo.append('<tr><td colspan="3" class="text-center text-muted py-3">Nenhum cliente com acesso</td></tr>');
+						return;
+					}
+					data.forEach(a => {
+						corpo.append(`
+							<tr>
+								<td>${escapeHtml(a.nomeCliente)}</td>
+								<td>${escapeHtml(a.dataConcessao)}</td>
+								<td class="text-end">
+									<button class="btn btn-sm btn-outline-danger" onclick="revogarCliente(${a.id})"><i class="bi bi-x-circle"></i> Revogar</button>
+								</td>
+							</tr>
+						`);
+					});
+				}
+			});
+		}
+
+		function liberarCliente() {
+			const clienteId = $('#selectClienteLiberar').val();
+			if (!clienteId) { alert('Selecione um cliente.'); return; }
+
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+				url: "/learn/cursos/acesso/cliente",
+				data: JSON.stringify({ cursoId: Number(cursoId), clienteId: Number(clienteId), concedidoPorId: _funcionarioId }),
+				success: function () { carregarAcessoClientes(); },
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		function revogarCliente(id) {
+			if (!confirm('Revogar o acesso deste cliente a este curso?')) return;
+			$.ajax({
+				type: "DELETE",
+				url: "/learn/cursos/acesso/cliente/" + id,
+				success: function () { carregarAcessoClientes(); },
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		// ======================================================
+		// ACESSO POR COLABORADOR
+		// ======================================================
+		function carregarAcessoColaboradores() {
+			$.ajax({
+				type: "GET",
+				url: "/learn/cursos/acesso/colaborador/curso/" + cursoId,
+				success: function (data) {
+					const corpo = $('#tbAcessoColaboradores');
+					corpo.empty();
+					if (data.length === 0) {
+						corpo.append('<tr><td colspan="3" class="text-center text-muted py-3">Nenhum colaborador com acesso</td></tr>');
+						return;
+					}
+					data.forEach(a => {
+						corpo.append(`
+							<tr>
+								<td>${escapeHtml(a.nomeColaborador)}</td>
+								<td>${escapeHtml(a.dataConcessao)}</td>
+								<td class="text-end">
+									<button class="btn btn-sm btn-outline-danger" onclick="revogarColaborador(${a.id})"><i class="bi bi-x-circle"></i> Revogar</button>
+								</td>
+							</tr>
+						`);
+					});
+				}
+			});
+		}
+
+		function buscarColaboradorParaLiberar() {
+			const palavra = $('#buscaColaboradorLiberar').val().trim();
+			const resultado = $('#resultadoBuscaColaborador');
+			resultado.empty();
+			if (!palavra) return;
+
+			$.ajax({
+				type: "GET",
+				url: "/learn/colaborador/buscar/" + palavra,
+				success: function (data) {
+					if (data.length === 0) {
+						resultado.html('<div class="text-muted small">Nenhum colaborador encontrado</div>');
+						return;
+					}
+					data.forEach(c => {
+						resultado.append(`
+							<div class="d-flex justify-content-between align-items-center border rounded px-2 py-1 mb-1">
+								<span class="small">${escapeHtml(c.nomeColaborador)} <span class="text-muted">(${escapeHtml(c.nomeCliente)})</span></span>
+								<button class="btn btn-sm btn-success" onclick="liberarColaborador(${c.id})"><i class="bi bi-unlock"></i></button>
+							</div>
+						`);
+					});
+				}
+			});
+		}
+
+		function liberarColaborador(colaboradorId) {
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+				url: "/learn/cursos/acesso/colaborador",
+				data: JSON.stringify({ cursoId: Number(cursoId), colaboradorId: Number(colaboradorId), concedidoPorId: _funcionarioId }),
+				success: function () {
+					$('#resultadoBuscaColaborador').empty();
+					$('#buscaColaboradorLiberar').val('');
+					carregarAcessoColaboradores();
+				},
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		function revogarColaborador(id) {
+			if (!confirm('Revogar o acesso deste colaborador a este curso?')) return;
+			$.ajax({
+				type: "DELETE",
+				url: "/learn/cursos/acesso/colaborador/" + id,
+				success: function () { carregarAcessoColaboradores(); },
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		// ======================================================
+		// INICIALIZAÇÃO
+		// ======================================================
+		$.ajax({
+			type: "GET",
+			url: "/learn/funcionarios/home",
+			success: function (data) { _funcionarioId = data.id; },
+			statusCode: { 401: erro401 }
+		});
+
+		carregarInfoCurso();
+		carregarAulas();
+		carregarClientesParaSelect();
+		carregarAcessoClientes();
+		carregarAcessoColaboradores();
+	</script>
+</body>
+</html>
