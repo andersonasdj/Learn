@@ -5,34 +5,43 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/bootstrap-icons.min.css">
-	<link rel="stylesheet" href="../assets/css/styleBusca.css">
 	<link rel="stylesheet" href="../assets/css/StyleClientesFuncionarios.css">
 	<link rel="stylesheet" href="../assets/css/defaultStyle.css?v=1.1">
 	<link rel="stylesheet" href="../assets/css/dark.css?v=1.1">
 	<link rel="stylesheet" href="../assets/css/navbar.css?v=1.1">
-	<title>Learn - Cursos</title>
+	<title>Learn - Modelo de Certificado</title>
 	<style>
-		.search-header { border-radius: 16px; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 10px rgba(0,0,0,.07); background: #fff; }
-		body.dark-mode .search-header { background: #1e1e1e; border-color: rgba(255,255,255,.1); }
+		.card { border: 1px solid rgba(0,0,0,.1) !important; box-shadow: 0 3px 12px rgba(0,0,0,.09) !important; border-radius: 14px !important; }
+		body.dark-mode .card { border-color: rgba(255,255,255,.12) !important; box-shadow: 0 3px 14px rgba(0,0,0,.5) !important; }
 
-		.card-curso {
-			border: none;
-			border-radius: 14px;
-			background: linear-gradient(180deg, #ffffff, #fafafa);
-			box-shadow: 0 6px 18px rgba(0,0,0,.08);
-			transition: all .25s ease;
+		.canvas-modelo {
+			position: relative;
+			width: 100%;
+			max-width: 900px;
+			margin: 0 auto;
+			background: #111;
+			border-radius: 8px;
 			overflow: hidden;
+			user-select: none;
 		}
-		.card-curso:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,.18); }
-		.card-curso .curso-capa {
-			height: 120px;
-			background: linear-gradient(135deg, #1e3a5f, #1a56c4);
-			display: flex; align-items: center; justify-content: center;
-			color: #fff; font-size: 2.2rem;
+		.canvas-modelo-imagem {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			display: block;
+			pointer-events: none;
 		}
-		.card-curso .curso-capa img { width: 100%; height: 100%; object-fit: cover; }
-		body.dark-mode .card-curso { background: linear-gradient(180deg, #2c3034, #212529); box-shadow: 0 8px 22px rgba(0,0,0,.45); }
-		body.dark-mode .card-curso .card-footer { background: transparent; border-top: 1px dashed rgba(255,255,255,.15); }
+		.campo-arrastavel {
+			position: absolute;
+			cursor: move;
+			white-space: nowrap;
+			padding: 2px 6px;
+			border: 1px dashed transparent;
+			border-radius: 4px;
+			line-height: 1.2;
+		}
+		.campo-arrastavel:hover { border-color: rgba(13,110,253,.5); }
+		.campo-arrastavel.selecionado { border-color: #0d6efd; background: rgba(13,110,253,.1); }
 	</style>
 </head>
 <body>
@@ -219,26 +228,58 @@
 		</nav>
 		<!-- / NAVBAR -->
 
-		<div class="container-fluid mt-3 mb-4">
-			<div class="search-header p-3">
-				<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-					<div>
-						<h5 class="mb-0 fw-semibold"><i class="bi bi-mortarboard-fill text-primary me-2"></i>Cursos</h5>
-						<small class="text-muted"><span id="contador">0</span> curso(s) cadastrado(s)</small>
-					</div>
-					<a href="/learn/curso/form" class="btn btn-primary btn-sm px-3">
-						<i class="bi bi-plus-circle me-1"></i> Novo Curso
-					</a>
+		<div class="container-fluid mt-3 mb-5">
+			<div class="card mb-4">
+				<div class="card-body">
+					<h5 class="mb-1"><i class="bi bi-patch-check text-primary me-2"></i>Modelo de Certificado</h5>
+					<p class="text-muted small mb-0">
+						Envie a imagem de fundo do certificado e arraste os campos abaixo até a posição desejada.
+						Todo certificado emitido usa este mesmo modelo.
+					</p>
 				</div>
 			</div>
-		</div>
 
-		<div class="container-fluid">
-			<div class="row g-3" id="listaCursos">
-				<div class="col-12 text-center text-muted py-5">
-					<i class="bi bi-mortarboard display-6 d-block mb-2 opacity-25"></i>
-					Carregando cursos...
+			<div class="card mb-4">
+				<div class="card-body">
+					<input type="file" id="imagemFundoInput" class="d-none" accept="image/png,image/jpeg,image/gif,image/webp">
+					<div id="areaUpload"></div>
 				</div>
+			</div>
+
+			<div class="card" id="painelEstiloCampo" style="display:none;">
+				<div class="card-body">
+					<h6 class="mb-3" id="painelEstiloTitulo">Estilo do campo</h6>
+					<div class="row g-3 align-items-end">
+						<div class="col-auto">
+							<label class="form-label small mb-1">Tamanho da fonte</label>
+							<input type="number" id="estiloTamanhoFonte" class="form-control form-control-sm" style="width:90px;" min="8" max="150">
+						</div>
+						<div class="col-auto">
+							<label class="form-label small mb-1">Cor</label>
+							<input type="color" id="estiloCor" class="form-control form-control-color form-control-sm">
+						</div>
+						<div class="col-auto">
+							<label class="form-label small mb-1 d-block">Negrito</label>
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" id="estiloNegrito">
+							</div>
+						</div>
+						<div class="col-auto">
+							<label class="form-label small mb-1">Alinhamento</label>
+							<select id="estiloAlinhamento" class="form-select form-select-sm">
+								<option value="ESQUERDA">Esquerda</option>
+								<option value="CENTRO">Centro</option>
+								<option value="DIREITA">Direita</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-end mt-3">
+				<button class="btn btn-primary" onclick="salvarModelo()">
+					<i class="bi bi-check-circle me-1"></i>Salvar modelo
+				</button>
 			</div>
 		</div>
 	</div>
@@ -266,98 +307,238 @@
 				.replace(/'/g, "&#039;");
 		}
 
+		function erro401() {
+			alert('Realize login novamente!');
+			window.location.href = "/learn/login";
+		}
+
+		function tratarErroAjax(xhr) {
+			if (xhr.status === 401) return;
+			if (xhr.status === 403) {
+				alert('Você não possui permissão para executar esta ação.');
+			} else {
+				alert(xhr.responseText || 'Erro ao processar a solicitação!');
+			}
+		}
+
 		function capaUrl(caminho) {
 			if (!caminho) return null;
 			return caminho.startsWith('http') ? caminho : '/learn/media/' + caminho;
 		}
 
-		function badgeStatus(status) {
-			const cfg = {
-				RASCUNHO:  { cor: 'secondary', label: 'Rascunho' },
-				PUBLICADO: { cor: 'success',   label: 'Publicado' },
-				ARQUIVADO: { cor: 'dark',      label: 'Arquivado' }
-			};
-			const c = cfg[status] || cfg.RASCUNHO;
-			return `<span class="badge bg-${c.cor}">${c.label}</span>`;
+		const TIPOS_CAMPO = [
+			{ tipo: 'NOME_ALUNO', label: 'Nome do Aluno', exemplo: 'Nome do Aluno', yPadrao: 40 },
+			{ tipo: 'NOME_CURSO', label: 'Nome do Curso', exemplo: 'Nome do Curso', yPadrao: 55 },
+			{ tipo: 'DATA_CONCLUSAO', label: 'Data de Conclusão', exemplo: '28/07/2026', yPadrao: 68 },
+			{ tipo: 'CARGA_HORARIA', label: 'Carga Horária', exemplo: '40h', yPadrao: 75 },
+			{ tipo: 'CODIGO_VALIDACAO', label: 'Código de Validação', exemplo: 'A1B2C3D4E5', yPadrao: 90 }
+		];
+
+		let _modelo = { caminhoImagemFundo: null, larguraImagemPx: 0, alturaImagemPx: 0, campos: {} };
+		let _campoSelecionado = null;
+		let _arrastando = null;
+
+		function inicializarCamposPadrao() {
+			TIPOS_CAMPO.forEach(t => {
+				if (!_modelo.campos[t.tipo]) {
+					_modelo.campos[t.tipo] = {
+						tipoCampo: t.tipo, posXPercentual: 50, posYPercentual: t.yPadrao,
+						tamanhoFonte: 24, corHex: '#000000', negrito: false, alinhamento: 'CENTRO'
+					};
+				}
+			});
 		}
 
-		function carregarCursos() {
+		function carregarModelo() {
 			$.ajax({
 				type: "GET",
-				url: "/learn/cursos",
+				url: "/learn/modelo-certificado",
 				success: function (data) {
-					$('#contador').text(data.length);
-					$('#listaCursos').empty();
-
-					if (!data || data.length === 0) {
-						$('#listaCursos').append(`
-							<div class="col-12 text-center text-muted py-5">
-								<i class="bi bi-mortarboard display-6 d-block mb-2 opacity-25"></i>
-								Nenhum curso cadastrado
-							</div>
-						`);
-						return;
+					if (data) {
+						_modelo.caminhoImagemFundo = data.caminhoImagemFundo;
+						_modelo.larguraImagemPx = data.larguraImagemPx;
+						_modelo.alturaImagemPx = data.alturaImagemPx;
+						data.campos.forEach(c => { _modelo.campos[c.tipoCampo] = c; });
 					}
-
-					data.forEach(c => {
-						const urlCapa = capaUrl(c.caminhoCapa);
-						const capa = urlCapa
-							? `<img src="${escapeHtml(urlCapa)}" alt="">`
-							: `<i class="bi bi-mortarboard-fill"></i>`;
-
-						const card = `
-							<div class="col-xl-3 col-lg-4 col-md-6">
-								<div class="card card-curso h-100">
-									<div class="curso-capa">${capa}</div>
-									<div class="card-body pb-2">
-										<div class="fw-semibold text-truncate mb-1" title="${escapeHtml(c.titulo)}">${escapeHtml(c.titulo)}</div>
-										<div class="mb-2">${badgeStatus(c.status)}</div>
-										<div class="small text-muted">
-											<i class="bi bi-person"></i> ${escapeHtml(c.nomeAutor || '—')}<br>
-											<i class="bi bi-calendar3"></i> ${escapeHtml(c.dataCriacao || '—')}
-										</div>
-									</div>
-									<div class="card-footer d-flex justify-content-end gap-1">
-										<a class="btn btn-sm btn-outline-primary" href="/learn/curso/gerenciar?id=${c.id}">
-											<i class="bi bi-gear me-1"></i>Gerenciar
-										</a>
-										<button class="btn btn-sm btn-outline-danger" onclick="excluirCurso(${c.id}, this)">
-											<i class="bi bi-trash"></i>
-										</button>
-									</div>
-								</div>
-							</div>
-						`;
-						$('#listaCursos').append(card);
-					});
+					inicializarCamposPadrao();
+					renderizarCanvas();
 				},
-				statusCode: {
-					500: function () { alert('Erro! Contate o desenvolvedor!'); },
-					401: function () {
-						alert('Realize login novamente!');
-						window.location.href = "/learn/login";
-					}
-				}
+				statusCode: { 401: erro401, 500: function () { alert('Erro ao carregar o modelo!'); } }
 			});
 		}
 
-		function excluirCurso(id, btn) {
-			if (!confirm("Tem certeza que deseja excluir este curso? Todas as aulas, vídeos e testes associados também serão excluídos.")) return;
-			const card = $(btn).closest('.col-xl-3, .col-lg-4, .col-md-6');
+		$('#imagemFundoInput').on('change', function () {
+			const arquivo = this.files[0];
+			this.value = '';
+			if (!arquivo) return;
+
+			const formData = new FormData();
+			formData.append('file', arquivo);
+
 			$.ajax({
-				type: "DELETE",
-				url: "/learn/cursos/delete/" + id,
-				success: function () {
-					card.fadeOut(400, function () { $(this).remove(); });
+				type: "POST",
+				url: "/learn/modelo-certificado/imagem",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					_modelo.caminhoImagemFundo = data.url;
+					_modelo.larguraImagemPx = data.larguraPx;
+					_modelo.alturaImagemPx = data.alturaPx;
+					renderizarCanvas();
 				},
-				statusCode: {
-					403: function () { alert('Você não possui permissão para excluir cursos.'); },
-					500: function () { alert('Erro ao excluir o curso!'); }
-				}
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		});
+
+		function renderizarCanvas() {
+			const container = $('#areaUpload');
+
+			if (!_modelo.caminhoImagemFundo) {
+				container.html(`
+					<div class="text-center text-muted py-5">
+						<i class="bi bi-image display-4 d-block mb-2 opacity-25"></i>
+						Nenhuma imagem de fundo configurada
+						<div class="mt-3">
+							<button class="btn btn-primary btn-sm" onclick="$('#imagemFundoInput').trigger('click')">
+								<i class="bi bi-upload me-1"></i>Selecionar imagem de fundo
+							</button>
+						</div>
+					</div>
+				`);
+				return;
+			}
+
+			container.html(`
+				<div class="d-flex justify-content-between align-items-center mb-2">
+					<small class="text-muted">Arraste os campos sobre a imagem. Clique num campo para ajustar o estilo.</small>
+					<button class="btn btn-outline-secondary btn-sm" onclick="$('#imagemFundoInput').trigger('click')">
+						<i class="bi bi-upload me-1"></i>Trocar imagem
+					</button>
+				</div>
+				<div id="canvasModelo" class="canvas-modelo" style="aspect-ratio:${_modelo.larguraImagemPx}/${_modelo.alturaImagemPx};">
+					<img src="${escapeHtml(capaUrl(_modelo.caminhoImagemFundo))}" class="canvas-modelo-imagem" alt="">
+				</div>
+			`);
+
+			TIPOS_CAMPO.forEach(renderizarCampo);
+		}
+
+		function renderizarCampo(tipoInfo) {
+			const campo = _modelo.campos[tipoInfo.tipo];
+			const canvas = $('#canvasModelo');
+			const escala = canvas.width() / _modelo.larguraImagemPx;
+			const tx = campo.alinhamento === 'CENTRO' ? '-50%' : campo.alinhamento === 'DIREITA' ? '-100%' : '0%';
+			const textAlign = campo.alinhamento === 'CENTRO' ? 'center' : campo.alinhamento === 'DIREITA' ? 'right' : 'left';
+
+			const el = $(`
+				<div class="campo-arrastavel${_campoSelecionado === tipoInfo.tipo ? ' selecionado' : ''}" data-tipo="${tipoInfo.tipo}"
+					style="left:${campo.posXPercentual}%; top:${campo.posYPercentual}%; transform:translate(${tx},-50%);
+						font-size:${campo.tamanhoFonte * escala}px; color:${campo.corHex}; font-weight:${campo.negrito ? 'bold' : 'normal'};
+						text-align:${textAlign};">
+					${escapeHtml(tipoInfo.exemplo)}
+				</div>
+			`);
+
+			el.on('mousedown', function (e) { iniciarArraste(e, tipoInfo.tipo); });
+			el.on('click', function (e) {
+				e.stopPropagation();
+				abrirPainelEstilo(tipoInfo.tipo);
+			});
+
+			canvas.append(el);
+		}
+
+		function iniciarArraste(e, tipo) {
+			e.preventDefault();
+			const canvas = $('#canvasModelo');
+			_arrastando = {
+				tipo: tipo,
+				canvasOffset: canvas.offset(),
+				canvasWidth: canvas.width(),
+				canvasHeight: canvas.height()
+			};
+			$(document).on('mousemove.arraste', moverArraste);
+			$(document).on('mouseup.arraste', finalizarArraste);
+		}
+
+		function moverArraste(e) {
+			if (!_arrastando) return;
+			const x = e.pageX - _arrastando.canvasOffset.left;
+			const y = e.pageY - _arrastando.canvasOffset.top;
+			const percX = Math.min(100, Math.max(0, (x / _arrastando.canvasWidth) * 100));
+			const percY = Math.min(100, Math.max(0, (y / _arrastando.canvasHeight) * 100));
+
+			_modelo.campos[_arrastando.tipo].posXPercentual = percX;
+			_modelo.campos[_arrastando.tipo].posYPercentual = percY;
+
+			$(`.campo-arrastavel[data-tipo="${_arrastando.tipo}"]`).css({ left: percX + '%', top: percY + '%' });
+		}
+
+		function finalizarArraste() {
+			_arrastando = null;
+			$(document).off('.arraste');
+		}
+
+		function abrirPainelEstilo(tipo) {
+			_campoSelecionado = tipo;
+			const campo = _modelo.campos[tipo];
+			const info = TIPOS_CAMPO.find(t => t.tipo === tipo);
+
+			$('#painelEstiloTitulo').text('Estilo — ' + info.label);
+			$('#estiloTamanhoFonte').val(campo.tamanhoFonte);
+			$('#estiloCor').val(campo.corHex);
+			$('#estiloNegrito').prop('checked', campo.negrito);
+			$('#estiloAlinhamento').val(campo.alinhamento);
+			$('#painelEstiloCampo').show();
+
+			$('.campo-arrastavel').removeClass('selecionado');
+			$(`.campo-arrastavel[data-tipo="${tipo}"]`).addClass('selecionado');
+		}
+
+		$('#estiloTamanhoFonte, #estiloCor, #estiloNegrito, #estiloAlinhamento').on('input change', function () {
+			if (!_campoSelecionado) return;
+			const campo = _modelo.campos[_campoSelecionado];
+			campo.tamanhoFonte = Number($('#estiloTamanhoFonte').val()) || 24;
+			campo.corHex = $('#estiloCor').val();
+			campo.negrito = $('#estiloNegrito').is(':checked');
+			campo.alinhamento = $('#estiloAlinhamento').val();
+			renderizarCanvas();
+		});
+
+		$(document).on('click', '#canvasModelo', function (e) {
+			if ($(e.target).is('#canvasModelo, .canvas-modelo-imagem')) {
+				_campoSelecionado = null;
+				$('#painelEstiloCampo').hide();
+				$('.campo-arrastavel').removeClass('selecionado');
+			}
+		});
+
+		function salvarModelo() {
+			if (!_modelo.caminhoImagemFundo) {
+				alert('Selecione uma imagem de fundo antes de salvar.');
+				return;
+			}
+			const payload = {
+				caminhoImagemFundo: _modelo.caminhoImagemFundo,
+				larguraImagemPx: _modelo.larguraImagemPx,
+				alturaImagemPx: _modelo.alturaImagemPx,
+				campos: TIPOS_CAMPO.map(t => _modelo.campos[t.tipo])
+			};
+
+			$.ajax({
+				type: "PUT",
+				contentType: "application/json",
+				url: "/learn/modelo-certificado",
+				data: JSON.stringify(payload),
+				success: function () { alert('Modelo salvo com sucesso!'); },
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
 			});
 		}
 
-		carregarCursos();
+		carregarModelo();
 	</script>
 </body>
 </html>

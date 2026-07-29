@@ -16,6 +16,9 @@ public interface ProgressoVideoRepository extends JpaRepository<ProgressoVideo, 
 	@Query("SELECT p FROM ProgressoVideo p WHERE p.funcionario.id = :funcionarioId AND p.video.aula.curso.id = :cursoId")
 	List<ProgressoVideo> buscarPorFuncionarioECurso(Long funcionarioId, Long cursoId);
 
+	@Query("SELECT DISTINCT p.funcionario.id FROM ProgressoVideo p WHERE p.video.aula.curso.id = :cursoId")
+	List<Long> buscarFuncionarioIdsPorCurso(Long cursoId);
+
 	@Modifying
 	@Query("DELETE FROM ProgressoVideo p WHERE p.funcionario.id = :funcionarioId AND p.video.aula.curso.id = :cursoId")
 	void excluirPorFuncionarioECurso(Long funcionarioId, Long cursoId);

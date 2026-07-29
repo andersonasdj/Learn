@@ -135,6 +135,7 @@
 				<div class="sidebar-group-items">
 					<a href="/learn/curso/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
 					<a href="/learn/curso/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+					<a href="/learn/curso/certificado" class="sidebar-subitem"><i class="bi bi-patch-check text-warning"></i>Modelo de Certificado</a>
 				</div>
 			</div>
 		</div>
@@ -236,6 +237,7 @@
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="/learn/curso/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
 								<li><a class="dropdown-item" href="/learn/curso/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+								<li><a class="dropdown-item" href="/learn/curso/certificado"><i class="bi bi-patch-check me-2 text-warning"></i>Modelo de Certificado</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -301,6 +303,7 @@
 							<div class="progress" style="height: 8px;">
 								<div class="progress-bar bg-success" id="progressoCursoBarra" role="progressbar" style="width: 0%"></div>
 							</div>
+							<div id="areaCertificado" class="mt-2" style="display:none;"></div>
 						</div>
 					</div>
 				</div>
@@ -365,8 +368,22 @@
 			window.location.href = "/learn/login";
 		}
 
+		function tratarErroAjax(xhr) {
+			if (xhr.status === 401) return; // tratado pelo statusCode 401 (erro401)
+			if (xhr.status === 403) {
+				alert('Você não possui permissão para executar esta ação.');
+			} else {
+				alert(xhr.responseText || 'Erro ao processar a solicitação!');
+			}
+		}
+
 		let _arvore = null;
 		let _aulaSelecionadaId = null;
+
+		function capaUrl(caminho) {
+			if (!caminho) return null;
+			return caminho.startsWith('http') ? caminho : '/learn/media/' + caminho;
+		}
 
 		function carregarCurso() {
 			$.ajax({
@@ -375,8 +392,9 @@
 				success: function (data) {
 					$('#cursoTitulo').text(data.titulo);
 					$('#cursoDescricao').text(data.descricao || '');
-					if (data.caminhoCapa) {
-						$('#capaCurso').html(`<img src="${escapeHtml(data.caminhoCapa)}" alt="">`);
+					const url = capaUrl(data.caminhoCapa);
+					if (url) {
+						$('#capaCurso').html(`<img src="${escapeHtml(url)}" alt="">`);
 					}
 				},
 				statusCode: { 401: erro401, 500: function () { alert('Erro ao carregar o curso!'); } }
@@ -420,6 +438,63 @@
 			const percentual = totalItens > 0 ? Math.round((itensConcluidos / totalItens) * 100) : 0;
 			$('#progressoCursoBarra').css('width', percentual + '%').attr('aria-valuenow', percentual);
 			$('#progressoCursoTexto').text(percentual + '% concluído (' + itensConcluidos + '/' + totalItens + ')');
+			atualizarAreaCertificado(totalItens > 0 && percentual === 100);
+		}
+
+		// ======================================================
+		// CERTIFICADO DE CONCLUSÃO
+		// ======================================================
+		function atualizarAreaCertificado(cursoCompleto) {
+			const area = $('#areaCertificado');
+			if (!cursoCompleto) {
+				area.hide().empty();
+				return;
+			}
+			area.show();
+			$.ajax({
+				type: "GET",
+				url: "/learn/certificados/curso/" + cursoId,
+				success: function (certificado) {
+					renderizarBotaoCertificado(certificado);
+				},
+				statusCode: { 401: erro401 }
+			});
+		}
+
+		function renderizarBotaoCertificado(certificado) {
+			const area = $('#areaCertificado');
+			if (certificado) {
+				area.html(`
+					<div class="alert alert-success d-flex justify-content-between align-items-center mb-0 py-2">
+						<span><i class="bi bi-award-fill me-1"></i>Curso concluído! Código: <strong>${escapeHtml(certificado.codigoValidacao)}</strong></span>
+						<a class="btn btn-sm btn-success" href="/learn/certificados/${certificado.id}/pdf" target="_blank">
+							<i class="bi bi-download me-1"></i>Baixar certificado
+						</a>
+					</div>
+				`);
+			} else {
+				area.html(`
+					<div class="alert alert-success d-flex justify-content-between align-items-center mb-0 py-2">
+						<span><i class="bi bi-award-fill me-1"></i>Parabéns, você concluiu o curso!</span>
+						<button class="btn btn-sm btn-success" onclick="emitirCertificado()">
+							<i class="bi bi-patch-check me-1"></i>Emitir certificado
+						</button>
+					</div>
+				`);
+			}
+		}
+
+		function emitirCertificado() {
+			$.ajax({
+				type: "POST",
+				url: "/learn/certificados/curso/" + cursoId + "/emitir",
+				success: function (certificado) {
+					renderizarBotaoCertificado(certificado);
+					window.open("/learn/certificados/" + certificado.id + "/pdf", "_blank");
+				},
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
 		}
 
 		function selecionarPrimeiraDisponivel() {
@@ -506,6 +581,18 @@
 		// ======================================================
 		// CONTEÚDO EM TEXTO (leitura, sem bloqueio)
 		// ======================================================
+		function prefixarImagens(html) {
+			const temp = document.createElement('div');
+			temp.innerHTML = html;
+			temp.querySelectorAll('img').forEach(img => {
+				const src = img.getAttribute('src');
+				if (src && !src.startsWith('http') && !src.startsWith('/learn/media/')) {
+					img.setAttribute('src', '/learn/media/' + src);
+				}
+			});
+			return temp.innerHTML;
+		}
+
 		function carregarConteudosPreview(aulaId) {
 			$.ajax({
 				type: "GET",
@@ -518,7 +605,7 @@
 						container.append(`
 							<div class="conteudo-leitura mb-4">
 								${c.titulo ? `<h6 class="mb-2">${escapeHtml(c.titulo)}</h6>` : ''}
-								<div class="conteudo-leitura-corpo">${c.corpoHtml}</div>
+								<div class="conteudo-leitura-corpo">${prefixarImagens(c.corpoHtml)}</div>
 							</div>
 						`);
 					});

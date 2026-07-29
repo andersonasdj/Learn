@@ -3,83 +3,125 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SisTech Login</title>
+    <title>TechGold Academy - Login</title>
     <link rel="shortcut icon" href="assets/img/favicon.ico">
-    <!-- PRELOAD IMAGEM -->
-    <link rel="preload" as="image" href="assets/img/background-login.avif">
-	<!-- Bootstrap 5 -->
-   	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-   	<!-- Bootstrap Icons -->
-   	<link rel="stylesheet" href="assets/css/bootstrap-icons.min.css">
-	<!-- style login -->
-	<link rel="stylesheet" href="assets/css/login/style-login.css">
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="assets/css/bootstrap-icons.min.css">
+    <!-- style login -->
+    <link rel="stylesheet" href="assets/css/login/style-login.css">
 </head>
 <body>
-<!-- ===================================================== -->
-<!-- FUNDO -->
-<!-- ===================================================== -->
-<div class="background">
-    <picture>
-        <!-- AVIF -->
-        <source srcset="assets/img/background-login.avif" type="image/avif">
-        <!-- WEBP -->
-        <source srcset="assets/img/background-login.webp" type="image/webp">
-        <!-- FALLBACK -->
-        <img src="assets/img/background-login.webp" alt="Background">
-    </picture>
-</div>
-<div class="overlay"></div>
+<div class="auth-shell">
 
-<!-- ===================================================== -->
-<!-- LOGIN -->
-<!-- ===================================================== -->
-<div class="login-wrapper">
+    <!-- ===================================================== -->
+    <!-- PAINEL DE MARCA -->
+    <!-- ===================================================== -->
+    <aside class="brand-panel">
+        <div class="brand-panel-bg" aria-hidden="true"></div>
 
-    <div class="login-card">
-        <!-- HEADER -->
-        <div class="text-center">
-			<img src="assets/img/login-icon.webp" class="logo" alt="SisTech">
-            <h1 class="login-title">SisTech</h1>
-            <p class="login-subtitle">Plataforma inteligente de gestão técnica</p>
-        </div>
-        <!-- FORM -->
-        <form method="POST" action="/learn/login" id="loginForm">
-            <!-- Usuário -->
-            <div class="mb-4">
-                <label for="username" class="form-label">Usuário</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-person input-icon"></i>
-                    <input type="text" class="form-control" id="username" name="username"
-                        placeholder="Digite seu usuário" autocomplete="username" required>
-                </div>
+        <div class="brand-panel-content">
+            <div class="brand-mark">
+                <img src="assets/img/login-icon.webp" alt="TechGold Academy" class="brand-mark-icon">
+                <span class="brand-mark-text">TechGold <strong>Academy</strong></span>
             </div>
-            <!-- Senha -->
-            <div class="mb-4">
-                <label for="password" class="form-label">Senha</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-lock input-icon"></i>
-                    <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Digite sua senha" autocomplete="current-password" required>
-                    <button type="button" class="toggle-password" id="togglePassword">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </div>
-            </div>
-            <!-- BOTÃO -->
-            <button type="submit" class="btn-login" id="loginBtn">Entrar</button>
-        </form>
 
-        <!-- FOOTER -->
-        <div class="forgot-password">
-            <a href="mailto:suporte@providerone.com.br">
-                Esqueceu sua senha?
-            </a>
+            <h1 class="brand-headline">Transforme o conhecimento da sua equipe em resultado.</h1>
+            <p class="brand-subheadline">
+                A plataforma de treinamento corporativo — crie cursos, acompanhe o
+                progresso de cada aluno e emita certificados de conclusão automaticamente.
+            </p>
+
+            <ul class="brand-features">
+                <li><i class="bi bi-collection-play"></i> Cursos e trilhas de aprendizagem</li>
+                <li><i class="bi bi-graph-up-arrow"></i> Acompanhamento de progresso em tempo real</li>
+                <li><i class="bi bi-patch-check"></i> Certificados de conclusão automáticos</li>
+            </ul>
         </div>
-        <div class="copyright">
-            © 2026 TechGold
+
+        <!-- Mockups flutuantes (decorativo) -->
+        <div class="floating-cards" aria-hidden="true">
+            <div class="floating-card card-1">
+                <i class="bi bi-play-circle-fill"></i>
+                <div class="floating-card-lines"><span></span><span></span></div>
+            </div>
+            <div class="floating-card card-2">
+                <i class="bi bi-award-fill"></i>
+                <div class="floating-card-lines"><span></span><span></span></div>
+            </div>
+            <div class="floating-card card-3">
+                <div class="mini-progress"><div class="mini-progress-bar"></div></div>
+                <span class="mini-progress-label">78% concluído</span>
+            </div>
         </div>
-    </div>
+    </aside>
+
+    <!-- ===================================================== -->
+    <!-- PAINEL DE LOGIN -->
+    <!-- ===================================================== -->
+    <main class="form-panel">
+        <div class="form-panel-inner">
+
+            <div class="form-brand-mobile">
+                <img src="assets/img/login-icon.webp" alt="TechGold Academy">
+                <span>TechGold <strong>Academy</strong></span>
+            </div>
+
+            <h2 class="form-title">Bem-vindo de volta</h2>
+            <p class="form-subtitle">Entre com sua conta para continuar seus estudos.</p>
+
+            <div class="alert-message alert-message-error" id="loginErrorMessage">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>Usuário ou senha inválidos. Tente novamente.</span>
+            </div>
+            <div class="alert-message alert-message-success" id="logoutMessage">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Você saiu com segurança.</span>
+            </div>
+
+            <!-- FORM -->
+            <form method="POST" action="/learn/login" id="loginForm">
+                <!-- Usuário -->
+                <div class="mb-3">
+                    <label for="username" class="form-label">Usuário</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" class="form-control" id="username" name="username"
+                            placeholder="Digite seu usuário" autocomplete="username" autofocus required>
+                    </div>
+                </div>
+                <!-- Senha -->
+                <div class="mb-4">
+                    <label for="password" class="form-label">Senha</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-lock input-icon"></i>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Digite sua senha" autocomplete="current-password" required>
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Mostrar senha">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- BOTÃO -->
+                <button type="submit" class="btn-login" id="loginBtn">
+                    Entrar <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+            </form>
+
+            <!-- FOOTER -->
+            <div class="forgot-password">
+                <a href="mailto:suporte@providerone.com.br">
+                    Esqueceu sua senha?
+                </a>
+            </div>
+            <div class="copyright">
+                © 2026 TechGold Academy
+            </div>
+        </div>
+    </main>
 </div>
+
 <!-- ===================================================== -->
 <!-- SCRIPTS -->
 <!-- ===================================================== -->
@@ -113,6 +155,15 @@
                 Entrando...
             `;
         });
+
+    // Mensagens vindas do Spring Security (redirects para /login?error ou /login?logout)
+    const paramsBusca = new URLSearchParams(window.location.search);
+    if (paramsBusca.has('error')) {
+        document.getElementById('loginErrorMessage').classList.add('is-visible');
+    }
+    if (paramsBusca.has('logout')) {
+        document.getElementById('logoutMessage').classList.add('is-visible');
+    }
 </script>
 </body>
 </html>

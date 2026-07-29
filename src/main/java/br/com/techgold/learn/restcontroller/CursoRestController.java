@@ -3,6 +3,7 @@ package br.com.techgold.learn.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.techgold.learn.dto.DtoAtualizarCurso;
 import br.com.techgold.learn.dto.DtoCadastroCurso;
@@ -46,6 +49,15 @@ public class CursoRestController {
 	@PutMapping
 	public ResponseEntity<DtoAtualizarCurso> atualizar(@RequestBody DtoAtualizarCurso dados) {
 		return ResponseEntity.ok(new DtoAtualizarCurso(service.atualizarCurso(dados)));
+	}
+
+	@PostMapping(value = "/{id}/capa", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> atualizarCapa(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+		try {
+			return ResponseEntity.ok(service.atualizarCapa(id, file));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

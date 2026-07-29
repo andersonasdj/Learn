@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.techgold.learn.dto.DtoAdesaoCurso;
 import br.com.techgold.learn.dto.DtoAtualizarProgressoVideo;
 import br.com.techgold.learn.dto.DtoCursoProgresso;
 import br.com.techgold.learn.dto.DtoResponderTeste;
@@ -28,6 +29,11 @@ public class ProgressoRestController {
 	@GetMapping("/cursos/{cursoId}")
 	public ResponseEntity<DtoCursoProgresso> obterProgresso(@PathVariable Long cursoId) {
 		return ResponseEntity.ok(service.obterProgresso(cursoId));
+	}
+
+	@GetMapping("/cursos/{cursoId}/adesao")
+	public ResponseEntity<DtoAdesaoCurso> obterAdesao(@PathVariable Long cursoId) {
+		return ResponseEntity.ok(service.obterAdesao(cursoId));
 	}
 
 	@PutMapping("/videos/{videoId}")

@@ -3,8 +3,11 @@ package br.com.techgold.learn.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -12,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import br.com.techgold.learn.dto.DtoAdesaoCurso;
 import br.com.techgold.learn.dto.DtoAtualizarProgressoVideo;
+import br.com.techgold.learn.dto.DtoAulaAdesao;
 import br.com.techgold.learn.dto.DtoAulaProgresso;
 import br.com.techgold.learn.dto.DtoCorrecaoQuestao;
 import br.com.techgold.learn.dto.DtoCursoProgresso;
@@ -51,8 +56,16 @@ public class ProgressoService {
 	@Autowired private ProgressoVideoRepository repositoryProgressoVideo;
 	@Autowired private ProgressoTesteRepository repositoryProgressoTeste;
 
+	public boolean cursoConcluidoPeloFuncionarioLogado(Long cursoId) {
+		DtoCursoProgresso arvore = obterProgresso(cursoId);
+		return !arvore.aulas().isEmpty() && arvore.aulas().stream().allMatch(DtoAulaProgresso::concluida);
+	}
+
 	public DtoCursoProgresso obterProgresso(Long cursoId) {
-		Long funcionarioId = funcionarioLogadoId();
+		return construirArvore(funcionarioLogadoId(), cursoId);
+	}
+
+	private DtoCursoProgresso construirArvore(Long funcionarioId, Long cursoId) {
 		Curso curso = repositoryCurso.getReferenceById(cursoId);
 		List<Aula> aulas = repositoryAula.findByCursoIdOrderByOrdemAsc(cursoId);
 
@@ -112,6 +125,41 @@ public class ProgressoService {
 		}
 
 		return new DtoCursoProgresso(cursoId, curso.getTitulo(), aulasDto);
+	}
+
+	public DtoAdesaoCurso obterAdesao(Long cursoId) {
+		Curso curso = repositoryCurso.getReferenceById(cursoId);
+
+		Set<Long> funcionarioIds = new HashSet<>();
+		funcionarioIds.addAll(repositoryProgressoVideo.buscarFuncionarioIdsPorCurso(cursoId));
+		funcionarioIds.addAll(repositoryProgressoTeste.buscarFuncionarioIdsPorCurso(cursoId));
+
+		List<Aula> aulas = repositoryAula.findByCursoIdOrderByOrdemAsc(cursoId);
+		Map<Long, int[]> contagemPorAula = new LinkedHashMap<>();
+		aulas.forEach(a -> contagemPorAula.put(a.getId(), new int[2])); // [0]=concluidos, [1]=emAndamento
+
+		for (Long funcionarioId : funcionarioIds) {
+			DtoCursoProgresso arvore = construirArvore(funcionarioId, cursoId);
+			for (DtoAulaProgresso aula : arvore.aulas()) {
+				int[] contagem = contagemPorAula.get(aula.id());
+				if (aula.concluida()) {
+					contagem[0]++;
+				} else {
+					boolean comAlgumProgresso = aula.videos().stream().anyMatch(DtoVideoProgresso::concluido)
+							|| (aula.teste() != null && aula.teste().tentativas() > 0);
+					if (comAlgumProgresso) contagem[1]++;
+				}
+			}
+		}
+
+		int totalAlunos = funcionarioIds.size();
+		List<DtoAulaAdesao> aulasAdesao = aulas.stream().map(a -> {
+			int[] c = contagemPorAula.get(a.getId());
+			int naoIniciados = Math.max(0, totalAlunos - c[0] - c[1]);
+			return new DtoAulaAdesao(a.getId(), a.getTitulo(), a.getOrdem(), c[0], c[1], naoIniciados);
+		}).toList();
+
+		return new DtoAdesaoCurso(cursoId, curso.getTitulo(), totalAlunos, aulasAdesao);
 	}
 
 	@Transactional
@@ -232,7 +280,7 @@ public class ProgressoService {
 		return teste.getTentativasMaximas() > 0 ? teste.getTentativasMaximas() : 3;
 	}
 
-	private Long funcionarioLogadoId() {
+	public Long funcionarioLogadoId() {
 		String nomeFuncionario = ((Funcionario) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getNomeFuncionario();
 		return repositoryFuncionario.findBynomeFuncionario(nomeFuncionario).getId();

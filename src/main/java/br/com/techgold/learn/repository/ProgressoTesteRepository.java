@@ -16,6 +16,9 @@ public interface ProgressoTesteRepository extends JpaRepository<ProgressoTeste, 
 	@Query("SELECT p FROM ProgressoTeste p WHERE p.funcionario.id = :funcionarioId AND p.teste.aula.curso.id = :cursoId")
 	List<ProgressoTeste> buscarPorFuncionarioECurso(Long funcionarioId, Long cursoId);
 
+	@Query("SELECT DISTINCT p.funcionario.id FROM ProgressoTeste p WHERE p.teste.aula.curso.id = :cursoId")
+	List<Long> buscarFuncionarioIdsPorCurso(Long cursoId);
+
 	@Modifying
 	@Query("DELETE FROM ProgressoTeste p WHERE p.funcionario.id = :funcionarioId AND p.teste.aula.curso.id = :cursoId")
 	void excluirPorFuncionarioECurso(Long funcionarioId, Long cursoId);

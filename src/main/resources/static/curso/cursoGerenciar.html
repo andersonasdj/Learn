@@ -17,6 +17,14 @@
 		body.dark-mode .questao-block { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.15) !important; }
 		.aula-header { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 
+		.capa-preview {
+			width: 96px; height: 64px; border-radius: 8px; flex-shrink: 0;
+			background: linear-gradient(135deg, #1e3a5f, #1a56c4);
+			display: flex; align-items: center; justify-content: center;
+			color: #fff; font-size: 1.3rem; overflow: hidden;
+		}
+		.capa-preview img { width: 100%; height: 100%; object-fit: cover; }
+
 		.editor-rico { border: 1px solid rgba(0,0,0,.15); border-radius: 8px; overflow: hidden; }
 		body.dark-mode .editor-rico { border-color: rgba(255,255,255,.15); }
 		.editor-rico-toolbar {
@@ -83,6 +91,7 @@
 				<div class="sidebar-group-items">
 					<a href="/learn/curso/list" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Listar</a>
 					<a href="/learn/curso/form" class="sidebar-subitem"><i class="bi bi-plus-circle text-success"></i>Novo</a>
+					<a href="/learn/curso/certificado" class="sidebar-subitem"><i class="bi bi-patch-check text-warning"></i>Modelo de Certificado</a>
 				</div>
 			</div>
 		</div>
@@ -184,6 +193,7 @@
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="/learn/curso/list"><i class="bi bi-list-ul me-2 text-primary"></i>Listar</a></li>
 								<li><a class="dropdown-item" href="/learn/curso/form"><i class="bi bi-plus-circle me-2 text-success"></i>Novo</a></li>
+								<li><a class="dropdown-item" href="/learn/curso/certificado"><i class="bi bi-patch-check me-2 text-warning"></i>Modelo de Certificado</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -249,8 +259,18 @@
 							<textarea id="infoDescricao" class="form-control" rows="3"></textarea>
 						</div>
 						<div class="col-md-12">
-							<label class="form-label fw-semibold">URL da capa</label>
-							<input type="text" id="infoCapa" class="form-control">
+							<label class="form-label fw-semibold">Capa do curso</label>
+							<input type="hidden" id="infoCapaAtual">
+							<div class="d-flex align-items-center gap-3">
+								<div class="capa-preview" id="infoCapaPreview"><i class="bi bi-mortarboard-fill"></i></div>
+								<div>
+									<input type="file" id="infoCapaArquivo" class="d-none" accept="image/png,image/jpeg,image/gif,image/webp">
+									<button type="button" class="btn btn-outline-secondary btn-sm" onclick="$('#infoCapaArquivo').trigger('click')">
+										<i class="bi bi-upload me-1"></i>Selecionar imagem
+									</button>
+									<small class="text-muted d-block mt-1">PNG, JPG, GIF ou WEBP.</small>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="text-end mt-3">
@@ -580,6 +600,17 @@
 		// ======================================================
 		// INFORMAÇÕES DO CURSO
 		// ======================================================
+		function capaUrl(caminho) {
+			if (!caminho) return null;
+			return caminho.startsWith('http') ? caminho : '/learn/media/' + caminho;
+		}
+
+		function exibirCapaPreview(caminho) {
+			$('#infoCapaAtual').val(caminho || '');
+			const url = capaUrl(caminho);
+			$('#infoCapaPreview').html(url ? `<img src="${escapeHtml(url)}" alt="">` : '<i class="bi bi-mortarboard-fill"></i>');
+		}
+
 		function carregarInfoCurso() {
 			$.ajax({
 				type: "GET",
@@ -587,8 +618,8 @@
 				success: function (data) {
 					$('#infoTitulo').val(data.titulo);
 					$('#infoDescricao').val(data.descricao);
-					$('#infoCapa').val(data.caminhoCapa);
 					$('#infoStatus').val(data.status);
+					exibirCapaPreview(data.caminhoCapa);
 				},
 				statusCode: { 401: erro401, 500: function () { alert('Erro ao carregar o curso!'); } }
 			});
@@ -599,7 +630,7 @@
 				id: Number(cursoId),
 				titulo: $('#infoTitulo').val().trim(),
 				descricao: $('#infoDescricao').val(),
-				caminhoCapa: $('#infoCapa').val(),
+				caminhoCapa: $('#infoCapaAtual').val(),
 				status: $('#infoStatus').val()
 			};
 			if (!payload.titulo) { alert('Informe o título do curso.'); return; }
@@ -613,6 +644,28 @@
 				statusCode: { 401: erro401, 500: function () { alert('Erro ao salvar as informações!'); } }
 			});
 		}
+
+		$('#infoCapaArquivo').on('change', function () {
+			const arquivo = this.files[0];
+			this.value = '';
+			if (!arquivo) return;
+
+			const formData = new FormData();
+			formData.append('file', arquivo);
+
+			$.ajax({
+				type: "POST",
+				url: "/learn/cursos/" + cursoId + "/capa",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					exibirCapaPreview(data.caminhoCapa);
+				},
+				error: tratarErroAjax,
+				statusCode: { 401: erro401 }
+			});
+		});
 
 		// ======================================================
 		// AULAS
@@ -775,6 +828,30 @@
 			});
 		}
 
+		function prefixarImagens(html) {
+			const temp = document.createElement('div');
+			temp.innerHTML = html;
+			temp.querySelectorAll('img').forEach(img => {
+				const src = img.getAttribute('src');
+				if (src && !src.startsWith('http') && !src.startsWith('/learn/media/')) {
+					img.setAttribute('src', '/learn/media/' + src);
+				}
+			});
+			return temp.innerHTML;
+		}
+
+		function removerPrefixoImagens(html) {
+			const temp = document.createElement('div');
+			temp.innerHTML = html;
+			temp.querySelectorAll('img').forEach(img => {
+				const src = img.getAttribute('src');
+				if (src && src.startsWith('/learn/media/')) {
+					img.setAttribute('src', src.substring('/learn/media/'.length));
+				}
+			});
+			return temp.innerHTML;
+		}
+
 		function comandoEditor(cmd, valor) {
 			document.execCommand(cmd, false, valor || null);
 			$('#editorConteudoArea').trigger('focus');
@@ -842,7 +919,7 @@
 						$('#conteudoId').val(data.id);
 						$('#conteudoTitulo').val(data.titulo);
 						$('#conteudoOrdem').val(data.ordem);
-						$('#editorConteudoArea').html(data.corpoHtml);
+						$('#editorConteudoArea').html(prefixarImagens(data.corpoHtml));
 					}
 				});
 			} else {
@@ -861,7 +938,7 @@
 			const payload = {
 				aulaId: Number(aulaId),
 				titulo: $('#conteudoTitulo').val(),
-				corpoHtml: corpoHtml,
+				corpoHtml: removerPrefixoImagens(corpoHtml),
 				ordem: Number($('#conteudoOrdem').val()) || 0
 			};
 			if (id) payload.id = Number(id);

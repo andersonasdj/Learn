@@ -30,4 +30,9 @@ public class CursoController {
 		return "cursoPreview.html";
 	}
 
+	@GetMapping("/certificado")
+	public String certificado() {
+		return "certificadoModelo.html";
+	}
+
 }

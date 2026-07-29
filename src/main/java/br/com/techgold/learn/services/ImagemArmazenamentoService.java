@@ -21,6 +21,18 @@ public class ImagemArmazenamentoService {
 	private String uploadDir;
 
 	public String salvar(MultipartFile arquivo, Long aulaId) {
+		return gravar(arquivo, "aulas/" + aulaId);
+	}
+
+	public String salvarCapaCurso(MultipartFile arquivo, Long cursoId) {
+		return gravar(arquivo, "cursos/" + cursoId);
+	}
+
+	public String salvarImagemCertificado(MultipartFile arquivo) {
+		return gravar(arquivo, "certificados");
+	}
+
+	private String gravar(MultipartFile arquivo, String pasta) {
 		if (arquivo == null || arquivo.isEmpty()) {
 			throw new IllegalArgumentException("Selecione uma imagem.");
 		}
@@ -30,7 +42,7 @@ public class ImagemArmazenamentoService {
 			throw new IllegalArgumentException("Formato de imagem não suportado: " + extensao);
 		}
 
-		String caminhoRelativo = "imagens/" + aulaId + "/" + UUID.randomUUID() + "." + extensao;
+		String caminhoRelativo = "imagens/" + pasta + "/" + UUID.randomUUID() + "." + extensao;
 		try {
 			Path destino = Path.of(uploadDir, caminhoRelativo);
 			Files.createDirectories(destino.getParent());
