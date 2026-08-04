@@ -1,6 +1,5 @@
 package br.com.techgold.learn.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,15 @@ import br.com.techgold.learn.services.FuncionarioService;
 @RequestMapping()
 public class CreateConfigController {
 	
-	@Autowired private FuncionarioService service;
-	@Autowired private ConfiguracaoPaisesService paisesService;
-	@Autowired private ConfiguracaoEmailService emailService;
+	private final FuncionarioService service;
+	private final ConfiguracaoPaisesService paisesService;
+	private final ConfiguracaoEmailService emailService;
+
+	CreateConfigController(FuncionarioService service, ConfiguracaoPaisesService paisesService, ConfiguracaoEmailService emailService) {
+		this.service = service;
+		this.paisesService = paisesService;
+		this.emailService = emailService;
+	}
 	
 	@PostMapping("/create")
 	public String register(@RequestBody DtoCadastroFuncionario dados ) {

@@ -22,16 +22,19 @@ public class EnviadorEmail {
 		
 		@Value("${learn.email.copia}")
 		private String copiaEmail;
-	
-		@Autowired private JavaMailSender emailSender;
 		
 		@Value("${upload.dir}")
 		private String UPLOAD_DIR;
+
+		private final JavaMailSender emailSender;
+
+	EnviadorEmail(JavaMailSender emailSender) {
+		this.emailSender = emailSender;
+	}
 		
 		@Async
 	    public void enviar2fa(String email, String assunto, String mensagem) {
-	        try {
-	            
+	        try {   
 	            MimeMessage message = emailSender.createMimeMessage();
 	            message.setSubject(assunto);
 	            MimeMessageHelper helper;
@@ -41,21 +44,14 @@ public class EnviadorEmail {
 	            helper.setTo(email);
 	            helper.setText(mensagem, true);
 	            emailSender.send(message);
-
-	            //Simulando demora de 3 segundos para enviar email
-	            //Thread.sleep(3000);
-
 	        } catch (Exception e) {
 	            throw new RuntimeException("Erro ao enviar email!", e);
 	        }
 	    }
 
-
-		public void enviarEmail(String assunto, String destinatario, String texto) {
-			
+		public void enviarEmail(String assunto, String destinatario, String texto) {			
 			try {
-				String corpoEmail = "<h4 style='color: red'><b>"+texto+"</b></h3>"; 
-				
+				String corpoEmail = "<h4 style='color: red'><b>"+texto+"</b></h3>"; 			
 				MimeMessage message = emailSender.createMimeMessage();
 	            message.setSubject(assunto);
 	            MimeMessageHelper helper;
@@ -68,6 +64,5 @@ public class EnviadorEmail {
 		            throw new RuntimeException("Erro ao enviar email!", e);
 		     }
 		}
-		
-		
+				
 }

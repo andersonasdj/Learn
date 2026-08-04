@@ -2,7 +2,6 @@ package br.com.techgold.learn.restcontroller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +26,11 @@ import br.com.techgold.learn.services.VideoService;
 @PreAuthorize("hasRole('ROLE_EDITOR')")
 public class VideoRestController {
 
-	@Autowired private VideoService service;
+	private final VideoService service;
+
+	VideoRestController(VideoService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/aula/{aulaId}")
 	public ResponseEntity<List<DtoVideoList>> listarPorAula(@PathVariable Long aulaId) {

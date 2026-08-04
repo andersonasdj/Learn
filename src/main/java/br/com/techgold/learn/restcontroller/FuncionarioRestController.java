@@ -1,13 +1,8 @@
 package br.com.techgold.learn.restcontroller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,9 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.techgold.learn.dto.DtoCadastroFuncionario;
 import br.com.techgold.learn.dto.DtoFuncionarioAdvancedEdit;
 import br.com.techgold.learn.dto.DtoFuncionarioAdvancedList;
-import br.com.techgold.learn.dto.DtoFuncionarioDisponibilidade;
-import br.com.techgold.learn.orm.ProjecaoAndamentoEquipe;
-
 
 import br.com.techgold.learn.dto.DtoFuncionarioEdit;
 import br.com.techgold.learn.dto.DtoFuncionarioHome;
@@ -43,7 +35,11 @@ import jakarta.validation.Valid;
 @RequestMapping("funcionarios")
 public class FuncionarioRestController {
 	
-	@Autowired FuncionarioService service;
+	final FuncionarioService service;
+
+	FuncionarioRestController(FuncionarioService service) {
+		this.service = service;
+	}
 	
 	@PreAuthorize("hasRole('ROLE_SADMIN')")
 	@PostMapping

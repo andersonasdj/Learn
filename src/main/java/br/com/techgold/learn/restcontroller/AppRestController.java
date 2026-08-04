@@ -2,7 +2,6 @@ package br.com.techgold.learn.restcontroller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +26,15 @@ import br.com.techgold.learn.services.LogLoginService;
 @RequestMapping("sistema")
 public class AppRestController {
 	
-	@Autowired private LogLoginService loginService;
-	@Autowired private ConfiguracaoPaisesService paisesService;
-	@Autowired private ConfiguracaoEmailService emailService;
+	private final LogLoginService loginService;
+	private final ConfiguracaoPaisesService paisesService;
+	private final ConfiguracaoEmailService emailService;
+
+	AppRestController(LogLoginService loginService, ConfiguracaoPaisesService paisesService, ConfiguracaoEmailService emailService) {
+		this.loginService = loginService;
+		this.paisesService = paisesService;
+		this.emailService = emailService;
+	}
 	
 	@GetMapping("/logs")
 	public List<DtoLogAcesso> logar() {

@@ -2,7 +2,6 @@ package br.com.techgold.learn.restcontroller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +23,11 @@ import br.com.techgold.learn.services.CursoAcessoService;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CursoAcessoRestController {
 
-	@Autowired private CursoAcessoService service;
+	private final CursoAcessoService service;
+
+	CursoAcessoRestController(CursoAcessoService service) {
+		this.service = service;
+	}
 
 	@PostMapping("/cliente")
 	public ResponseEntity<?> liberarParaCliente(@RequestBody DtoCadastroCursoClienteAcesso dados) {

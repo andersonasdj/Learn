@@ -1,6 +1,5 @@
 package br.com.techgold.learn.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,8 +22,13 @@ import br.com.techgold.learn.services.TesteService;
 @PreAuthorize("hasRole('ROLE_EDITOR')")
 public class TesteRestController {
 
-	@Autowired private TesteRepository repository;
-	@Autowired private TesteService service;
+	private final TesteRepository repository;
+	private final TesteService service;
+
+	TesteRestController(TesteRepository repository, TesteService service) {
+		this.repository = repository;
+		this.service = service;
+	}
 
 	@GetMapping("/aula/{aulaId}")
 	public ResponseEntity<DtoTeste> buscarPorAula(@PathVariable Long aulaId) {

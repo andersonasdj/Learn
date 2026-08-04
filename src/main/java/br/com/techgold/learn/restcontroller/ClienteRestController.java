@@ -1,13 +1,6 @@
 package br.com.techgold.learn.restcontroller;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -35,8 +28,13 @@ import br.com.techgold.learn.services.ClienteService;
 @RequestMapping("clientes")
 public class ClienteRestController {
 	
-	@Autowired private ClienteRepository repository;
-	@Autowired private ClienteService service;	
+	private final ClienteRepository repository;
+	private final ClienteService service;
+
+	ClienteRestController(ClienteService service, ClienteRepository repository) {
+		this.service = service;
+		this.repository = repository;
+	}	
 			
 	@GetMapping("nome/{conteudo}") //RETORNA DTO COM PROJEÇÃO DOS DADOS NECESSÀRIO COM NATIVE QUERY
 	public Page<DtoClienteList> buscarClientePorPalavras(@PathVariable String conteudo,  @PageableDefault(size = 100, sort= {"id"}, direction = Direction.DESC) Pageable page) {

@@ -4,7 +4,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +22,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class AppController {
 	
-	@Autowired FuncionarioService funcionarioService;
+	final FuncionarioService funcionarioService;
+
+    AppController(FuncionarioService funcionarioService) {
+        this.funcionarioService = funcionarioService;
+    }
 	
     @GetMapping("/2fa")
     public String exibirFormulario2FA(HttpSession session, Model model) {

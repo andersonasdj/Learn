@@ -1,6 +1,5 @@
 package br.com.techgold.learn.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,9 +19,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration {
 	
-	@Autowired private UserAuthenticationFilter filter;
-	@Autowired private TwoFactorRedirectFilter twoFactorRedirectFilter;
-	@Autowired private CustomAuthenticationSuccessHandler customSuccessHandler;
+	private final UserAuthenticationFilter filter;
+	private final TwoFactorRedirectFilter twoFactorRedirectFilter;
+	private final CustomAuthenticationSuccessHandler customSuccessHandler;
+
+	SecurityConfiguration(UserAuthenticationFilter filter, TwoFactorRedirectFilter twoFactorRedirectFilter, CustomAuthenticationSuccessHandler customSuccessHandler) {
+		this.filter = filter;
+		this.twoFactorRedirectFilter = twoFactorRedirectFilter;
+		this.customSuccessHandler = customSuccessHandler;
+	}
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -33,7 +38,6 @@ public class SecurityConfiguration {
 	        .addFilterAfter(twoFactorRedirectFilter, UserAuthenticationFilter.class)
 	        .authorizeHttpRequests(auth -> auth
 	            .requestMatchers("/templates/**", "/assets/**").permitAll()
-	            .requestMatchers("/seguranca/avaliar/**", "/api/seguranca/avaliar/**", "/seguranca/avaliacaoSeguranca.html").permitAll()
 	            .requestMatchers("/2fa", "/2fa/**", "/verify-2fa").hasAuthority("PRE_2FA")
 	            .requestMatchers(HttpMethod.POST, "/login", "/create").permitAll()
 	            .requestMatchers(HttpMethod.GET, "/create").permitAll()

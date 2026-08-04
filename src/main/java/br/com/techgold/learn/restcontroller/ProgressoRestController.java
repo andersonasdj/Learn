@@ -1,6 +1,5 @@
 package br.com.techgold.learn.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +23,11 @@ import br.com.techgold.learn.services.ProgressoService;
 @PreAuthorize("hasRole('ROLE_USER')")
 public class ProgressoRestController {
 
-	@Autowired private ProgressoService service;
+	private final ProgressoService service;
+
+	ProgressoRestController(ProgressoService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/cursos/{cursoId}")
 	public ResponseEntity<DtoCursoProgresso> obterProgresso(@PathVariable Long cursoId) {

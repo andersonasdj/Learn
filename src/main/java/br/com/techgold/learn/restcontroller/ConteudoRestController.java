@@ -2,7 +2,6 @@ package br.com.techgold.learn.restcontroller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,8 +28,13 @@ import br.com.techgold.learn.services.ImagemArmazenamentoService;
 @PreAuthorize("hasRole('ROLE_EDITOR')")
 public class ConteudoRestController {
 
-	@Autowired private ConteudoService service;
-	@Autowired private ImagemArmazenamentoService armazenamentoService;
+	private final ConteudoService service;
+	private final ImagemArmazenamentoService armazenamentoService;
+
+	ConteudoRestController(ConteudoService service, ImagemArmazenamentoService armazenamentoService) {
+		this.service = service;
+		this.armazenamentoService = armazenamentoService;
+	}
 
 	@GetMapping("/aula/{aulaId}")
 	public ResponseEntity<List<DtoConteudoList>> listarPorAula(@PathVariable Long aulaId) {

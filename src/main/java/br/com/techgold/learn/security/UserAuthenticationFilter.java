@@ -3,7 +3,6 @@ package br.com.techgold.learn.security;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,10 +21,17 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class UserAuthenticationFilter extends OncePerRequestFilter {
 
-	@Autowired private FuncionarioService funcionarioService;
-	@Autowired private LogLoginService loginService;
-	@Autowired private ConfiguracaoPaisesService paisesService;
-	@Autowired private DefaultBruteForceProtectionService bf;
+	private final FuncionarioService funcionarioService;
+	private final LogLoginService loginService;
+	private final ConfiguracaoPaisesService paisesService;
+	private final DefaultBruteForceProtectionService bf;
+
+	UserAuthenticationFilter(FuncionarioService funcionarioService, LogLoginService loginService, ConfiguracaoPaisesService paisesService, DefaultBruteForceProtectionService bf) {
+		this.funcionarioService = funcionarioService;
+		this.loginService = loginService;
+		this.paisesService = paisesService;
+		this.bf = bf;
+	}
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

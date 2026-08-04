@@ -1,6 +1,5 @@
 package br.com.techgold.learn.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,11 @@ import br.com.techgold.learn.services.ModeloCertificadoService;
 @PreAuthorize("hasRole('ROLE_EDITOR')")
 public class ModeloCertificadoRestController {
 
-	@Autowired private ModeloCertificadoService service;
+	private final ModeloCertificadoService service;
+
+	ModeloCertificadoRestController(ModeloCertificadoService service) {
+		this.service = service;
+	}
 
 	@GetMapping
 	public ResponseEntity<DtoModeloCertificado> obter() {

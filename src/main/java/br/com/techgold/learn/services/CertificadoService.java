@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.techgold.learn.dto.DtoCertificado;
+import br.com.techgold.learn.dto.DtoCertificadoEmitido;
 import br.com.techgold.learn.model.Aula;
 import br.com.techgold.learn.model.CampoCertificado;
 import br.com.techgold.learn.model.Certificado;
@@ -55,6 +56,10 @@ public class CertificadoService {
 	public DtoCertificado buscarPorCurso(Long cursoId) {
 		Long funcionarioId = progressoService.funcionarioLogadoId();
 		return repository.findByFuncionarioIdAndCursoId(funcionarioId, cursoId).map(DtoCertificado::new).orElse(null);
+	}
+
+	public List<DtoCertificadoEmitido> listarTodos() {
+		return repository.findAllByOrderByDataEmissaoDesc().stream().map(DtoCertificadoEmitido::new).toList();
 	}
 
 	@Transactional

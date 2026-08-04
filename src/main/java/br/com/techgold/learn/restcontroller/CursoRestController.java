@@ -2,7 +2,6 @@ package br.com.techgold.learn.restcontroller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,8 +27,13 @@ import br.com.techgold.learn.services.CursoService;
 @PreAuthorize("hasRole('ROLE_EDITOR')")
 public class CursoRestController {
 
-	@Autowired private CursoRepository repository;
-	@Autowired private CursoService service;
+	private final CursoRepository repository;
+	private final CursoService service;
+
+	CursoRestController(CursoRepository repository, CursoService service) {
+		this.repository = repository;
+		this.service = service;
+	}
 
 	@GetMapping
 	public ResponseEntity<List<DtoCursoList>> listar() {

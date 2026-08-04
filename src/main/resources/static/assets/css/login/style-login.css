@@ -22,6 +22,20 @@ body{
 }
 
 /* ===================================================== */
+/* PALETA PROVIDERONE (alinhada ao modelo de certificado) */
+/* ===================================================== */
+
+:root{
+    --po-navy:#17224f;
+    --po-navy-dark:#0d1638;
+    --po-navy-soft:#2a3a7a;
+    --po-blue:#3b62b0;
+    --po-blue-light:#8fabe8;
+    --po-ink:#14151a;
+    --po-gray:#6b7280;
+}
+
+/* ===================================================== */
 /* SHELL (split screen) */
 /* ===================================================== */
 
@@ -48,44 +62,21 @@ body{
     position:absolute;
     inset:0;
     z-index:0;
-    background:
-        linear-gradient(135deg, #4338ca 0%, #3949c9 35%, #2563eb 70%, #0ea5e9 100%);
+    background:linear-gradient(160deg, var(--po-navy-dark), var(--po-navy) 55%, var(--po-navy-soft));
 }
 
-.brand-panel-bg::before,
-.brand-panel-bg::after{
-    content:"";
-    position:absolute;
-    border-radius:50%;
-    filter:blur(90px);
-}
-
-.brand-panel-bg::before{
-    width:380px;
-    height:380px;
-    background:rgba(255,255,255,0.16);
-    top:-110px;
-    left:-90px;
-}
-
-.brand-panel-bg::after{
-    width:420px;
-    height:420px;
-    background:rgba(14,165,233,0.35);
-    bottom:-140px;
-    right:-100px;
-}
-
-/* Padrão de pontos, sutil */
+/* Círculo de destaque, eco do círculo azul do certificado */
 .brand-panel::before{
     content:"";
     position:absolute;
-    inset:0;
-    z-index:0;
-    background-image:radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px);
-    background-size:26px 26px;
-    mask-image:linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.15));
-    -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.15));
+    z-index:1;
+    top:11%;
+    right:26%;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--po-blue);
+    box-shadow:0 10px 24px rgba(59,98,176,0.35);
 }
 
 .brand-panel-content{
@@ -95,37 +86,66 @@ body{
     color:#ffffff;
 }
 
-.brand-mark{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.po-logo{
     margin-bottom:56px;
 }
 
-.brand-mark-icon{
-    width:40px;
-    height:40px;
-    border-radius:10px;
-    filter:drop-shadow(0 4px 12px rgba(0,0,0,0.25));
-}
-
-.brand-mark-text{
-    font-size:1.05rem;
-    font-weight:500;
+.po-logo-word{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.55rem;
+    font-weight:600;
+    color:var(--po-ink);
     letter-spacing:.2px;
-    color:rgba(255,255,255,0.92);
 }
 
-.brand-mark-text strong{
+.po-logo-accent{
+    position:relative;
+    color:var(--po-navy);
     font-weight:700;
 }
+
+.po-logo-accent sup{
+    font-size:.5em;
+    font-weight:700;
+    color:var(--po-blue);
+    margin-left:-2px;
+}
+
+.po-logo-sub{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:4px;
+    font-size:.72rem;
+    font-weight:600;
+    letter-spacing:2.5px;
+    color:var(--po-gray);
+    text-transform:uppercase;
+}
+
+.po-logo-rule{
+    width:26px;
+    height:1px;
+    background:var(--po-gray);
+    display:inline-block;
+}
+
+.po-logo--sm .po-logo-word{ font-size:1.2rem; }
+
+/* Variante clara do logo, sobre o painel navy */
+.brand-panel-content .po-logo-word{ color:#ffffff; }
+.brand-panel-content .po-logo-accent,
+.brand-panel-content .po-logo-accent sup{ color:var(--po-blue-light); }
+.brand-panel-content .po-logo-sub{ color:rgba(255,255,255,0.68); }
+.brand-panel-content .po-logo-rule{ background:rgba(255,255,255,0.4); }
 
 .brand-headline{
     font-size:2.35rem;
-    font-weight:700;
+    font-weight:800;
     line-height:1.25;
     margin-bottom:20px;
     letter-spacing:-.5px;
+    color:#ffffff;
 }
 
 .brand-subheadline{
@@ -149,7 +169,7 @@ body{
     gap:12px;
     font-size:.98rem;
     font-weight:500;
-    color:rgba(255,255,255,0.95);
+    color:#ffffff;
 }
 
 .brand-features i{
@@ -161,6 +181,7 @@ body{
     flex-shrink:0;
     border-radius:10px;
     background:rgba(255,255,255,0.14);
+    color:#ffffff;
     font-size:1rem;
 }
 
@@ -180,33 +201,35 @@ body{
     display:flex;
     align-items:center;
     gap:10px;
-    background:rgba(255,255,255,0.14);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,0.22);
+    background:#ffffff;
+    border:1px solid rgba(23,34,79,0.08);
     border-radius:14px;
     padding:12px 16px;
-    color:#ffffff;
-    box-shadow:0 12px 30px rgba(15,23,42,0.25);
+    color:var(--po-navy);
+    box-shadow:0 14px 30px rgba(23,34,79,0.16);
     animation:floatCard 6s ease-in-out infinite;
 }
 
-.floating-card i{ font-size:1.25rem; }
+.floating-card i{ font-size:1.6rem; color:var(--po-blue); }
 
-.floating-card-lines{
+.floating-card-text{
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:2px;
 }
 
-.floating-card-lines span{
-    display:block;
-    height:6px;
-    border-radius:3px;
-    background:rgba(255,255,255,0.55);
+.floating-card-title{
+    font-size:.82rem;
+    font-weight:700;
+    color:var(--po-ink);
+    white-space:nowrap;
 }
 
-.floating-card-lines span:first-child{ width:74px; }
-.floating-card-lines span:last-child{ width:46px; background:rgba(255,255,255,0.32); }
+.floating-card-subtitle{
+    font-size:.72rem;
+    color:var(--po-gray);
+    white-space:nowrap;
+}
 
 .card-1{
     top:14%;
@@ -233,7 +256,7 @@ body{
     width:100%;
     height:6px;
     border-radius:3px;
-    background:rgba(255,255,255,0.25);
+    background:rgba(23,34,79,0.1);
     overflow:hidden;
     margin-bottom:8px;
 }
@@ -242,13 +265,13 @@ body{
     width:78%;
     height:100%;
     border-radius:3px;
-    background:#ffffff;
+    background:var(--po-blue);
 }
 
 .mini-progress-label{
     font-size:.78rem;
     font-weight:600;
-    color:rgba(255,255,255,0.9);
+    color:var(--po-navy);
 }
 
 @keyframes floatCard{
@@ -282,25 +305,7 @@ body{
 
 .form-brand-mobile{
     display:none;
-    align-items:center;
-    gap:10px;
     margin-bottom:32px;
-}
-
-.form-brand-mobile img{
-    width:36px;
-    height:36px;
-    border-radius:9px;
-}
-
-.form-brand-mobile span{
-    font-size:1rem;
-    font-weight:500;
-    color:#0f172a;
-}
-
-.form-brand-mobile strong{
-    font-weight:700;
 }
 
 .form-title{
@@ -388,9 +393,9 @@ body{
 
 .form-control:focus{
     background:#ffffff;
-    border-color:#4338ca;
+    border-color:var(--po-blue);
     color:#0f172a;
-    box-shadow:0 0 0 3px rgba(67,56,202,0.15);
+    box-shadow:0 0 0 3px rgba(59,98,176,0.15);
 }
 
 .toggle-password{
@@ -419,7 +424,7 @@ body{
     justify-content:center;
     border:none;
     border-radius:12px;
-    background:linear-gradient(135deg, #4338ca, #2563eb);
+    background:linear-gradient(135deg, var(--po-navy), var(--po-blue));
     color:#ffffff;
     font-size:16px;
     font-weight:600;
@@ -428,7 +433,7 @@ body{
 
 .btn-login:hover{
     transform:translateY(-1px);
-    box-shadow:0 10px 24px rgba(37,99,235,0.32);
+    box-shadow:0 10px 24px rgba(59,98,176,0.32);
 }
 
 .btn-login:disabled{
@@ -447,7 +452,7 @@ body{
 }
 
 .forgot-password a{
-    color:#4338ca;
+    color:var(--po-blue);
     text-decoration:none;
     font-size:.88rem;
     font-weight:600;

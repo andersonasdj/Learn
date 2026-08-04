@@ -3,7 +3,6 @@ package br.com.techgold.learn.bruteforce;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +15,15 @@ public class DefaultBruteForceProtectionService implements BruteForceProtectionS
     @Value("${learn.security.failedlogin.count}")
     private int maxFailedLogins;
  
-    @Autowired private FuncionarioRepository userRepository;
+    private final FuncionarioRepository userRepository;
 
     private int cacheMaxLimit = 2000;
 
     private final ConcurrentHashMap<String, FailedLogin> cache;
 
-    public DefaultBruteForceProtectionService() {
-        this.cache = new ConcurrentHashMap<>(cacheMaxLimit); //setting max limit for cache
+    public DefaultBruteForceProtectionService(FuncionarioRepository userRepository) {
+        this.cache = new ConcurrentHashMap<>(cacheMaxLimit);
+        this.userRepository = userRepository; //setting max limit for cache
     }
     
     public int registerLoginFailure(String username) {

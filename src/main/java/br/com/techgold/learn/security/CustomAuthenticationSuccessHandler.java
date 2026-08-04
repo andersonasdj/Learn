@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,8 +23,13 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-	@Autowired FuncionarioService funcionarioService;
-	@Autowired TwoFactorAuthService emailService;
+	final FuncionarioService funcionarioService;
+	final TwoFactorAuthService emailService;
+
+    CustomAuthenticationSuccessHandler(FuncionarioService funcionarioService, TwoFactorAuthService emailService) {
+        this.funcionarioService = funcionarioService;
+        this.emailService = emailService;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)throws IOException, ServletException {

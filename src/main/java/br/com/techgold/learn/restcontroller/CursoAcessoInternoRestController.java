@@ -2,7 +2,6 @@ package br.com.techgold.learn.restcontroller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +23,11 @@ import br.com.techgold.learn.services.CursoAcessoService;
 @RequestMapping("api/interno")
 public class CursoAcessoInternoRestController {
 
-	@Autowired private CursoAcessoService service;
+	private final CursoAcessoService service;
+
+	CursoAcessoInternoRestController(CursoAcessoService service) {
+		this.service = service;
+	}
 
 	@GetMapping("/cursos/acesso")
 	public ResponseEntity<Boolean> temAcesso(@RequestParam Long colaboradorId, @RequestParam Long cursoId) {

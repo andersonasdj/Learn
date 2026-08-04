@@ -35,4 +35,9 @@ public class CursoController {
 		return "certificadoModelo.html";
 	}
 
+	@GetMapping("/certificados")
+	public String certificadosEmitidos() {
+		return "certificadoList.html";
+	}
+
 }

@@ -1,6 +1,7 @@
 package br.com.techgold.learn.restcontroller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.techgold.learn.dto.DtoCertificado;
+import br.com.techgold.learn.dto.DtoCertificadoEmitido;
 import br.com.techgold.learn.services.CertificadoService;
 
 @RestController
@@ -20,7 +22,17 @@ import br.com.techgold.learn.services.CertificadoService;
 @PreAuthorize("hasRole('ROLE_USER')")
 public class CertificadoRestController {
 
-	@Autowired private CertificadoService service;
+	private final CertificadoService service;
+
+	CertificadoRestController(CertificadoService service) {
+		this.service = service;
+	}
+
+	@GetMapping
+	@PreAuthorize("hasRole('ROLE_EDITOR')")
+	public ResponseEntity<List<DtoCertificadoEmitido>> listarTodos() {
+		return ResponseEntity.ok(service.listarTodos());
+	}
 
 	@GetMapping("/curso/{cursoId}")
 	public ResponseEntity<DtoCertificado> buscarPorCurso(@PathVariable Long cursoId) {
