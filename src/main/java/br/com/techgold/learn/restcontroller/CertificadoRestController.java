@@ -53,7 +53,7 @@ public class CertificadoRestController {
 	public ResponseEntity<?> baixarPdf(@PathVariable Long id) {
 		try {
 			byte[] pdf = service.gerarPdf(id);
-			ContentDisposition disposicao = ContentDisposition.attachment()
+			ContentDisposition disposicao = ContentDisposition.inline()
 					.filename("certificado-" + id + ".pdf")
 					.build();
 			return ResponseEntity.ok()

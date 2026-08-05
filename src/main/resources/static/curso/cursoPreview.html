@@ -357,6 +357,27 @@
 		</div>
 	</footer>
 
+	<!-- MODAL: Visualizar certificado -->
+	<div class="modal fade" id="modalCertificadoPdf" tabindex="-1" aria-labelledby="modalCertificadoPdfLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
+				<div class="modal-header" style="background:linear-gradient(135deg,#1e3a5f,#1a56c4);color:#fff;">
+					<h5 class="modal-title mb-0" id="modalCertificadoPdfLabel"><i class="bi bi-file-earmark-pdf me-2"></i>Certificado</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body p-0" style="height:80vh;">
+					<iframe id="iframeCertificadoPdf" src="" style="width:100%;height:100%;border:0;" title="Certificado"></iframe>
+				</div>
+				<div class="modal-footer">
+					<a id="linkBaixarCertificadoPdf" href="#" download class="btn btn-outline-secondary btn-sm">
+						<i class="bi bi-download me-1"></i>Baixar PDF
+					</a>
+					<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<script src="../assets/js/jquery-3.6.3.js"></script>
 	<script defer src="../assets/js/bootstrap.bundle.min.js"></script>
 	<script defer src="../assets/js/dark.js"></script>
@@ -485,9 +506,9 @@
 				area.html(`
 					<div class="alert alert-success d-flex justify-content-between align-items-center mb-0 py-2">
 						<span><i class="bi bi-award-fill me-1"></i>Curso concluído! Código: <strong>${escapeHtml(certificado.codigoValidacao)}</strong></span>
-						<a class="btn btn-sm btn-success" href="/learn/certificados/${certificado.id}/pdf" target="_blank">
-							<i class="bi bi-download me-1"></i>Baixar certificado
-						</a>
+						<button type="button" class="btn btn-sm btn-success" onclick="abrirCertificadoPdf(${certificado.id})">
+							<i class="bi bi-eye me-1"></i>Ver certificado
+						</button>
 					</div>
 				`);
 			} else {
@@ -508,7 +529,7 @@
 				url: "/learn/certificados/curso/" + cursoId + "/emitir",
 				success: function (certificado) {
 					renderizarBotaoCertificado(certificado);
-					window.open("/learn/certificados/" + certificado.id + "/pdf", "_blank");
+					abrirCertificadoPdf(certificado.id);
 				},
 				error: tratarErroAjax,
 				statusCode: { 401: erro401 }
@@ -841,6 +862,17 @@
 				statusCode: { 401: erro401 }
 			});
 		}
+
+		function abrirCertificadoPdf(id) {
+			const url = "/learn/certificados/" + id + "/pdf";
+			document.getElementById('iframeCertificadoPdf').src = url;
+			document.getElementById('linkBaixarCertificadoPdf').href = url;
+			new bootstrap.Modal(document.getElementById('modalCertificadoPdf')).show();
+		}
+
+		document.getElementById('modalCertificadoPdf').addEventListener('hidden.bs.modal', function () {
+			document.getElementById('iframeCertificadoPdf').src = '';
+		});
 
 		carregarCurso();
 		carregarProgresso();
