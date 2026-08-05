@@ -7,4 +7,5 @@ public interface ColaboradorProjecao{
 	String getCliente_id();
 	String getEmail();
 	String getNomeCliente();
+	Boolean getAtivo();
 }

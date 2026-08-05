@@ -18,7 +18,7 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 			+ "LIMIT 1", nativeQuery = true)
 	String retornarEmailColaboradorPorIdClienteNome(Long id, String nome);
 	
-	@Query(value = "SELECT co.id, co.nomeColaborador, co.celular, co.cliente_id, co.email "
+	@Query(value = "SELECT co.id, co.nomeColaborador, co.celular, co.cliente_id, co.email, co.ativo "
 			+ "FROM colaboradores co "
 			+ "WHERE co.cliente_id=:id ORDER BY co.nomeColaborador", nativeQuery = true)
 	List<ColaboradorProjecao> buscaColaboradoresPorIdCliente(Long id);
@@ -51,7 +51,8 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 	            c.celular        AS celular,
 	            c.cliente.id     AS cliente_id,
 	            c.email          AS email,
-	            c.cliente.nomeCliente	AS nomeCliente
+	            c.cliente.nomeCliente	AS nomeCliente,
+	            c.ativo          AS ativo
 	        FROM Colaborador c
 	        WHERE
 		        LOWER(c.nomeColaborador) LIKE LOWER(CONCAT('%', :dados, '%'))

@@ -42,8 +42,15 @@ public class ColaboradorService {
 				colaborador.setCelular(dados.celular());
 				colaborador.setNomeColaborador(dados.nomeColaborador());
 				colaborador.setEmail(dados.email());
-				colaborador.setUsername(dados.username());
-				colaborador.setPassword(new BCryptPasswordEncoder().encode(dados.password().toString()));
+				if (dados.ativo() != null) {
+					colaborador.setAtivo(dados.ativo());
+				}
+				if (dados.username() != null && !dados.username().isBlank()) {
+					colaborador.setUsername(dados.username());
+				}
+				if (dados.password() != null && !dados.password().isBlank()) {
+					colaborador.setPassword(new BCryptPasswordEncoder().encode(dados.password()));
+				}
 				return "Editado com sucesso!!";
 		}else {
 			return "Colaborador não encontrado!";

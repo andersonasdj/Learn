@@ -31,6 +31,7 @@ public class Colaborador {
 	private String username;
 	private String password;
 	private String caminhoFoto;
+	private Boolean ativo;
 	@ManyToOne
 	private Cliente cliente;
 
@@ -40,6 +41,7 @@ public class Colaborador {
 		this.cliente = cliente;
 		this.email = dados.email();
 		this.username = dados.username();
+		this.ativo = true;
 		if (dados.password() != null && !dados.password().isBlank()) {
 		    this.setPassword(new BCryptPasswordEncoder().encode(dados.password()));
 		}

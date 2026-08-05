@@ -6,6 +6,7 @@ public record DtoColaboradorListar(
 		Long id,
 		String nomeColaborador,
 		String celular,
+		Boolean ativo,
 		Long clienteId,
 		String email,
 		String usermail
@@ -13,7 +14,7 @@ public record DtoColaboradorListar(
 		) {
 
 	public DtoColaboradorListar(Colaborador c) {
-		this(c.getId(), c.getNomeColaborador(), c.getCelular(), c.getId(), c.getEmail(), c.getUsername());
+		this(c.getId(), c.getNomeColaborador(), c.getCelular(), c.getAtivo(), c.getId(), c.getEmail(), c.getUsername());
 	}
 
 }
