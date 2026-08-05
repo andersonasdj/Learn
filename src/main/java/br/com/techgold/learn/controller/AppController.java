@@ -106,13 +106,7 @@ public class AppController {
 	public String home() {
 		return "templates/home.html";
 	}
-	
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping("/sobre")
-	public String sobre() {
-		return "templates/sobre.html";
-	}
-		
+			
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/logAcesso")
 	public String logsAcesso() {

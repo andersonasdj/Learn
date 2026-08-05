@@ -1,10 +1,19 @@
 /* ── NAVBAR MODERNA ── */
 .navbar-modern {
   background: #ffffff;
-  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+  box-shadow: 0 4px 16px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.05);
   border-bottom: 1px solid #f1f5f9;
   padding: 0;
   min-height: 56px;
+}
+.nav-link-modern.active {
+  background: #eff6ff;
+  color: #1c71d8;
+  font-weight: 600;
+}
+body.dark-mode .nav-link-modern.active {
+  background: #1a2e4a;
+  color: #60a5fa;
 }
 @media (min-width: 992px) {
   .navbar-modern > .container-fluid { height: 56px; }
@@ -166,7 +175,7 @@
 body.dark-mode .navbar-modern {
   background: #1e2736;
   border-bottom-color: #2d3748;
-  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.3);
 }
 body.dark-mode .brand-text { color: #f1f5f9; }
 body.dark-mode .nav-link-modern { color: #94a3b8; }

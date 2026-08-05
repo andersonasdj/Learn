@@ -3,47 +3,32 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" href="../assets/img/favicon.ico">
-	<link rel="stylesheet" href="../assets/css/styleBusca.css">
-	<link rel="stylesheet" href="../assets/css/StyleClientesFuncionarios.css">
-	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../assets/css/password-generator.css">
-	<link rel="stylesheet" href="../assets/css/bootstrap-icons.min.css">
-	<link rel="stylesheet" href="../assets/css/dark.css">
-	<link rel="stylesheet" href="../assets/css/navbar.css">
-	<title>Sistech - Funcionarios</title>
+	<link rel="shortcut icon" href="assets/img/favicon.ico">
+	<link rel="stylesheet" href="assets/css/defaultStyle.css">
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/password-generator.css">
+	<link rel="stylesheet" href="assets/css/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="assets/css/navbar.css">
+	<link rel="stylesheet" href="assets/css/dark.css">
+	<title>Learn - Configurações</title>
 	<style>
-			body.dark-mode table {
-			  background-color: #212529;
-			  color: #f8f9fa;
-			}
-
-			body.dark-mode th,
-			body.dark-mode td {
-			  background-color: rgb(119, 118, 123);
-			  color: #f8f9fa;
-			  border-color: #343a40;
-			}
-
-			body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
-			  background-color: #2c3034;
-			  color: #f8f9fa !important;
-			}
-
-			body.dark-mode .table-hover tbody tr:hover {
-			  background-color: #343a40;
-			  color: #f8f9fa !important;
-			}
-
-			body.dark-mode .table-primary {
-			  background-color: #0d6efd;
-			  color: #fff;
-			}
+		.card { border: 1px solid rgba(0,0,0,.1) !important; box-shadow: 0 3px 12px rgba(0,0,0,.09) !important; border-radius: 16px !important; overflow: hidden; }
+		body.dark-mode .card { border-color: rgba(255,255,255,.12) !important; box-shadow: 0 3px 14px rgba(0,0,0,.5) !important; }
+		.card-header.config-header-bar {
+			background: linear-gradient(135deg, #1e3a5f, #1a56c4);
+			color: #fff;
+			font-weight: 600;
+			font-size: .76rem;
+			text-transform: uppercase;
+			letter-spacing: .06em;
+			border: none;
+			padding: 12px 16px;
+		}
 	</style>
 </head>
 <body>
 	<div class="container-fluid">
-		<script>(function(){if(localStorage.getItem('darkMode')==='enabled')document.body.classList.add('dark-mode');document.body.dataset.layout=localStorage.getItem('navLayout')||'top';if(localStorage.getItem('sidebarCollapsed')==='true')document.body.classList.add('sidebar-collapsed');})();</script>
+	<script>(function(){if(localStorage.getItem('darkMode')==='enabled')document.body.classList.add('dark-mode');document.body.dataset.layout=localStorage.getItem('navLayout')||'top';if(localStorage.getItem('sidebarCollapsed')==='true')document.body.classList.add('sidebar-collapsed');})();</script>
 
 	<!-- SIDEBAR -->
 	<aside id="sidebarNav" class="sistech-sidebar">
@@ -57,8 +42,7 @@
 			<a href="/learn/home" class="sidebar-item active">
 				<i class="bi bi-house-fill"></i>
 				<span class="sidebar-item-label">Início</span>
-			</a>
-		
+			</a>	
 			<div class="sidebar-group" id="sgClientes">
 				<button class="sidebar-group-header" onclick="toggleSidebarGroup('sgClientes')">
 					<i class="bi bi-building"></i>
@@ -104,7 +88,6 @@
 					<a href="/learn/curso/certificados" class="sidebar-subitem"><i class="bi bi-list-ul text-primary"></i>Emitidos</a>
 				</div>
 			</div>
-
 		</div>
 		<div class="sidebar-footer">
 			<button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" title="Recolher barra lateral">
@@ -135,7 +118,7 @@
 			<button class="icon-btn" onclick="toggleDarkMode()" title="Alternar modo escuro">
 				<i class="bi bi-moon"></i>
 			</button>
-			
+		
 			<div class="dropdown">
 				<button class="user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 					<div class="user-avatar" id="userInitialsSlim">?</div>
@@ -153,11 +136,10 @@
 		</div>
 	</div>
 
-<div class="container-fluid">
-	<!-- NAVBAR -->
+	<div class="container-fluid">
+		<!-- NAVBAR -->
 		<nav class="navbar navbar-expand-lg navbar-modern sticky-top mb-2">
 			<div class="container-fluid px-3">
-
 				<!-- Brand -->
 				<a class="navbar-brand-modern" href="/learn/home">
 					<div class="brand-icon">
@@ -182,7 +164,6 @@
 								<i class="bi bi-house-fill"></i> Início
 							</a>
 						</li>
-
 						<li class="nav-item dropdown">
 							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								<i class="bi bi-building"></i> Clientes
@@ -194,9 +175,8 @@
 								<li><a class="dropdown-item" href="/learn/cliente/colaborador"><i class="bi bi-people me-2 text-secondary"></i>Colaboradores</a></li>
 							</ul>
 						</li>
-
 						<li class="nav-item dropdown">
-							<a class="nav-link-modern dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<a class="nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								<i class="bi bi-person-badge"></i> Funcionários
 							</a>
 							<ul class="dropdown-menu">
@@ -230,12 +210,10 @@
 						<button class="layout-toggle-btn" onclick="toggleLayout()" title="Alternar para barra lateral">
 							<i class="bi bi-layout-sidebar"></i>
 						</button>
-
 						<!-- Dark mode -->
 						<button class="icon-btn" onclick="toggleDarkMode()" id="toggleDarkBtn" title="Alternar modo escuro" aria-label="Alternar modo escuro">
 							<i class="bi bi-moon"></i>
 						</button>
-
 						<!-- Usuário dropdown -->
 						<div class="dropdown">
 							<button class="user-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -256,232 +234,132 @@
 			</div>
 		</nav>
 		<!-- / NAVBAR -->
-
-		<hr class="bg-danger border-2 border-top border-danger">
-		
-		<div class="card mb-4">
-		    <div class="card-header">
-		        <i class="bi bi-person-badge"></i>
-		        <b>Dados do Funcionário</b>
-		    </div>
-
-		    <div class="card-body">
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>ID:</b></div>
-		            <div class="col-md-8"><span id="txtId"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>Nome:</b></div>
-		            <div class="col-md-8"><span id="txtNome"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>Usuário:</b></div>
-		            <div class="col-md-8"><span id="txtUsername"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>E-mail:</b></div>
-		            <div class="col-md-8"><span id="txtEmail"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>Status:</b></div>
-		            <div class="col-md-8"><span id="txtAtivo"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>MFA:</b></div>
-		            <div class="col-md-8"><span id="txtMfa"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>Exigir troca de senha:</b></div>
-		            <div class="col-md-8"><span id="txtTrocaSenha"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>Último login:</b></div>
-		            <div class="col-md-8"><span id="txtUltimoLogin"></span></div>
-		        </div>
-
-		        <div class="row mb-2">
-		            <div class="col-md-4"><b>Última troca de senha:</b></div>
-		            <div class="col-md-8"><span id="txtUltimaTrocaSenha"></span></div>
-		        </div>
-
-		        <div class="row">
-		            <div class="col-md-4"><b>Última atualização:</b></div>
-		            <div class="col-md-8"><span id="txtAtualizacao"></span></div>
-		        </div>
-		    </div>
-		</div>
-		
-		<div class=" mt-4">
-
-		    <h4>
-		        <i class="bi bi-gear"></i>
-		        Configurações Avançadas do Funcionário
-		    </h4>
-
-		    <hr>
-
-		    <input type="hidden" id="idFuncionario">
-
-		    <div class="row">
-		        <div class="col-md-6">
-		            <label class="form-label"><b>Função</b></label>
-		            <select id="role" class="form-select"></select>
-		        </div>
-		    </div>
-
-		    <div class="mt-4">
-		        <button class="btn btn-primary" onclick="salvar()">
-		            Salvar
-		        </button>
-		        <a href="#" onclick="window.close()" class="btn btn-secondary">
-		            Fechar
-		        </a>
-		    </div>
-
-		</div>
-		
-		
-		<br /><br />
-		<footer class="container-fluid fixed-bottom text-center text-white">
-				<div class="text-center" style="background-color: rgba(0, 0, 0, 0.2);">
-					© 2025 Copyright:
-					<a class="text-white" href="#">TechGold</a>
-				</div>
-		</footer>
-
-	
-		<!-- ############################################ MODAL PASSWORD GENERATOR ########################################## -->
-		<div class="modal fade" id="modalPasswordGenerator" tabindex="-1" aria-labelledby="modalPasswordGenerator" aria-hidden="true">
-			<div class="modal-dialog modal-md">
-				<div class="modal-content">
-					<div class="container-password">
-						<div class="result">
-							<div class="result__info right">click para copiar</div>
-							<div class="result__info left">copiado</div>
-							<div class="result__viewbox" id="result" style="color: aliceblue; "></div>
-							<a id="copy-btn" style="--x: 0; --y: 0"><i class="far fa-copy"></i></a>
-						</div>
-						<div class="length range__slider" data-min="4" data-max="32">
-							<div class="length__title field-title" data-length='0'>Tamanho:</div>
-							<input id="slider" type="range" min="4" max="32" value="16" />
-						</div>
-						<div class="settings">
-							<span class="settings__title field-title">configurações</span>
-							<div class="setting">
-								<input type="checkbox" id="uppercase" checked />
-								<label for="uppercase">Incluir Maiúsculo</label>
-							</div>
-							<div class="setting">
-								<input type="checkbox" id="lowercase" checked />
-								<label for="lowercase">Incluir Minúsculo</label>
-							</div>
-							<div class="setting">
-								<input type="checkbox" id="number" checked />
-								<label for="number">Incluir Número</label>
-							</div>
-							<div class="setting">
-								<input type="checkbox" id="symbol" />
-								<label for="symbol">Incluir Símbolo</label>
-							</div>
-						</div>
-						<button class="btn generate" id="generate">Gerar Senha</button>
+		<br/>
+		<h5><i class="bi bi-gear-fill"></i> Configurações</h5>
+			
+			<div class="card mb-4">
+			  <div class="card-header config-header-bar">
+			    Países Permitidos para Login
+			  </div>
+			  <div class="card-body">
+			    <div class="row">
+			      <div class="col-md-6">
+			        <div class="form-check">
+			          <input type="checkbox" class="form-check-input" id="BR" disabled>
+			          <label class="form-check-label" for="BR">Brasil (BR)</label>
+			        </div>
+			        <div class="form-check">
+			          <input type="checkbox" class="form-check-input" id="US">
+			          <label class="form-check-label" for="US">Estados Unidos (US)</label>
+			        </div>
+			        <div class="form-check">
+			          <input type="checkbox" class="form-check-input" id="PT">
+			          <label class="form-check-label" for="PT">Portugal (PT)</label>
+			        </div>
+			      </div>
+			      <div class="col-md-6">
+			        <div class="form-check">
+			          <input type="checkbox" class="form-check-input" id="CA">
+			          <label class="form-check-label" for="CA">Canadá (CA)</label>
+			        </div>
+			        <div class="form-check">
+			          <input type="checkbox" class="form-check-input" id="FR">
+			          <label class="form-check-label" for="FR">França (FR)</label>
+			        </div>
+			        <div class="form-check">
+			          <input type="checkbox" class="form-check-input" id="CL">
+			          <label class="form-check-label" for="CL">Chile (CL)</label>
+			        </div>
+			      </div>
+			    </div>
+			    <button class="btn btn-sm btn-primary mt-3" onclick="salvarPaisesPermitidos()">Salvar</button>
+			  </div>
+			</div>   
+           
+			<footer class="container-fluid fixed-bottom text-center text-white">
+					<div class="text-center" style="background-color: rgba(0, 0, 0, 0.2);">
+						© 2026 Copyright:
+						<a class="text-white" href="#">TechGold</a>
 					</div>
-				</div>
-			</div>
-		</div>
-		<!-- ############################################ MODAL PASSWORD GENERATOR ########################################## -->
-
-	<script src="../assets/js/jquery-3.6.3.js"></script>
-	<script src="../assets/js/popper.min.js"></script>
-	<script src="../assets/js/bootstrap.min.js"></script>
-	<script src="../assets/js/password-generator.js"></script>
-	<script src="../assets/js/dark.js"></script>
-	<script src="../assets/js/navbar.js"></script>
-	<script defer src="../assets/js/sidebar.js"></script>
-	<script>	
+			</footer>
+	</div>
+	
+	<script src="assets/js/jquery-3.6.3.js"></script>
+	<script src="assets/js/popper.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/password-generator.js"></script>
+	<script src="assets/js/dark.js"></script>
+	<script src="assets/js/navbar.js"></script>
+	<script>		
 		
-		$(document).ready(function () {
-		    const id = extrairIdDaURL();
-		    $('#idFuncionario').val(id);
-
-		    $.ajax({
-		        type: "GET",
-		        url: `/learn/funcionarios/avancado/${id}`,
-		        success: function (data) {
-					$('#txtId').text(data.id);
-				   $('#txtNome').text(data.nomeFuncionario);
-				   $('#txtUsername').text(data.username);
-				   $('#txtEmail').text(data.email || '-');
-
-				   $('#txtAtivo').html(data.ativo
-				       ? '<span class="badge bg-success">Ativo</span>'
-				       : '<span class="badge bg-danger">Inativo</span>'
-				   );
-
-				   $('#txtMfa').html(data.mfa
-				       ? '<span class="badge bg-success">Ativo</span>'
-				       : '<span class="badge bg-secondary">Desativado</span>'
-				   );
-
-				   $('#txtTrocaSenha').html(data.trocaSenha
-				       ? '<span class="badge bg-warning text-dark">Sim</span>'
-				       : '<span class="badge bg-secondary">Não</span>'
-				   );
-
-				   $('#txtUltimoLogin').text(data.dataUltimoLogin || '-');
-				   $('#txtUltimaTrocaSenha').text(data.dataAtualizacaoSenha || '-');
-				   $('#txtAtualizacao').text(data.dataAtualizacao || '-');
-
-				   // Campos administrativos
-				   preencherRoles(data.role);
-		        },
-		        error: function () {
-		            alert("Acesso não autorizado.");
-		            window.close();
-		        }
-		    });
+		
+		$.ajax({
+			type: "GET",
+			contentType: "application/json",
+			url: "/learn/sistema/configuracao/email",
+			success: function (data) {
+				
+				data.map(i => {
+					if(i.status == true){
+						document.getElementById("status"+i.agendamento).checked=true;					
+					}else{
+						document.getElementById("status"+i.agendamento).checked=false;
+					}
+					
+					document.getElementById("email"+i.agendamento).value = i.email;
+					document.getElementById("id"+i.agendamento).value = i.id;
+				});
+			},
+			error: function (e) { alert(e); }
 		});
-
-		function extrairIdDaURL() {
-			const params = new URLSearchParams(window.location.search);
-			return params.get('id');
-		}
-
-		function preencherRoles(roleAtual) {
-		    const roles = ['ADMIN', 'EDITOR', 'USER', 'SADMIN'];
-
-		    roles.forEach(r => {
-		        $('#role').append(
-		            `<option value="${r}" ${r === roleAtual ? 'selected' : ''}>${r}</option>`
-		        );
-		    });
-		}
-
-		function salvar() {
-		    $.ajax({
-		        type: "PUT",
-		        contentType: "application/json",
-		        url: "/learn/funcionarios/avancado",
-		        data: JSON.stringify({
-		            id: $('#idFuncionario').val(),
-		            role: $('#role').val()
-		        }),
-		        success: function () {
-		            alert("Configurações salvas com sucesso!");
-		        },
-		        error: function () {
-		            alert("Você não tem permissão.");
-		        }
-		    });
-		}
 		
+		$.ajax({
+			type: "GET",
+			contentType: "application/json",
+			url: "/learn/sistema/configuracao/paises",
+			success: function (data) {
+				
+				data.map(i => {
+					if(i.status == true){
+						document.getElementById(i.pais).checked=true;					
+					}else{
+						document.getElementById(i.pais).checked=false;
+					}
+				});
+			},
+			error: function (e) { alert(e); }
+		});
+		
+		function salvarPaisesPermitidos(){
+			const br = document.getElementById("BR");
+			const us = document.getElementById("US");
+			const pt = document.getElementById("PT");
+			const ca = document.getElementById("CA");
+			const fr = document.getElementById("FR");
+			const cl = document.getElementById("CL");
+			
+			var paises = [];
+			
+			if(br.checked == true){ paises[paises.length]="BR";}
+			if(us.checked == true){ paises[paises.length]="US";}
+			if(pt.checked == true){ paises[paises.length]="PT";}
+			if(ca.checked == true){ paises[paises.length]="CA";}
+			if(fr.checked == true){ paises[paises.length]="FR";}
+			if(cl.checked == true){ paises[paises.length]="CL";}
+			
+			if(br.checked != false){
+				$.ajax({
+					type: "POST",
+					contentType: "application/json",
+					url: "/learn/sistema/configuracao/paises",
+					data: JSON.stringify(
+						{ "paises": paises }
+					),
+					success: function (data) { alert("Países atualizados com sucesso!");	},
+					error: function (e) { alert(e); }
+				});
+			}else{ alert("Desabilitar BR impossibilitará seu acesso!"); }
+		}
 		
 	</script>
 </body>
