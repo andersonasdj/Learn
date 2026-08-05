@@ -39,7 +39,7 @@
 .brand-icon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #1c71d8, #38bdf8);
+  background: linear-gradient(135deg, #1e3a5f, #1a56c4);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -204,7 +204,7 @@ body[data-layout="side"].sidebar-collapsed .sistech-sidebar { width: 60px; }
 }
 
 .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 16px 14px 14px; border-bottom: 1px solid rgba(255,255,255,.07); flex-shrink: 0; overflow: hidden; white-space: nowrap; }
-.sidebar-brand-icon { width: 30px; height: 30px; background: #164294; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sidebar-brand-icon { width: 30px; height: 30px; background: linear-gradient(135deg, #1e3a5f, #1a56c4); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .sidebar-brand-text { color: #f1f5f9; font-weight: 700; font-size: .92rem; letter-spacing: .03em; transition: opacity .15s, width .15s; overflow: hidden; }
 body[data-layout="side"].sidebar-collapsed .sidebar-brand-text { opacity: 0; width: 0; }
 

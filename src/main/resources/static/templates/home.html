@@ -103,7 +103,7 @@
 	<aside id="sidebarNav" class="sistech-sidebar">
 		<div class="sidebar-brand">
 			<div class="sidebar-brand-icon">
-				<img src="./assets/img/key.png" style="height:13px;filter:brightness(0) invert(1);">
+				<i class="bi bi-mortarboard-fill" style="font-size:13px;color:#fff;"></i>
 			</div>
 			<span class="sidebar-brand-text">Dashboard</span>
 		</div>
@@ -218,7 +218,7 @@
 				<!-- Brand -->
 				<a class="navbar-brand-modern" href="/learn/home">
 					<div class="brand-icon">
-						<img src="./assets/img/key.png" style="height:15px; filter:brightness(0) invert(1);">
+						<i class="bi bi-mortarboard-fill" style="font-size:15px;color:#fff;"></i>
 					</div>
 					<span class="brand-text">Learn</span>
 				</a>
@@ -453,27 +453,30 @@
 		</div>
 	</div>
 	<!-- ################################################### MODAL FOTO ################################################# -->
-	<!-- ############################################### MODAL TROCA DE SENHS ########################################### -->
-	<div class="modal fade" id="modalTrocaDeSenha" tabindex="-1" aria-labelledby="modalTrocaDeSenha" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="modalLabelTrocaDeSenha">Aviso</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="container">
-					<br />
-					<p><span style="font-size: 25px; color: red;">Realize a alteração de sua senha!</span>
-						<a href="/learn/funcionario/perfil" class="btn btn-warning">Alterar</a>
+	<!-- ############################################### MODAL TROCA DE SENHA ########################################### -->
+	<div class="modal fade" id="modalTrocaDeSenha" tabindex="-1" aria-labelledby="modalLabelTrocaDeSenha" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" style="max-width:440px">
+			<div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
+				<button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-body text-center p-4 pt-5">
+					<div class="mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:64px;height:64px;border-radius:50%;background:rgba(250,178,25,.14);">
+						<i class="bi bi-shield-lock-fill" style="font-size:1.8rem;color:#fab219;"></i>
+					</div>
+					<h5 class="fw-bold mb-2" id="modalLabelTrocaDeSenha">Atualize sua senha</h5>
+					<p class="text-muted mb-0" style="font-size:.92rem;">
+						Por segurança, é necessário definir uma nova senha antes de continuar utilizando o sistema.
 					</p>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Fechar</button>
+				<div class="modal-footer border-0 pt-0 pb-4 px-4 d-flex gap-2">
+					<button type="button" class="btn btn-light flex-shrink-0" data-bs-dismiss="modal">Depois</button>
+					<a href="/learn/funcionario/perfil" class="btn btn-warning fw-semibold flex-grow-1">
+						<i class="bi bi-key-fill me-1"></i>Alterar senha agora
+					</a>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- ############################################### MODAL TROCA DE SENHS ########################################### -->
+	<!-- ############################################### MODAL TROCA DE SENHA ########################################### -->
 
 	<script defer src="assets/js/bootstrap.bundle.min.js"></script>
 	<script defer src="assets/js/dark.js"></script>
