@@ -2,10 +2,7 @@ package br.com.techgold.learn.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +13,8 @@ import br.com.techgold.learn.dto.DtoCadastroFuncionario;
 import br.com.techgold.learn.dto.DtoFuncionarioAdvancedEdit;
 import br.com.techgold.learn.dto.DtoFuncionarioAdvancedList;
 import br.com.techgold.learn.dto.DtoFuncionarioEdit;
-import br.com.techgold.learn.dto.DtoListarCustoFuncionarios;
 import br.com.techgold.learn.dto.DtoListarFuncionarios;
 import br.com.techgold.learn.dto.DtoSenha;
-import br.com.techgold.learn.dto.DtoSolicitacoesFuncionario;
-import br.com.techgold.learn.dto.DtoSolicitacoesGerais;
 import br.com.techgold.learn.model.Funcionario;
 import br.com.techgold.learn.orm.DtoFuncionarioEditSimplificado;
 import br.com.techgold.learn.repository.FuncionarioRepository;
@@ -29,8 +23,11 @@ import jakarta.transaction.Transactional;
 @Service
 public class FuncionarioService {
 
-	@Autowired FuncionarioRepository repository;
+	final FuncionarioRepository repository;
 
+	FuncionarioService(FuncionarioRepository repository) {
+		this.repository = repository;
+	}
 	
 	@Transactional
 	public void atualizaImagem(Long id, String caminhoFoto) {
@@ -66,7 +63,6 @@ public class FuncionarioService {
 		funcionario.setUsername(dados.username().toLowerCase());
 		funcionario.setNomeFuncionario(dados.nomeFuncionario());
 		funcionario.setMfa(dados.mfa());
-		funcionario.setAusente(dados.ausente());
 		funcionario.setEmail(dados.email());
 		
 		if(repository.count() > 1) {
@@ -76,12 +72,6 @@ public class FuncionarioService {
 		funcionario.setDataAtualizacao(LocalDateTime.now().withNano(0));
 		funcionario.setTentativasLogin(0);
 		return new DtoListarFuncionarios(funcionario);
-	}
-	
-	@Transactional
-	public void alteraStatusRefeicao(Long id, boolean dados) {
-		Funcionario funcionario = repository.getReferenceById(id);
-		funcionario.setRefeicao( dados );
 	}
 	
 	@Transactional
@@ -110,43 +100,12 @@ public class FuncionarioService {
 		funcionario.setPais(pais);
 	}
 	
-	public Boolean statusRefeicao(Long id) {
-		Boolean refeicao = repository.statusRefeicao(id);
-		if(refeicao != null) {
-			return refeicao;
-		}else return false;
-	}
-	
 	public int existeFuncionarios() {
 		return repository.existsFuncionarios();
 	}
 	
 	public DtoFuncionarioEditSimplificado buscaDadosFuncionario(Long id) {
 		return repository.buscaFuncionarioSimplificadoPorId(id);
-	}
-	
-	public DtoSolicitacoesFuncionario buscaSolicitacoes(Funcionario funcionario) {
-		Map<String, Integer> m = repository.buscaContagemPorFuncionario(funcionario.getId())
-				.stream().collect(Collectors.toMap(p -> p.getStatus(), p -> p.getQtd().intValue()));
-		int abertas   = m.getOrDefault("ABERTO",    0);
-		int andamento = m.getOrDefault("ANDAMENTO", 0);
-		int agendadas = m.getOrDefault("AGENDADO",  0);
-		int aguardando= m.getOrDefault("AGUARDANDO",0);
-		int pausado   = m.getOrDefault("PAUSADO",   0);
-		return new DtoSolicitacoesFuncionario(abertas, andamento, agendadas, aguardando, pausado,
-				abertas + andamento + agendadas + aguardando + pausado);
-	}
-
-	public DtoSolicitacoesGerais buscaSolicitacoesGerais() {
-		Map<String, Integer> m = repository.buscaContagemGeralAgrupada()
-				.stream().collect(Collectors.toMap(p -> p.getStatus(), p -> p.getQtd().intValue()));
-		int abertas   = m.getOrDefault("ABERTO",    0);
-		int andamento = m.getOrDefault("ANDAMENTO", 0);
-		int agendadas = m.getOrDefault("AGENDADO",  0);
-		int aguardando= m.getOrDefault("AGUARDANDO",0);
-		int pausado   = m.getOrDefault("PAUSADO",   0);
-		return new DtoSolicitacoesGerais(abertas, andamento, agendadas, aguardando, pausado,
-				abertas + andamento + agendadas + aguardando + pausado);
 	}
 	
 	public Boolean existe(DtoCadastroFuncionario dados) {
@@ -171,10 +130,6 @@ public class FuncionarioService {
 	
 	public List<DtoListarFuncionarios> listarAtivos() {
 		return repository.listarFuncionarios().stream().map(DtoListarFuncionarios::new).toList();
-	}
-	
-	public List<DtoListarCustoFuncionarios> listarCustoAtivos() {
-		return repository.listarFuncionarios().stream().map(DtoListarCustoFuncionarios::new).toList();
 	}
 	
 	public DtoFuncionarioEdit editar(Long id) {
@@ -217,8 +172,7 @@ public class FuncionarioService {
 	@Transactional
 	public void atualizarCode(Funcionario f) {
 		Funcionario funcionario = repository.getReferenceById(f.getId());
-		funcionario.setCode(f.getCode());
-		
+		funcionario.setCode(f.getCode());	
 	}
 	
 	@Transactional
@@ -230,7 +184,6 @@ public class FuncionarioService {
 		if(repository.count() > 1) {
 			funcionario.setRole(dados.role());
 		}
-		funcionario.setValorHora(dados.valorHora());
 		funcionario.setDataAtualizacao(LocalDateTime.now().withNano(0));
 		funcionario.setTentativasLogin(0);
 		return new DtoFuncionarioAdvancedEdit(funcionario);

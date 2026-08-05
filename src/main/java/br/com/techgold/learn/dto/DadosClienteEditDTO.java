@@ -9,8 +9,6 @@ import br.com.techgold.learn.model.Cliente;
 public record DadosClienteEditDTO(
 		Long id,
 		Boolean ativo,
-		Boolean vip,
-		Boolean redFlag,
 		String nomeCliente,
 		String endereco,
 		String telefone,
@@ -18,18 +16,13 @@ public record DadosClienteEditDTO(
 		String password,
 		String cnpj,
 		String bairro,
-		Long tempoContratado,
-		String token,
-		String dominio,
 		@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 		LocalDateTime dataUltimoLogin
 		) {
-	
+
 	public DadosClienteEditDTO(Cliente c) {
 		this(c.getId(),
 				c.getAtivo(),
-				c.isVip(),
-				c.isRedFlag(),
 				c.getNomeCliente(),
 				c.getEndereco(),
 				c.getTelefone(),
@@ -37,9 +30,6 @@ public record DadosClienteEditDTO(
 				c.getPassword(),
 				c.getCnpj(),
 				c.getBairro(),
-				c.getTempoContratado(),
-				c.getToken(),
-				c.getDominio(),
 				c.getDataUltimoLogin());
 	}
 }

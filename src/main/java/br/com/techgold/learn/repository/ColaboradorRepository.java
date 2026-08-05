@@ -18,20 +18,20 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 			+ "LIMIT 1", nativeQuery = true)
 	String retornarEmailColaboradorPorIdClienteNome(Long id, String nome);
 	
-	@Query(value = "SELECT co.id, co.nomeColaborador, co.celular, co.vip, co.cliente_id, co.email "
+	@Query(value = "SELECT co.id, co.nomeColaborador, co.celular, co.cliente_id, co.email "
 			+ "FROM colaboradores co "
 			+ "WHERE co.cliente_id=:id ORDER BY co.nomeColaborador", nativeQuery = true)
 	List<ColaboradorProjecao> buscaColaboradoresPorIdCliente(Long id);
-	
+
 	@Query(value = "SELECT co.nomeColaborador FROM colaboradores co "
 			+ "WHERE co.cliente_id=:id ORDER BY co.nomeColaborador", nativeQuery = true)
 	List<String> listarNomesColaboradoresPorIdCliente(Long id);
-	
+
 	@Query(value = "SELECT co.nomeColaborador, co.celular FROM colaboradores co "
 			+ "WHERE co.cliente_id=:id ORDER BY co.nomeColaborador", nativeQuery = true)
 	List<ColaboradorProjecaoSimples> listarNomesCelularColaboradoresPorIdCliente(Long id);
-	
-	@Query(value = "SELECT co.celular, co.vip FROM colaboradores co "
+
+	@Query(value = "SELECT co.celular FROM colaboradores co "
 			+ "WHERE co.cliente_id=:id AND co.nomeColaborador=:nomeColaborador", nativeQuery = true)
 	String listarCelularColaborador(Long id, String nomeColaborador);
 	
@@ -45,17 +45,15 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long>{
 	public int verificaSeExistePorNome(String nomeColaborador, String email);
 
 	@Query("""
-	        SELECT 
+	        SELECT
 	            c.id            AS id,
 	            c.nomeColaborador AS nomeColaborador,
 	            c.celular        AS celular,
-	            c.vip            AS vip,
 	            c.cliente.id     AS cliente_id,
 	            c.email          AS email,
-	            c.cliente.nomeCliente	AS nomeCliente,
-	            c.cliente.vip	AS vipCliente
+	            c.cliente.nomeCliente	AS nomeCliente
 	        FROM Colaborador c
-	        WHERE 
+	        WHERE
 		        LOWER(c.nomeColaborador) LIKE LOWER(CONCAT('%', :dados, '%'))
 		        OR LOWER(c.email)        LIKE LOWER(CONCAT('%', :dados, '%'))
 		        OR c.celular             LIKE CONCAT('%', :dados, '%')

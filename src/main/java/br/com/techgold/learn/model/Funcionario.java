@@ -1,6 +1,5 @@
 package br.com.techgold.learn.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -30,41 +29,33 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Funcionario extends Usuario implements UserDetails {
-	
+
 	private static final long serialVersionUID = 3474835326939061879L;
 	@Column(length = 50)
 	private String nomeFuncionario;
 	private String caminhoFoto;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
-	
+
 	private LocalDateTime dataAtualizacaoSenha;
-	
+
 	private Boolean trocaSenha;
-	
-	private Boolean ausente;
-	
-	private Boolean refeicao;
-	
+
 	private int tentativasLogin;
-	
+
 	private boolean twoFactorVerified = false; // controle interno
-	
-	private BigDecimal valorHora;
-	
+
 	public Funcionario(DtoCadastroFuncionario dados) {
 		String senhaEncriptada = new BCryptPasswordEncoder().encode(dados.password());
-		
+
 		this.nomeFuncionario = dados.nomeFuncionario();
 		this.setRole(dados.role());
 		this.setUsername(dados.username().toLowerCase());
 		this.setPassword(senhaEncriptada);
 		this.setAtivo(true);
 		this.setMfa(false);
-		this.setAusente(false);
-		this.setRefeicao(false);
 		this.setDataAtualizacao(LocalDateTime.now().withNano(0));
-		
+
 	}
 
 	@Override

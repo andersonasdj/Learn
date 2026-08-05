@@ -41,7 +41,6 @@ public class ColaboradorService {
 			Colaborador colaborador = repository.getReferenceById(dados.id());
 				colaborador.setCelular(dados.celular());
 				colaborador.setNomeColaborador(dados.nomeColaborador());
-				colaborador.setVip(dados.vip());
 				colaborador.setEmail(dados.email());
 				colaborador.setUsername(dados.username());
 				colaborador.setPassword(new BCryptPasswordEncoder().encode(dados.password().toString()));
@@ -74,11 +73,7 @@ public class ColaboradorService {
 	}
 	
 	public String listarCelularColaborador(Long id, String nomeColaborador) {
-		String dados = repository.listarCelularColaborador(id, nomeColaborador);
-		if(dados != null) {
-			String[] resultado = dados.split(",");
-			return resultado[0] + (resultado[1].equals("true") ? " - VIP": "");
-		}else { return ""; }
+		return repository.listarCelularColaborador(id, nomeColaborador);
 	}
 	
 	public boolean existeColaborador(Long id) {

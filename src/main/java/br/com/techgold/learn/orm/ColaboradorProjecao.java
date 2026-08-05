@@ -4,9 +4,7 @@ public interface ColaboradorProjecao{
 	Long getId();
 	String getNomeColaborador();
 	String getCelular();
-	String getVip();
 	String getCliente_id();
 	String getEmail();
 	String getNomeCliente();
-	String getVipCliente();
 }

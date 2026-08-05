@@ -18,17 +18,13 @@ import br.com.techgold.learn.repository.ClienteRepository;
 
 @Service
 public class ClienteService {
-	
+
 	@Autowired ClienteRepository repository;
-	
-	public Cliente buscaClientePorToken(String token) {
-		return repository.findByToken(token);
-	}
-	
+
 	public List<DtoClienteList> listarAtivos() {
 		return repository.listarClientes().stream().map(DtoClienteList::new).toList();
 	}
-	
+
 	public Page<DtoClienteList> listarClientePorPalavra(Pageable page, String conteudo) {
 		return repository.listarClientesPorPalavra(page, conteudo).map(DtoClienteList::new);
 	}
@@ -37,17 +33,17 @@ public class ClienteService {
 	public List<String> listarNomesClienteAtivos() {
 		return repository.listarNomesClienteAtivos();
 	}
-	
+
 	@Cacheable(value="idClientesAtivos")
 	public List<String> listarIdClienteAtivos() {
 		return repository.listarIdClienteAtivos();
 	}
-	
+
 	@Cacheable(value="todosOsClientes")
 	public Page<DtoClienteList> listarTodos(Pageable page) {
 		return repository.findAll(page).map(DtoClienteList::new);
 	}
-	
+
 	@Cacheable(value="bairrosClientes")
 	public List<String> listarBairrosClientes(){
 		List<String> listaDeBairros = new ArrayList<>();
@@ -70,17 +66,9 @@ public class ClienteService {
 	public Cliente atualizarCliente(DtoAtualizarCliente dados) {
 		return repository.save(new Cliente(dados));
 	}
-	
+
 	public Cliente buscaClientePorNome(Long dados) {
 		return  repository.getReferenceById(dados);
 	}
-	
-	public boolean verificaSeVip(Long id) {
-		return repository.verificaSeVip(id);
-	}
-	
-	public boolean verificaSeRedFlag(Long id) {
-		return repository.verificaSeRedFlag(id);
-	}
-	
+
 }

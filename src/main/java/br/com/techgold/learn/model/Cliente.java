@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cliente extends Usuario {
-	
+
 	@Column(length = 100)
 	private String nomeCliente;
 	@Column(length = 200)
@@ -28,17 +28,10 @@ public class Cliente extends Usuario {
 	private String telefone;
 	@Column(length = 20)
 	private String cnpj;
-	private boolean redFlag;
-	private boolean vip;
 	@Column(length = 20)
 	private String bairro;
-	@Column(length = 30)
-	private String dominio;
-	@Column(length = 300)
-	private String token;
-	private Long tempoContratado;
 	private String caminhoFoto;
-	
+
 	public Cliente(DtoCadastroCliente dados) {
 		this.nomeCliente = dados.nomeCliente();
 		this.setUsername(dados.username());
@@ -49,15 +42,10 @@ public class Cliente extends Usuario {
 		this.endereco = dados.endereco();
 		this.telefone = dados.telefone();
 		this.cnpj = dados.cnpj();
-		this.redFlag = false;
-		this.vip = false;
 		this.bairro = dados.bairro();
-		this.tempoContratado = dados.tempoContratado();
-		this.token = dados.token();
-		this.dominio = dados.dominio();
 	}
-	
-public Cliente(DtoAtualizarCliente dados) {		
+
+public Cliente(DtoAtualizarCliente dados) {
 		this.setId(dados.id());
 		this.nomeCliente = dados.nomeCliente();
 		this.setUsername(dados.username());
@@ -68,11 +56,6 @@ public Cliente(DtoAtualizarCliente dados) {
 		this.endereco = dados.endereco();
 		this.telefone = dados.telefone();
 		this.cnpj = dados.cnpj();
-		this.redFlag = dados.redFlag();
-		this.vip = dados.vip();
 		this.bairro = dados.bairro();
-		this.tempoContratado = dados.tempoContratado();
-		this.token = dados.token();
-		this.dominio = dados.dominio();
 	}
 }

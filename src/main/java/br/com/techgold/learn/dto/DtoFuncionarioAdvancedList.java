@@ -1,6 +1,5 @@
 package br.com.techgold.learn.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,7 +14,6 @@ public record DtoFuncionarioAdvancedList(
 		UserRole role,
 		Boolean ativo,
 		Boolean mfa,
-		Boolean ausente,
 		@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 		LocalDateTime dataAtualizacao,
 		@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -23,25 +21,22 @@ public record DtoFuncionarioAdvancedList(
 		@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 		LocalDateTime dataUltimoLogin,
 		Boolean trocaSenha,
-		String email,
-		BigDecimal valorHora
+		String email
 		) {
-	
+
 	public DtoFuncionarioAdvancedList(Funcionario f) {
 		this(
-				f.getId(), 
-				f.getNomeFuncionario(), 
-				f.getUsername(), 
+				f.getId(),
+				f.getNomeFuncionario(),
+				f.getUsername(),
 				f.getRole(),
 				f.getAtivo(),
 				f.getMfa(),
-				(f.getAusente()) != null ? f.getAusente(): false,
 				f.getDataAtualizacao(),
 				f.getDataAtualizacaoSenha(),
 				f.getDataUltimoLogin(),
 				(f.getTrocaSenha()) != null? f.getTrocaSenha(): false,
-				f.getEmail(),
-				f.getValorHora()
+				f.getEmail()
 				);
 	}
 

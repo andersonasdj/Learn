@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="assets/css/dark.css?v=1">
 	<link rel="stylesheet" href="assets/css/navbar.css?v=4">
 	<link rel="stylesheet" href="assets/css/home.css?v=8.1">
-	<title>Learn - TechGold</title>
+	<title>ProviderOne Tecnologia - Login</title>
 	<style>
 		.card-curso {
 			border: none;
@@ -31,37 +31,37 @@
 		.card-curso .curso-capa img { width: 100%; height: 100%; object-fit: cover; }
 		body.dark-mode .card-curso { background: linear-gradient(180deg, #2c3034, #212529); box-shadow: 0 8px 22px rgba(0,0,0,.45); }
 
-		/* ===== Gráfico de adesão às aulas ===== */
+		/* ===== Gráfico de adesão às aulas (funil de retenção) ===== */
 		.viz-root {
-			--viz-good: #0ca30c;
-			--viz-warning: #fab219;
-			--viz-neutral-fill: #dedcd3;
+			--viz-primary: #0d6efd;
+			--viz-primary-track: #e9eef9;
+			--viz-drop: #d03b3b;
 			--viz-surface: #ffffff;
 			--viz-text-primary: #0b0b0b;
 			--viz-text-secondary: #52514e;
 			--viz-text-muted: #898781;
 		}
 		body.dark-mode .viz-root {
-			--viz-neutral-fill: #4b4b48;
+			--viz-primary: #4d94ff;
+			--viz-primary-track: #24314d;
+			--viz-drop: #ff6b6b;
 			--viz-surface: #2c3034;
 			--viz-text-primary: #ffffff;
 			--viz-text-secondary: #c3c2b7;
 			--viz-text-muted: #9a988f;
 		}
-		.viz-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 14px; font-size: .82rem; color: var(--viz-text-secondary); }
-		.viz-legend-item { display: flex; align-items: center; gap: 6px; }
-		.viz-legend-swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
-		.viz-legend-total { font-size: .78rem; color: var(--viz-text-muted); }
-		.viz-seg-good { background: var(--viz-good); }
-		.viz-seg-warning { background: var(--viz-warning); }
-		.viz-seg-neutral { background: var(--viz-neutral-fill); }
-		.viz-bars { display: flex; flex-direction: column; gap: 14px; }
-		.viz-bar-row { display: grid; grid-template-columns: minmax(120px, 220px) 1fr 34px; align-items: center; gap: 10px; }
-		.viz-bar-label { font-size: .82rem; color: var(--viz-text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-		.viz-bar-track { display: flex; gap: 2px; height: 20px; border-radius: 6px; overflow: hidden; background: var(--viz-surface); }
-		.viz-bar-seg { height: 100%; transition: filter .15s; cursor: default; outline: none; }
-		.viz-bar-seg.is-hovered, .viz-bar-seg:focus-visible { filter: brightness(1.12); box-shadow: inset 0 0 0 2px rgba(255,255,255,.55); }
-		.viz-bar-total { font-size: .78rem; color: var(--viz-text-muted); text-align: right; }
+		.viz-funnel-caption { font-size: .82rem; color: var(--viz-text-secondary); margin-bottom: 18px; }
+		.viz-funnel-caption strong { color: var(--viz-text-primary); font-weight: 600; }
+		.viz-funnel-rows { display: flex; flex-direction: column; gap: 18px; }
+		.viz-funnel-row { display: grid; grid-template-columns: minmax(120px, 220px) 1fr minmax(84px, auto); align-items: center; gap: 14px; }
+		.viz-funnel-label { font-size: .82rem; font-weight: 500; color: var(--viz-text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+		.viz-funnel-track { height: 10px; border-radius: 999px; overflow: hidden; background: var(--viz-primary-track); }
+		.viz-funnel-fill { height: 100%; border-radius: 999px; background: var(--viz-primary); transition: filter .15s; cursor: default; outline: none; }
+		.viz-funnel-fill.is-hovered, .viz-funnel-fill:focus-visible { filter: brightness(1.12); box-shadow: inset 0 0 0 2px rgba(255,255,255,.55); }
+		.viz-funnel-value { text-align: right; }
+		.viz-funnel-count { font-size: .82rem; font-weight: 600; color: var(--viz-text-primary); }
+		.viz-funnel-pct { font-size: .74rem; color: var(--viz-text-muted); margin-left: 4px; }
+		.viz-funnel-drop { font-size: .72rem; color: var(--viz-drop); margin-top: 2px; white-space: nowrap; }
 		.viz-tooltip {
 			position: absolute; transform: translate(-50%, -100%);
 			background: #0b0b0b; color: #fff; font-size: .78rem; font-weight: 600;
@@ -69,7 +69,30 @@
 			opacity: 0; visibility: hidden; transition: opacity .12s; white-space: nowrap; z-index: 2000;
 		}
 		.viz-tooltip.is-visible { opacity: 1; visibility: visible; }
-		@media (max-width: 576px) { .viz-bar-row { grid-template-columns: 90px 1fr 28px; } }
+		@media (max-width: 576px) { .viz-funnel-row { grid-template-columns: 90px 1fr 70px; } }
+
+		.viz-select {
+			appearance: none; -webkit-appearance: none; -moz-appearance: none;
+			background-color: var(--viz-surface);
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23898781'><path d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/></svg>");
+			background-repeat: no-repeat;
+			background-position: right 13px center;
+			background-size: 13px;
+			border: 1.5px solid rgba(0,0,0,.1);
+			border-radius: 999px;
+			padding: 6px 34px 6px 16px;
+			font-size: .82rem;
+			font-weight: 500;
+			color: var(--viz-text-primary);
+			cursor: pointer;
+			transition: border-color .15s, box-shadow .15s;
+		}
+		.viz-select:hover { border-color: rgba(13,110,253,.4); }
+		.viz-select:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13,110,253,.14); }
+		body.dark-mode .viz-select {
+			border-color: rgba(255,255,255,.15);
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%239a988f'><path d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/></svg>");
+		}
 	</style>
 </head>
 
@@ -371,8 +394,8 @@
 							<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
 								<h6 class="mb-0"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Adesão às aulas</h6>
 								<div class="d-flex align-items-center gap-2 flex-wrap">
-									<select id="selectCursoAdesao" class="form-select form-select-sm" style="width:auto;min-width:200px;"></select>
-									<button type="button" class="btn btn-sm btn-outline-secondary" id="btnTabelaAdesao">Ver como tabela</button>
+									<select id="selectCursoAdesao" class="viz-select" style="min-width:200px;"></select>
+									<button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="btnTabelaAdesao">Ver como tabela</button>
 								</div>
 							</div>
 							<div id="adesaoConteudo" class="viz-root">
@@ -640,37 +663,54 @@
 		    const total = dados.totalAlunos;
 
 		    let html = `
-		        <div class="viz-legend">
-		            <span class="viz-legend-item"><span class="viz-legend-swatch viz-seg-good"></span>Concluído</span>
-		            <span class="viz-legend-item"><span class="viz-legend-swatch viz-seg-warning"></span>Em andamento</span>
-		            <span class="viz-legend-item"><span class="viz-legend-swatch viz-seg-neutral"></span>Não iniciado</span>
-		            <span class="viz-legend-total ms-auto">${total} aluno(s) com progresso registrado</span>
+		        <div class="viz-funnel-caption">
+		            <strong>${total}</strong> aluno(s) iniciaram este curso — as barras mostram quantos alcançaram cada aula.
 		        </div>
-		        <div class="viz-bars">
+		        <div class="viz-funnel-rows">
 		    `;
 
+		    let alcancaramAnterior = null;
+
 		    dados.aulas.forEach((a, idx) => {
-		        const pctConcluido = (a.concluidos / total) * 100;
-		        const pctAndamento = (a.emAndamento / total) * 100;
-		        const pctNaoIniciado = (a.naoIniciados / total) * 100;
+		        const alcancaram = a.concluidos + a.emAndamento;
+		        const pct = (alcancaram / total) * 100;
 		        const rotulo = (idx + 1) + '. ' + a.titulo;
 
+		        let dropHtml = '';
+		        let tooltipTexto = `${escapeHtml(a.titulo)}: ${alcancaram} de ${total} alunos alcançaram (${arredondar(pct)}%)`;
+
+		        if (idx > 0 && alcancaramAnterior > 0) {
+		            const quedaAbs = alcancaramAnterior - alcancaram;
+		            const quedaPct = (quedaAbs / alcancaramAnterior) * 100;
+		            if (quedaAbs > 0) {
+		                dropHtml = `<div class="viz-funnel-drop"><i class="bi bi-arrow-down-short"></i>${quedaAbs} (-${arredondar(quedaPct)}%)</div>`;
+		                tooltipTexto += ` · queda de ${quedaAbs} aluno(s) (-${arredondar(quedaPct)}%) em relação à aula anterior`;
+		            }
+		        }
+
 		        html += `
-		            <div class="viz-bar-row">
-		                <div class="viz-bar-label" title="${escapeHtml(rotulo)}">${escapeHtml(rotulo)}</div>
-		                <div class="viz-bar-track" role="img" aria-label="${escapeHtml(a.titulo)}: ${a.concluidos} concluíram, ${a.emAndamento} em andamento, ${a.naoIniciados} não iniciaram, de ${total} alunos">
-		                    ${a.concluidos > 0 ? `<div class="viz-bar-seg viz-seg-good" style="width:${pctConcluido}%" tabindex="0" data-tooltip="Concluído — ${a.concluidos} aluno(s)"></div>` : ''}
-		                    ${a.emAndamento > 0 ? `<div class="viz-bar-seg viz-seg-warning" style="width:${pctAndamento}%" tabindex="0" data-tooltip="Em andamento — ${a.emAndamento} aluno(s)"></div>` : ''}
-		                    ${a.naoIniciados > 0 ? `<div class="viz-bar-seg viz-seg-neutral" style="width:${pctNaoIniciado}%" tabindex="0" data-tooltip="Não iniciado — ${a.naoIniciados} aluno(s)"></div>` : ''}
+		            <div class="viz-funnel-row">
+		                <div class="viz-funnel-label" title="${escapeHtml(rotulo)}">${escapeHtml(rotulo)}</div>
+		                <div class="viz-funnel-track">
+		                    <div class="viz-funnel-fill" style="width:${pct}%" tabindex="0" data-tooltip="${escapeHtml(tooltipTexto)}"></div>
 		                </div>
-		                <div class="viz-bar-total">${total}</div>
+		                <div class="viz-funnel-value">
+		                    <span class="viz-funnel-count">${alcancaram}</span><span class="viz-funnel-pct">${arredondar(pct)}%</span>
+		                    ${dropHtml}
+		                </div>
 		            </div>
 		        `;
+
+		        alcancaramAnterior = alcancaram;
 		    });
 
 		    html += `</div>`;
 		    conteudo.innerHTML = html;
 		    ativarTooltipsAdesao();
+		}
+
+		function arredondar(numero) {
+		    return Math.round(numero);
 		}
 
 		function renderizarTabelaAdesao() {
@@ -687,29 +727,49 @@
 		        return;
 		    }
 
+		    const total = dados.totalAlunos;
+
 		    let html = `
 		        <div class="table-responsive">
 		            <table class="table table-sm align-middle mb-0">
 		                <thead>
 		                    <tr>
 		                        <th>Aula</th>
-		                        <th class="text-end">Concluído</th>
-		                        <th class="text-end">Em andamento</th>
-		                        <th class="text-end">Não iniciado</th>
+		                        <th class="text-end">Alcançaram</th>
+		                        <th class="text-end">% do total</th>
+		                        <th class="text-end">Queda desde a aula anterior</th>
 		                    </tr>
 		                </thead>
 		                <tbody>
 		    `;
 
+		    let alcancaramAnterior = null;
+
 		    dados.aulas.forEach((a, idx) => {
+		        const alcancaram = a.concluidos + a.emAndamento;
+		        const pct = (alcancaram / total) * 100;
+		        let queda = '—';
+
+		        if (idx > 0 && alcancaramAnterior > 0) {
+		            const quedaAbs = alcancaramAnterior - alcancaram;
+		            if (quedaAbs > 0) {
+		                const quedaPct = (quedaAbs / alcancaramAnterior) * 100;
+		                queda = `-${quedaAbs} (-${arredondar(quedaPct)}%)`;
+		            } else {
+		                queda = '—';
+		            }
+		        }
+
 		        html += `
 		            <tr>
 		                <td>${(idx + 1)}. ${escapeHtml(a.titulo)}</td>
-		                <td class="text-end">${a.concluidos}</td>
-		                <td class="text-end">${a.emAndamento}</td>
-		                <td class="text-end">${a.naoIniciados}</td>
+		                <td class="text-end">${alcancaram} / ${total}</td>
+		                <td class="text-end">${arredondar(pct)}%</td>
+		                <td class="text-end">${queda}</td>
 		            </tr>
 		        `;
+
+		        alcancaramAnterior = alcancaram;
 		    });
 
 		    html += `</tbody></table></div>`;
@@ -729,7 +789,7 @@
 
 		function ativarTooltipsAdesao() {
 		    const tooltip = obterTooltipAdesao();
-		    document.querySelectorAll('#adesaoConteudo .viz-bar-seg').forEach(seg => {
+		    document.querySelectorAll('#adesaoConteudo .viz-funnel-fill').forEach(seg => {
 		        const mostrar = () => {
 		            tooltip.textContent = seg.getAttribute('data-tooltip');
 		            const rect = seg.getBoundingClientRect();

@@ -281,7 +281,7 @@
 		                    <span class="input-group-text">
 		                        <i class="bi bi-search"></i>
 		                    </span>
-		                    <input class="form-control" type="search" placeholder="Cliente, domínio..." id="palavraChave" onkeypress="if(event.key==='Enter'){ event.preventDefault(); buscaPorPalavra(); }">
+		                    <input class="form-control" type="search" placeholder="Cliente..." id="palavraChave" onkeypress="if(event.key==='Enter'){ event.preventDefault(); buscaPorPalavra(); }">
 		                </div>
 		                <button class="btn btn-success w-100 mb-4" onclick="buscaPorPalavra()"><i class="bi bi-search"></i> Buscar</button>
 
@@ -290,20 +290,6 @@
 		                <select class="form-select mb-4" id="bairro" name="bairro">
 		                    <option value="">Todos</option>
 		                </select>
-
-		                <!-- FILTROS -->
-		                <label class="form-label fw-semibold"> Filtros rápidos </label>
-		                <div class="d-grid gap-2">
-		                    <button class="btn btn-outline-warning btn-sm btn-filtro-rapido" onclick="listarVip('vip')">
-		                        <i class="bi bi-star-fill"></i> VIP
-		                    </button>
-		                    <button class="btn btn-outline-danger btn-sm btn-filtro-rapido" onclick="listarVip('redflag')">
-		                        <i class="bi bi-exclamation-triangle-fill"></i> Red Flag
-		                    </button>
-		                    <button class="btn btn-outline-secondary btn-sm btn-filtro-rapido" onclick="listarVip('redfladvip')">
-		                        <i class="bi bi-stars"></i> VIP + Red Flag
-		                    </button>
-		                </div>
 
 		                <hr class="border-0 border-top border-1 opacity-25 my-3">
 		                <div class="small text-muted">
@@ -401,14 +387,6 @@
 						</div>
 						
 						<div class="row">
-							<div class="col-md-12">
-								<label class="form-label" for="dominiomodal"><b>Domínio</b></label>
-								<input type="text" id="dominiomodal" class="form-control">
-								<small class="text-muted d-block mt-1">A inclusão do domínio ativa a captura de emails automáticos</small>
-							</div>
-						</div>
-						
-						<div class="row">
 							<div class="col-md-6">
 								<label class="form-label mt-1" for="bairroModal"><b>Bairro</b></label>
 								<input type="text" id="bairroModal" class="form-control"><br />
@@ -418,51 +396,14 @@
 								<select class="form-select" id="ativoModal"> </select>
 							</div>
 						</div>
-						
+
 						<div class="row">
-							<div class="col-md-6">
-								<label class="form-label mt-1" for="redFlagModal"><b>Red Flag</b></label>
-								<select class="form-select" id="redFlagModal"> </select>
-							</div>
-							<div class="col-md-6">
-								<label class="form-label mt-1" for="vipModal"><b>VIP</b></label>
-								<select class="form-select" id="vipModal"> </select>
-							</div>
-						</div>
-						
-						<div class="row">
-							<div class="col-md-6">
-								<label class="form-label mt-3" for="tempoContratado"><b>Banco de Horas</b></label>
-								<input type="text" id="tempoContratado" class="form-control" onkeyup="handleComa(event)"><br />
-							</div>
 							<div class="col-md-6">
 								<label class="form-label mt-3" for="ultimologinModal"><b>Ultimo Login</b></label>
 								<input type="text" id="ultimologinModal" class="form-control" readonly><br />
 							</div>
 						</div>
-						
-						<div class="row align-items-end">
-						    <div class="col-12">
-						        <label class="form-label" for="apitokenModal"><b>API Token</b></label>
-						        <div class="input-group">
-						            <input type="password" id="apitokenModal" class="form-control" autocomplete="off">
-						            <button type="button" class="btn btn-outline-secondary" id="btnToggleToken" title="Mostrar token">
-						                <i class="bi bi-eye"></i>
-						            </button>
-						            <button type="button" class="btn btn-outline-secondary" id="btnCopyToken" title="Copiar token">
-						                <i class="bi bi-clipboard"></i>
-						            </button>
-						            <button type="button" class="btn btn-warning fw-semibold" onclick="gerarToken()" title="Gerar novo token">
-						                <i class="bi bi-arrow-clockwise"></i> Gerar novo token
-						            </button>
-						        </div>
-						        <small class="text-warning d-flex align-items-center gap-1 mt-2">
-						            <i class="bi bi-exclamation-triangle-fill"></i>
-						            Atenção: gerar um novo token pode interromper integrações já configuradas.
-						        </small>
-						    </div>
-						</div>
-		
+
 						</br>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -592,10 +533,6 @@
 								<label class="form-label mt-2" for="celularEdicaoModal"><b>Celular</b></label>
 								<input type="tel" maxlength="17" onkeyup="handlePhone(event)" id="celularEdicaoModal" class="form-control"><br />
 							</div>
-							<div class="col-md-6 ms-auto">
-								<label class="form-label mt-2" for="statusEdicaoModal"><b>VIP</b></label>
-								<select class="form-select" id="statusEdicaoModal" aria-label="Default select example"> </select>
-							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12 ms-auto">
@@ -674,49 +611,6 @@
 			}, 150);
 		}
 
-		function copiarToken() {
-			const token = $('#apitokenModal').val();
-			if (!token) {
-				alert('Nenhum token para copiar.');
-				return;
-			}
-			if (navigator.clipboard && window.isSecureContext) {
-				navigator.clipboard.writeText(token).then(function() {
-					indicarTokenCopiado();
-				}).catch(function() {
-					copiarTokenFallback(token);
-				});
-			} else {
-				copiarTokenFallback(token);
-			}
-		}
-
-		function copiarTokenFallback(token) {
-			const temp = $('<textarea>').val(token).appendTo('body').select();
-			document.execCommand('copy');
-			temp.remove();
-			indicarTokenCopiado();
-		}
-
-		function indicarTokenCopiado() {
-			const btn = $('#btnCopyToken');
-			const icon = btn.find('i');
-			icon.attr('class', 'bi bi-clipboard-check text-success');
-			btn.attr('title', 'Copiado!');
-			setTimeout(function() {
-				icon.attr('class', 'bi bi-clipboard');
-				btn.attr('title', 'Copiar token');
-			}, 2000);
-		}
-
-		$('#btnCopyToken').on('click', copiarToken);
-		$('#btnToggleToken').on('click', function() {
-			const tokenInput = $('#apitokenModal');
-			const isPassword = tokenInput.attr('type') === 'password';
-			tokenInput.attr('type', isPassword ? 'text' : 'password');
-			$(this).find('i').toggleClass('bi-eye bi-eye-slash');
-			$(this).attr('title', isPassword ? 'Esconder token' : 'Mostrar token');
-		});
 		function buscaPorPalavra(){
 		
 			$('#corpoClientes').empty();
@@ -747,22 +641,12 @@
 								status = '<span class="badge bg-danger">Desativado</span>';
 							}
 							
-							var vip =" ";
-							var redFlag =" ";
-							if(i.vip == true){
-							    vip = '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">VIP</span>';
-							}
-
-							if(i.redFlag == true){
-							    redFlag = '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">RED FLAG</span>';
-							}
-							
-							var itens = 
+							var itens =
 							'<tr id=linha' + i.id + '>'
 							+ `<td>
 								    <div class="cliente-info">
 								        <div class="cliente-nome">
-								            ${i.nomeCliente} ${vip} ${redFlag}
+								            ${i.nomeCliente}
 								        </div>
 								    </div>
 								</td>`
@@ -814,95 +698,6 @@
 			}
 		}
 		
-		function listarVip(filtro){
-			$('#corpoClientes').empty();
-			$('#paginas').empty();
-			$('#qtdFiltrados').text("");
-			$('#contador').empty();
-			$('#palavraChave').val("");
-			palavraChave
-			$.ajax({
-			type: "GET",
-			contentType: "application/json",
-			url: "/learn/clientes/filtro/vip/"+filtro,
-			success: function (data) {
-				$('#qtdFiltrados').text(data.length);
-				if (!data || data.length === 0) {
-					$('#corpoClientes').html('<tr><td colspan="3" class="text-center text-muted py-4"><i class="bi bi-filter"></i> Nenhum cliente encontrado com este filtro</td></tr>');
-					return;
-				}
-				data.map(i => {
-					var status;
-					if(i.ativo == true){
-						status = '<span class="badge bg-success">Ativado</span>';
-					}else{
-						status = '<span class="badge bg-danger">Desativado</span>';
-					}
-					
-					var vip =" ";
-					var redFlag =" ";
-					if(i.vip == true){
-					    vip = '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">VIP</span>';
-					}
-
-					if(i.redFlag == true){
-					    redFlag = '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">RED FLAG</span>';
-					}
-					
-					var itens = 
-					'<tr id=linha' + i.id + '>'
-						+ `<td>
-						    <div class="cliente-info">
-						        <div class="cliente-nome">
-						            ${i.nomeCliente} ${vip} ${redFlag}
-						        </div>
-						    </div>
-						</td>`
-					+ '<td>' + status + '</t}>'
-					+ `
-					<td class="acoes-cliente">
-					    <div class="acoes-wrapper">
-					    <button
-					        class="btn-action btn btn-primary"
-					        data-bs-toggle="modal"
-					        data-bs-target="#exampleModal"
-					        onclick="editar(${i.id})">
-					        <i class="bi bi-pencil-square"></i>
-					    </button>
-					    <button
-					        class="btn-action btn btn-secondary"
-					        data-bs-toggle="modal"
-					        data-bs-target="#modalColaborador"
-					        onclick="editarColaboradores(${i.id})">
-					        <i class="bi bi-people"></i>
-					    </button>
-					    <button
-					        class="btn-action btn btn-outline-secondary"
-					        title="Gerenciar logo"
-					        onclick="abrirModalLogo(${i.id}, '${i.nomeCliente}')">
-					        <i class="bi bi-image"></i>
-					    </button>
-					    <button
-					        class="btn-action btn btn-danger"
-					        onclick="excluir(${i.id})">
-					        <i class="bi bi-trash"></i>
-					    </button>
-						</div>
-					</td>`
-					+ '</tr>'
-				$('#corpoClientes').append(itens);
-				});
-			},
-			statusCode: {
-				    500: function() { alert('Erro! Contate o desenvolvedor!'); },
-					401: function() { 
-						alert('Realize login novamente!'); 
-						window.location.href = "/sistech/login"; 
-					}
-			}
-			});
-		}
-		
 		listarTodos();
 		
 		$(document).ready(function () {
@@ -951,22 +746,12 @@
 						status = '<span class="badge bg-danger">Desativado</span>';
 					}
 					
-					var vip =" ";
-					var redFlag =" ";
-					if(i.vip == true){
-					    vip = '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">VIP</span>';
-					}
-
-					if(i.redFlag == true){
-					    redFlag = '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">RED FLAG</span>';
-					}
-					
-					var itens = 
+					var itens =
 					'<tr id=linha' + i.id + '>'
 						+ `<td>
 						    <div class="cliente-info">
 						        <div class="cliente-nome">
-						            ${i.nomeCliente} ${vip} ${redFlag}
+						            ${i.nomeCliente}
 						        </div>
 						    </div>
 						</td>`
@@ -1007,14 +792,14 @@
 			},
 			statusCode: {
 				    500: function() { alert('Erro! Contate o desenvolvedor!'); },
-				    401: function() { 
-						alert('Realize login novamente!'); 
-						window.location.href = "/learn/login"; 
+				    401: function() {
+						alert('Realize login novamente!');
+						window.location.href = "/learn/login";
 					}
 			}
 			});
 		}
-		
+
 		$.ajax({
 			type: "GET",
 			contentType: "application/json",
@@ -1046,16 +831,6 @@
 		  return value
 		}
 		
-		const handleComa = (event) => {
-		  let input = event.target
-		  input.value = horaMask(input.value)
-		}
-		
-		const horaMask = (value) => {
-		  if (!value) return ""
-		  value = value.replace(/[^0-9\.]/g,'');
-		  return value;
-		}
 	</script>
 	
 	<script>
@@ -1081,22 +856,12 @@
 						status = '<span class="badge bg-danger">Desativado</span>';
 					}
 					
-					var vip =" ";
-					var redFlag =" ";
-					if(i.vip == true){
-					    vip = '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">VIP</span>';
-					}
-
-					if(i.redFlag == true){
-					    redFlag = '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">RED FLAG</span>';
-					}
-					
-					var itens = 
+					var itens =
 					'<tr id=linha' + i.id + '>'
 						+ `<td>
 						    <div class="cliente-info">
 						        <div class="cliente-nome">
-						            ${i.nomeCliente} ${vip} ${redFlag}
+						            ${i.nomeCliente}
 						        </div>
 						    </div>
 						</td>`
@@ -1160,24 +925,16 @@
 				$("#numPag"+num).attr("style","color:red");
 
 				data.content.map(i => {
-					var status,vip="",redFlag="";
+					var status;
 					if(i.ativo == true){ status = "<FONT COLOR='#008000'>Ativado</FONT>"; }
 					else{ status = "<FONT COLOR='#ff0000'>Desativado</FONT>"; }
-					
-					if(i.vip == true){
-					    vip = '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">VIP</span>';
-					}
 
-					if(i.redFlag == true){
-					    redFlag = '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">RED FLAG</span>';
-					}
-					
-					var itens = 
+					var itens =
 					'<tr id=linha' + i.id + '>'
 						+ `<td>
 						    <div class="cliente-info">
 						        <div class="cliente-nome">
-						            ${i.nomeCliente} ${vip} ${redFlag}
+						            ${i.nomeCliente}
 						        </div>
 						    </div>
 						</td>`
@@ -1304,12 +1061,7 @@
 					$('#nomemodal').val("");
 					$('#enderecomodal').val("");
 					$('#ativoModal').empty();
-					$('#vipModal').empty();
-					$('#redFlagModal').empty();
 					$('#bairroModal').val("");
-					$('#tempoContratado').val("");
-					$('#apitokenModal').val("");
-					$('#dominiomodal').val("");
 					$('#ultimologinModal').val("");
 					$('#usernamemodal').val("");
 					$('#passwordmodal').val("");
@@ -1322,9 +1074,6 @@
 					$('#senhamodal').val(data.password);
 					$('#cnpjmodal').val(data.cnpj);
 					$('#bairroModal').val(data.bairro);
-					$('#tempoContratado').val(data.tempoContratado/60);
-					$('#apitokenModal').val(data.token);
-					$('#dominiomodal').val(data.dominio);
 					$('#ultimologinModal').val(data.dataUltimoLogin);
 					$('#usernamemodal').val(data.username);
 					$('#passwordmodal').val(data.password);
@@ -1337,21 +1086,6 @@
 						$('#ativoModal').append("<option value=true>Ativado</option>");
 					}
 					
-					if (data.vip == true) {
-						$('#vipModal').append("<option value=" + data.vip + "> Ativado </option>");
-						$('#vipModal').append("<option value=false>Desativado</option>");
-					} else {
-						$('#vipModal').append("<option value=" + data.vip + "> Desativado </option>");
-						$('#vipModal').append("<option value=true>Ativado</option>");
-					}
-					
-					if (data.redFlag == true) {
-						$('#redFlagModal').append("<option value=" + data.redFlag + "> Ativado </option>");
-						$('#redFlagModal').append("<option value=false>Desativado</option>");
-					} else {
-						$('#redFlagModal').append("<option value=" + data.redFlag + "> Desativado </option>");
-						$('#redFlagModal').append("<option value=true>Ativado</option>");
-					}
 				},
 				statusCode: {
 					    500: function() { alert('Erro! Contate o desenvolvedor!'); },
@@ -1384,12 +1118,11 @@
 					}
 
 					var itens = data.map(i => {
-						var vipBadge = i.vip ? ' <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-star-fill"></i> VIP</span>' : '';
 						var emailHtml = i.email ? '<a class="color-lnk" href="mailto:' + i.email + '">' + i.email + '</a>' : '<span class="text-muted">—</span>';
 
 						return '<tr id=linhaModalColaborador' + i.id + '>'
 						+ '<td class="text-muted">' + i.id + '</td>'
-						+ '<td><i class="bi bi-person-circle me-1 text-secondary"></i>' + i.nomeColaborador + vipBadge + '</td>'
+						+ '<td><i class="bi bi-person-circle me-1 text-secondary"></i>' + i.nomeColaborador + '</td>'
 						+ '<td><i class="bi bi-whatsapp wpp-color"></i> &nbsp; <a class="color-lnk" href="https://wa.me/55' + i.celular.replace(/[^0-9]/g, '')+'" target="_blank">' + i.celular + '</a></td>'
 						+ '<td>' + emailHtml + '</td>'
 						+ '<td class="text-end">'
@@ -1419,27 +1152,18 @@
 					$('#idEdicaoModal').val("");
 					$('#nomeEdicaoModal').val("");
 					$('#celularEdicaoModal').val("");
-					$('#statusEdicaoModal').empty();
 					$('#emailEdicaoModal').val("");
-					
+
 					$('#usernameEdicaoModal').val("");
 					$('#passwordEdicaoModal').val("");
-					
+
 					$('#idEdicaoModal').val(data.id);
 					$('#nomeEdicaoModal').val(data.nomeColaborador);
 					$('#celularEdicaoModal').val(data.celular);
 					$('#emailEdicaoModal').val(data.email);
-					
+
 					$('#usernameEdicaoModal').val(data.username);
 					$('#passwordEdicaoModal').val(data.password);
-					
-					if (data.vip == true) {
-						$('#statusEdicaoModal').append("<option value=" + data.vip + ">" + data.vip + "</option>");
-						$('#statusEdicaoModal').append("<option value=false>false</option>");
-					} else {
-						$('#statusEdicaoModal').append("<option value=" + data.vip + ">" + data.vip + "</option>");
-						$('#statusEdicaoModal').append("<option value=true>true</option>");
-					}
 				},
 				statusCode: {
 					    500: function() { alert('Erro! Contate o desenvolvedor!'); },
@@ -1455,12 +1179,10 @@
 			var id = $('#idEdicaoModal').val(),
 				nomeColaborador = $('#nomeEdicaoModal').val(),
 				celular = $('#celularEdicaoModal').val(),
-				vip = $('#statusEdicaoModal').val(),
 				email = $('#emailEdicaoModal').val(),
-				idCliente = $('#idColaboradoCliente').val();
-				token = $('#apitokenModal').val("");		
+				idCliente = $('#idColaboradoCliente').val(),
 				username = $('#usernameEdicaoModal').val(),
-				password = $('#passwordEdicaoModal').val(),
+				password = $('#passwordEdicaoModal').val();
 
 			$.ajax({
 				type: "PUT",
@@ -1470,10 +1192,8 @@
 					"id": id,
 					"nomeColaborador": nomeColaborador,
 					"celular": celular,
-					"vip": vip,
 					"email": email,
 					"idCliente": idCliente,
-					"token": token,
 					"username": username,
 					"password": password
 				}),
@@ -1547,14 +1267,9 @@
 				telefone = $('#telefonemodal').val(),
 				cnpj = $('#cnpjmodal').val(),
 				endereco = $('#enderecomodal').val(),
-				dominio = $('#dominiomodal').val(),
 				ativo = $('#ativoModal').val(),
-				vip = $('#vipModal').val(),
-				redFlag = $('#redFlagModal').val();
-				bairro = $('#bairroModal').val(),
-				tempoContratado = $('#tempoContratado').val(),
-				token = $('#apitokenModal').val(),
-			
+				bairro = $('#bairroModal').val();
+
 			$.ajax({
 				type: "PUT",
 				contentType: "application/json",
@@ -1567,29 +1282,16 @@
 					"telefone": telefone,
 					"cnpj": cnpj,
 					"endereco": endereco,
-					"dominio": dominio,
 					"ativo": ativo,
-					"vip": vip,
-					"redFlag": redFlag,
-					"bairro": bairro,
-					"tempoContratado":tempoContratado*60,
-					"token": token
+					"bairro": bairro
 				}),
 				success: function (data) {
 
-					var status, vipBadge = "", redFlagBadge = "";
+					var status;
 					if(data.ativo == true){
 						status = '<span class="badge bg-success">Ativado</span>';
 					}else{
 						status = '<span class="badge bg-danger">Desativado</span>';
-					}
-
-					if(data.vip == true){
-					    vipBadge = '<span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">VIP</span>';
-					}
-
-					if(data.redFlag == true){
-					    redFlagBadge = '<span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">RED FLAG</span>';
 					}
 
 					var itens =
@@ -1597,7 +1299,7 @@
 							+ `<td>
 							    <div class="cliente-info">
 							        <div class="cliente-nome">
-							            ${data.nomeCliente} ${vipBadge} ${redFlagBadge}
+							            ${data.nomeCliente}
 							        </div>
 							    </div>
 							</td>`

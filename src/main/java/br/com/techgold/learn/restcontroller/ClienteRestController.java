@@ -51,18 +51,7 @@ public class ClienteRestController {
 	public List<DtoClienteList> listarFiltro(@PathVariable String bairro){
 		return repository.listarClientesPorBairro(bairro).stream().map(DtoClienteList::new).toList();
 	}
-	
-	@GetMapping("/filtro/vip/{vip}")
-	public List<DtoClienteList> listarFiltroVip(@PathVariable String vip){
-		if(vip.equals("vip")) {
-			return repository.listarClientesVip().stream().map(DtoClienteList::new).toList();
-		}else if(vip.equals("redflag")) {
-			return repository.listarClientesRedFlag().stream().map(DtoClienteList::new).toList();
-		}else {
-			return repository.listarClientesRedFlagEVip().stream().map(DtoClienteList::new).toList();
-		}
-	} 
-	
+
 	@GetMapping("/nomes")
 	public List<String> listaClientesNome(){
 		return repository.listarNomesCliente();

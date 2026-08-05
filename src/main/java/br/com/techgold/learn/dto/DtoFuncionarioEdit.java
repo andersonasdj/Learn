@@ -12,7 +12,6 @@ public record DtoFuncionarioEdit(
 		String username,
 		Boolean ativo,
 		Boolean mfa,
-		Boolean ausente,
 		@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 		LocalDateTime dataAtualizacao,
 		@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -22,15 +21,14 @@ public record DtoFuncionarioEdit(
 		Boolean trocaSenha,
 		String email
 		) {
-	
+
 	public DtoFuncionarioEdit(Funcionario f) {
 		this(
-				f.getId(), 
-				f.getNomeFuncionario(), 
-				f.getUsername(), 
+				f.getId(),
+				f.getNomeFuncionario(),
+				f.getUsername(),
 				f.getAtivo(),
 				f.getMfa(),
-				(f.getAusente()) != null ? f.getAusente(): false,
 				f.getDataAtualizacao(),
 				f.getDataAtualizacaoSenha(),
 				f.getDataUltimoLogin(),

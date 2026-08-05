@@ -300,9 +300,6 @@
 		                    <button class="btn btn-outline-danger btn-sm btn-filtro-rapido" onclick="filtrarStatus('inativo')">
 		                        <i class="bi bi-x-circle-fill"></i> Inativos
 		                    </button>
-		                    <button class="btn btn-outline-warning btn-sm btn-filtro-rapido" onclick="filtrarStatus('ausente')">
-		                        <i class="bi bi-clock-fill"></i> Ausentes
-		                    </button>
 		                </div>
 		                <hr class="border-0 border-top border-1 opacity-25 my-3">
 		                <div class="small text-muted">
@@ -321,7 +318,6 @@
 		                        <thead>
 		                            <tr>
 		                                <th>Nome</th>
-		                                <th width="110">Presença</th>
 		                                <th width="110">Ativo</th>
 		                                <th width="80">2FA</th>
 		                                <th width="130">Função</th>
@@ -377,15 +373,11 @@
 							<input type="text" id="usuariomodal" class="form-control">
 						</div>
 						<div class="col-md-6 ms-auto">
-							<label class="form-label mt-2" for="ausenteModal"><b>Presença <i class="bi bi-chat-text" data-toggle="tooltip" data-placement="top" title="Oculta do dashboard"></i></b></label>
-							<select class="form-select" id="ausenteModal" aria-label="Default select example"> </select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6 ms-auto">
 							<label class="form-label mt-2" for="statusModal"><b>Status</b></label>
 							<select class="form-select" id="statusModal" aria-label="Default select example"> </select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-6 ms-auto">
 							<label class="form-label mt-2" for="mfaModal"><b>MFA</b></label>
 							<select class="form-select" id="mfaModal" aria-label="Default select example"> </select>
@@ -519,30 +511,6 @@
 			   );
 		}
 
-		function salvarConfiguracoesAvancadas() {
-		    const id = $('#idFuncionarioAvancado').val();
-		    const role = $('#funcaoAvancada').val();
-		    const valorHora = $('#valorHora').val();
-
-		    $.ajax({
-		        type: "PUT",
-		        contentType: "application/json",
-		        url: "/learn/funcionarios/configuracoes-avancadas",
-		        data: JSON.stringify({
-		            id: id,
-		            role: role,
-		            valorHora: valorHora
-		        }),
-		        success: function () {
-		            alert("Configurações avançadas atualizadas com sucesso!");
-		            $('#modalConfiguracoesAvancadas').modal('hide');
-		        },
-		        error: function () {
-		            alert("Você não tem permissão para essa ação.");
-		        }
-		    });
-		}
-
 		$.ajax({
 			type: "GET",
 			contentType: "application/json",
@@ -552,23 +520,17 @@
 				$('#qtdFiltrados').text(data.length + ' registros');
 
 				if (!data || data.length === 0) {
-					$('#tabela-usuarios tbody').html('<tr><td colspan="6" class="text-center text-muted py-4"><i class="bi bi-people"></i> Nenhum funcionário cadastrado</td></tr>');
+					$('#tabela-usuarios tbody').html('<tr><td colspan="5" class="text-center text-muted py-4"><i class="bi bi-people"></i> Nenhum funcionário cadastrado</td></tr>');
 					return;
 				}
 
 				data.map(i => {
-					var status, ausente, mfa;
+					var status, mfa;
 
 					if(i.ativo == true){
 						status = '<span class="badge bg-success">Ativado</span>';
 					}else{
 						status = '<span class="badge bg-danger">Desativado</span>';
-					}
-
-					if(i.ausente == true){
-						ausente = '<span class="badge bg-danger">Ausente</span>';
-					}else{
-						ausente = '<span class="badge bg-success">Presente</span>';
 					}
 
 					if(i.mfa == true){
@@ -580,7 +542,6 @@
 					var itens =
 					'<tr id=linha' + i.id + '>'
 					+ '<td id=name' + i.id + '>' + i.nomeFuncionario + '</td>'
-					+ '<td>' + ausente + '</td>'
 					+ '<td>' + status + '</td>'
 					+ '<td>' + mfa + '</td>'
 					+ '<td>' + i.role + '</td>'
@@ -594,7 +555,7 @@
 					        onclick="preencheModalPassword(${i.id})">
 					        <img src="../assets/img/key-change.png" style="height: 16px">
 					    </button>
-					   
+
 					    <button
 					        class="btn-action btn btn-primary"
 					        data-bs-toggle="modal"
@@ -611,15 +572,6 @@
 					</td>`
 					+ '</tr>'
 				$('#tabela-usuarios').append(itens);
-					if(i.refeicao != null){
-						if(i.refeicao == true){
-							$('#btnRefeicao'+i.id).append('<i class="bi bi-cup-hot" style="color: red; font-size: 20px;"><input type="hidden" id="refeicaoValor'+i.id+'" name="refeicaoValor'+i.id+'" value="'+i.refeicao+'"></i>');
-						}else{
-							$('#btnRefeicao'+i.id).append('<i class="bi bi-cup-hot" style="color: green; font-size: 20px;"><input type="hidden" id="refeicaoValor'+i.id+'" name="refeicaoValor'+i.id+'" value="'+i.refeicao+'"></i>');
-						}
-					}else{
-						$('#btnRefeicao'+i.id).append('<i class="bi bi-cup-hot" style="color: green; font-size: 20px;"><input type="hidden" id="refeicaoValor'+i.id+'" name="refeicaoValor'+i.id+'" value="false"></i>');
-					}
 				});
 			},
 			statusCode: {
@@ -635,56 +587,13 @@
 				var row = $(this);
 				var show = false;
 				if (tipo === 'ativo') {
-					show = row.find('td:eq(2) .badge').hasClass('bg-success');
+					show = row.find('td:eq(1) .badge').hasClass('bg-success');
 				} else if (tipo === 'inativo') {
-					show = row.find('td:eq(2) .badge').hasClass('bg-danger');
-				} else if (tipo === 'ausente') {
 					show = row.find('td:eq(1) .badge').hasClass('bg-danger');
 				}
 				if (show) { row.show(); count++; } else { row.hide(); }
 			});
 			$('#qtdFiltrados').text(count + ' registros');
-		}
-
-		function refeicao(id){
-			var refeicao = $('#refeicaoValor'+id).val();
-
-			if(refeicao == 'false'){
-				$('#btnRefeicao'+id).empty();
-				$('#refeicaoValor'+id).val(true);
-				$.ajax({
-					type: "PUT",
-					contentType: "application/json",
-					url: "/learn/funcionarios/admin/refeicao",
-					data: JSON.stringify(
-						{
-							"id": id,
-							"refeicao": true
-						}
-					),
-					success: function (data) { alert("Status alterado para ( Em Refeição )");	},
-					error: function (e) { alert(e); }
-				});
-				$('#btnRefeicao'+id).append('<i class="bi bi-cup-hot" style="color: red; font-size: 20px;"><input type="hidden" id="refeicaoValor'+id+'" name="refeicaoValor'+id+'" value="true"></i>');
-
-			}else{
-				$('#btnRefeicao'+id).empty();
-				$('#refeicaoValor'+id).val(false);
-				$.ajax({
-					type: "PUT",
-					contentType: "application/json",
-					url: "/learn/funcionarios/admin/refeicao",
-					data: JSON.stringify(
-						{
-							"id":id,
-							"refeicao": false
-						}
-					),
-					success: function (data) { alert("Status alterado para ( Online! )");	},
-					error: function (e) { alert(e); }
-				});
-				$('#btnRefeicao'+id).append('<i class="bi bi-cup-hot" style="color: green; font-size: 20px;"><input type="hidden" id="refeicaoValor'+id+'" name="refeicaoValor'+id+'" value="false"></i>');
-			}
 		}
 
 		function verificaForcaSenha() {
@@ -742,7 +651,6 @@
 					$('#mfaModal').empty();
 					$('#dataUltimoLoginModal').text("");
 					$('#dataUltimaTrocaSenhaModal').text("");
-					$('#ausenteModal').empty();
 					$('#emailmodal').val("");
 
 					$('#idmodal').val(data.id);
@@ -753,24 +661,13 @@
 					$('#dataUltimaTrocaSenhaModal').text(data.dataAtualizacaoSenha);
 					$('#emailmodal').val(data.email);
 
-					var ausente, status;
-
-					if(data.ausente == true ){ ausente = "Ausente"; }
-					else{ ausente = "Presente"; }
+					var status;
 
 					if(data.ativo == true ){ status = "Ativado"; }
 					else{ status = "Desativado"; }
 
 					if(data.trocaSenha == true){ document.getElementById("trocaSenha").checked=true; }
 					else{ document.getElementById("trocaSenha").checked=false; }
-
-					if (data.ausente == true) {
-						$('#ausenteModal').append("<option value=" + data.ausente + ">" + ausente + "</option>");
-						$('#ausenteModal').append("<option value=false>Presente</option>");
-					} else {
-						$('#ausenteModal').append("<option value=" + data.ausente + ">" + ausente + "</option>");
-						$('#ausenteModal').append("<option value=true>Ausente</option>");
-					}
 
 					if (data.ativo == true) {
 						$('#statusModal').append("<option value=" + data.ativo + ">" + status + "</option>");
@@ -840,7 +737,6 @@
 			var username = $('#usuariomodal').val();
 			var ativo = $('#statusModal').val();
 			var mfa = $('#mfaModal').val();
-			var ausente = $('#ausenteModal').val();
 			var email = $('#emailmodal').val();
 
 			var trocaSenha = document.getElementById("trocaSenha");
@@ -856,23 +752,16 @@
 					"username": username,
 					"ativo": ativo,
 					"mfa": mfa,
-					"ausente": ausente,
 					"trocaSenha":trocaSenha,
 					"email":email
 				}),
 				success: function (data) {
-					var status, ausente;
+					var status;
 
 					if(data.ativo == true){
 						status = '<span class="badge bg-success">Ativado</span>';
 					}else{
 						status = '<span class="badge bg-danger">Desativado</span>';
-					}
-
-					if(data.ausente == true){
-						ausente = '<span class="badge bg-danger">Ausente</span>';
-					}else{
-						ausente = '<span class="badge bg-success">Presente</span>';
 					}
 
 					if(data.mfa == true){
@@ -884,7 +773,6 @@
 					var itens =
 						'<tr id=linha' + data.id + '>'
 						+ '<td id=name' + data.id + '>' + data.nomeFuncionario + '</td>'
-						+ '<td>' + ausente + '</td>'
 						+ '<td>' + status + '</td>'
 						+ '<td>' + mfa + '</td>'
 						+ '<td>' + data.role + '</td>'
@@ -916,11 +804,6 @@
 
 					$('#linha' + data.id).remove();
 					$('#tabela-usuarios').append(itens);
-					if(data.refeicao == 'false'){
-						$('#btnRefeicao'+data.id).append('<i class="bi bi-cup-hot" style="color: red; font-size: 20px;"><input type="hidden" id="refeicaoValor'+data.id+'" name="refeicaoValor'+data.id+'" value="true"></i>');
-					} else{
-						$('#btnRefeicao'+data.id).append('<i class="bi bi-cup-hot" style="color: green; font-size: 20px;"><input type="hidden" id="refeicaoValor'+data.id+'" name="refeicaoValor'+data.id+'" value="false"></i>');
-					}
 					alert("atualizado com sucesso");
 				},
 				error: function (e) { alert("Você não tem permissão !"); }

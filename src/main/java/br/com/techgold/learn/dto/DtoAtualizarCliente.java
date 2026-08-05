@@ -17,16 +17,11 @@ public record DtoAtualizarCliente(
 		String telefone,
 		String cnpj,
 		Boolean ativo,
-		Boolean vip,
-		Boolean redFlag,
-		String bairro,
-		Long tempoContratado,
-		String token,
-		String dominio) {
+		String bairro) {
 
 	public DtoAtualizarCliente(Cliente c) {
-		
-		this(c.getId(),c.getNomeCliente(),c.getUsername(),c.getPassword(),c.getEndereco(),c.getTelefone(),c.getCnpj(),c.getAtivo(), c.isVip(), c.isRedFlag(), c.getBairro(), c.getTempoContratado(), c.getToken(), c.getDominio());
+
+		this(c.getId(),c.getNomeCliente(),c.getUsername(),c.getPassword(),c.getEndereco(),c.getTelefone(),c.getCnpj(),c.getAtivo(), c.getBairro());
 	}
 
 }

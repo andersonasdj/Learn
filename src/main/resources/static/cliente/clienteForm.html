@@ -304,7 +304,7 @@
 
 	            <div class="row g-3">
 
-	                <div class="col-lg-6">
+	                <div class="col-lg-8">
 
 	                    <label>
 	                        <i class="bi bi-buildings"></i>
@@ -317,7 +317,7 @@
 
 	                </div>
 
-	                <div class="col-lg-3">
+	                <div class="col-lg-4">
 
 	                    <label>
 	                        <i class="bi bi-file-earmark-text"></i>
@@ -327,19 +327,6 @@
 	                    <input type="text"
 	                           id="cnpj"
 	                           maxlength="18"
-	                           class="form-control mt-2">
-
-	                </div>
-
-	                <div class="col-lg-3">
-
-	                    <label>
-	                        <i class="bi bi-globe"></i>
-	                        Domínio
-	                    </label>
-
-	                    <input type="text"
-	                           id="dominio"
 	                           class="form-control mt-2">
 
 	                </div>
@@ -457,38 +444,6 @@
 	                        </button>
 
 	                    </div>
-
-	                </div>
-
-	            </div>
-
-	        </div>
-
-	    </div>
-
-	    <!-- CONTRATO -->
-
-	    <div class="card card-cor shadow-sm border-0 mb-4">
-
-	        <div class="card-body">
-
-	            <h6 class="mb-3">
-	                <i class="bi bi-clock-history"></i>
-	                Contrato
-	            </h6>
-
-	            <div class="row g-3">
-
-	                <div class="col-lg-4">
-
-	                    <label>
-	                        <i class="bi bi-hourglass-split"></i>
-	                        Banco de Horas
-	                    </label>
-
-	                    <input type="text"
-	                           id="tempoContratado"
-	                           class="form-control mt-2">
 
 	                </div>
 
@@ -660,7 +615,6 @@
     // ########################################
     btnSalvar.addEventListener('click', salvar);
     document.getElementById('telefone').addEventListener('input', handlePhone);
-    document.getElementById('tempoContratado').addEventListener('input', handleHora);
     document.getElementById('togglePassword').addEventListener('click', togglePassword);
 	document.getElementById('cnpj').addEventListener('input', handleCNPJ);
 
@@ -673,14 +627,11 @@
             const payload = {
                 nomeCliente: getValue('nomeCliente'),
                 endereco: getValue('endereco'),
-                dominio: getValue('dominio'),
                 telefone: getValue('telefone'),
                 username: getValue('username'),
                 password: getValue('password'),
                 bairro: getValue('bairro'),
-                cnpj: getValue('cnpj'),
-                tempoContratado:
-                    parseFloat(getValue('tempoContratado') || 0) * 60
+                cnpj: getValue('cnpj')
             };
 
             const response = await fetch('/learn/clientes', {
@@ -735,16 +686,7 @@
         event.target.value = value;
     }
 
-    // ########################################
-    // HORAS
-    // ########################################
-    function handleHora(event) {
-        let value = event.target.value;
-        value = value.replace(/[^0-9\.]/g, '');
-        event.target.value = value;
-    }
-	
-	function handleCNPJ(event) {
+    function handleCNPJ(event) {
 	    let value = event.target.value;
 	    // remove tudo que não for número
 	    value = value.replace(/\D/g, '');

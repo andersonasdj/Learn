@@ -63,14 +63,6 @@
 			  margin-right: 6px;
 			}
 
-			/* ===== BADGE VIP ===== */
-			.badge-vip {
-			  background: linear-gradient(135deg, #dc3545, #a71d2a);
-			  font-size: .7rem;
-			  padding: .35em .6em;
-			  border-radius: 12px;
-			}
-
 			/* ===== FOOTER ===== */
 			.card-footer {
 			  background: transparent;
@@ -98,7 +90,7 @@
 			  border-color: #444;
 			}	
 			
-			/* Cliente normal */
+			/* Cliente */
 			.badge-cliente {
 			  background-color: #f8f9fa;
 			  color: #495057;
@@ -106,42 +98,11 @@
 			  font-weight: 500;
 			}
 
-			/* Cliente VIP */
-			.badge-cliente-vip {
-			  background: linear-gradient(135deg, #fff3cd, #ffe8a1);
-			  color: #664d03;
-			  border: 1px solid #ffecb5;
-			  font-weight: 600;
-			}
-
 			/* Dark mode */
 			body.dark-mode .badge-cliente {
 			  background-color: #2c3034;
 			  color: #e9ecef;
 			  border-color: #444;
-			}
-
-			body.dark-mode .badge-cliente-vip {
-			  background: linear-gradient(135deg, #5c4b00, #7a5f00);
-			  color: #fff3cd;
-			  border-color: #856404;
-			}
-
-			/* Colaborador VIP */
-			.badge-colaborador-vip {
-			  background: linear-gradient(135deg, #e7f1ff, #d0e2ff);
-			  color: #0d3b66;
-			  font-size: .65rem;
-			  font-weight: 600;
-			  padding: .25em .55em;
-			  border-radius: 10px;
-			  border: 1px solid #b6d4fe;
-			}
-
-			body.dark-mode .badge-colaborador-vip {
-			  background: linear-gradient(135deg, #1c2e4a, #243b5e);
-			  color: #d6e4ff;
-			  border-color: #3d5a80;
 			}
 
 			/* ===== AVATAR ===== */
@@ -458,7 +419,7 @@
 	          </div>
 	        </div>
 
-	        <!-- CELULAR + VIP -->
+	        <!-- CELULAR -->
 	        <div class="row g-3 mb-2">
 	          <div class="col-md-6">
 	            <label class="form-label fw-semibold">Celular</label>
@@ -466,16 +427,6 @@
 	              <span class="input-group-text"><i class="bi bi-telephone"></i></span>
 	              <input type="tel" maxlength="17" onkeyup="handlePhone(event)" id="celularEdicaoModal" class="form-control">
 	            </div>
-	          </div>
-
-	          <div class="col-md-6">
-	            <label class="form-label fw-semibold">Status VIP</label>
-	            <select class="form-select" id="statusEdicaoModal">
-	              <!-- preenchido via JS -->
-	            </select>
-	            <small class="text-muted">
-	              Colaboradores VIP possuem prioridade
-	            </small>
 	          </div>
 	        </div>
 
@@ -568,12 +519,6 @@
 		            $('#celularEdicaoModal').val(data.celular);
 		            $('#emailEdicaoModal').val(data.email);
 
-		            $('#statusEdicaoModal').empty();
-		            $('#statusEdicaoModal').append(`
-		                <option value="true" ${data.vip === true ? 'selected' : ''}>VIP</option>
-		                <option value="false" ${data.vip === false ? 'selected' : ''}>Normal</option>
-		            `);
-
 		            const modal = new bootstrap.Modal(
 		                document.getElementById('editarColaboradorModal')
 		            );
@@ -629,13 +574,7 @@
 				const avatarCor = (nome) => avatarCores[(nome || ' ').toUpperCase().charCodeAt(0) % avatarCores.length];
 				const ini = (c.nomeColaborador || '?').charAt(0).toUpperCase();
 
-				const clienteBadge = c.vipCliente === 'true'
-				    ? `<span class="badge rounded-pill badge-cliente-vip"><i class="bi bi-star-fill me-1"></i>${c.nomeCliente}</span>`
-				    : `<span class="badge rounded-pill badge-cliente"><i class="bi bi-building me-1"></i>${c.nomeCliente}</span>`;
-
-				const vipBadge = c.vip === 'true'
-				    ? `<span class="badge badge-colaborador-vip ms-1"><i class="bi bi-star-fill me-1"></i>VIP</span>`
-				    : '';
+				const clienteBadge = `<span class="badge rounded-pill badge-cliente"><i class="bi bi-building me-1"></i>${c.nomeCliente}</span>`;
 
 				let card = `
 				<div class="col-xl-3 col-lg-4 col-md-6">
@@ -645,7 +584,7 @@
 				      <div class="d-flex align-items-center gap-3 mb-3">
 				        <div class="colab-avatar" style="background:${avatarCor(c.nomeColaborador)}">${ini}</div>
 				        <div class="overflow-hidden flex-grow-1">
-				          <div class="fw-semibold text-truncate" style="font-size:.95rem;">${c.nomeColaborador} ${vipBadge}</div>
+				          <div class="fw-semibold text-truncate" style="font-size:.95rem;">${c.nomeColaborador}</div>
 				          <div class="mt-1">${clienteBadge}</div>
 				        </div>
 				      </div>
@@ -711,8 +650,7 @@
 		        id: $('#idEdicaoModal').val(),
 		        nomeColaborador: $('#nomeEdicaoModal').val(),
 		        celular: $('#celularEdicaoModal').val(),
-		        email: $('#emailEdicaoModal').val(),
-		        vip: $('#statusEdicaoModal').val() === 'true'
+		        email: $('#emailEdicaoModal').val()
 		    };
 
 		    $.ajax({
@@ -791,16 +729,6 @@
 		  return value
 		}
 		
-		const handleComa = (event) => {
-		  let input = event.target
-		  input.value = horaMask(input.value)
-		}
-		
-		const horaMask = (value) => {
-		  if (!value) return ""
-		  value = value.replace(/[^0-9\.]/g,'');
-		  return value;
-		}
 	</script>
 	<script>
 		$(document).ready(function() {

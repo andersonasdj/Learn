@@ -117,12 +117,10 @@ body.dark-mode .home-skeleton-card {
 /* ── Status / aviso pills ── */
 .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 50px; font-size: .82rem; font-weight: 600; text-decoration: none !important; transition: all .15s; cursor: pointer; border: 1.5px solid transparent; }
 .status-pill.online { background: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
-.status-pill.refeicao-ativo { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
 .status-pill:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.12); }
 .aviso-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 50px; font-size: .82rem; font-weight: 600; text-decoration: none !important; background: #fff7ed; color: #ea580c; border: 1.5px solid #fed7aa; transition: all .15s; }
 .aviso-pill:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.12); }
 body.dark-mode .status-pill.online { background: #14532d; color: #86efac; border-color: #166534; }
-body.dark-mode .status-pill.refeicao-ativo { background: #7f1d1d; color: #fca5a5; border-color: #991b1b; }
 body.dark-mode .aviso-pill { background: #431407; color: #fdba74; border-color: #7c2d12; }
 
 /* ── Atalho cards ── */

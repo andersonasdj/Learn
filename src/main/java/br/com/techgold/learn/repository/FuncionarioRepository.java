@@ -58,10 +58,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
 
 	@Query(value = "SELECT f.trocaSenha FROM funcionarios f WHERE f.id=:id", nativeQuery = true)
 	public Boolean exigeTrocaDeSenha(Long id);
-	
-	@Query(value = "SELECT f.refeicao FROM funcionarios f WHERE f.id=:id", nativeQuery = true)
-	public Boolean statusRefeicao(Long id);
-	
+
 	@Query(value = "SELECT COUNT(*) FROM funcionarios", nativeQuery = true)
 	public int existsFuncionarios();
 
@@ -70,10 +67,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
 
 	@Query(value = "SELECT * FROM funcionarios f WHERE f.ativo=true", nativeQuery = true)
 	public List<Funcionario> listarFuncionarios();
-	
-	@Query(value = "SELECT f.id, f.valorHora FROM funcionarios f WHERE f.ativo=true", nativeQuery = true)
-	public List<Funcionario> listarCustoFuncionarios();
-	
+
 	@Query(value = "SELECT * FROM funcionarios f", nativeQuery = true)
 	public List<Funcionario> listarTodosFuncionarios();
 }
